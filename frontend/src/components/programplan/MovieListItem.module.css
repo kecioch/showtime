@@ -1,0 +1,14 @@
+.movieListItem {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.cover {
+    width: 20%;
+}
+
+.information {
+    width: 80%;
+    padding-left: 1em;
+}

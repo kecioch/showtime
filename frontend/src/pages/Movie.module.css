@@ -1,0 +1,4 @@
+.headerInfo {
+    display: flex;
+    flex-direction: row;
+}
