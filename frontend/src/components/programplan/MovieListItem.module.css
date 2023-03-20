@@ -12,3 +12,11 @@
     width: 80%;
     padding-left: 1em;
 }
+
+.description {
+    text-align: justify;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+  }

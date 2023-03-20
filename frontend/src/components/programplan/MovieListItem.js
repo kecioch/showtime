@@ -21,7 +21,7 @@ const MovieListItem = (props) => {
           <Card.Subtitle className="mb-2 text-muted">
             {movie.subtitle}
           </Card.Subtitle>
-          <Card.Text>{movie.description}</Card.Text>
+          <Card.Text className={styles.description}>{movie.description}</Card.Text>
           <Link to={`/movies/${movie.title}`}>
             <Button>Details</Button>
           </Link>
