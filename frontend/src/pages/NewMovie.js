@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import styles from "./NewMovie.module.css";
 import { useState } from "react";
+import { BACKEND_URL } from "../constants";
 
 const NewMovie = (props) => {
   const [title, setTitle] = useState();
@@ -15,10 +16,10 @@ const NewMovie = (props) => {
 
   const addMovieHandler = (ev) => {
     ev.preventDefault();
-    fetch("http://localhost:4000/movies", {
+    fetch(`${BACKEND_URL}/movies`, {
       method: "POST",
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -5,6 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Content from "../../ui/Content";
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from "../../constants";
 
 const ProgramPlan = (props) => {
   const [movies, setMovies] = useState();
@@ -22,7 +23,7 @@ const ProgramPlan = (props) => {
     content = <div className={styles.programPlan}>{movieList}</div>;
 
   useEffect(() => {
-    fetch("http://localhost:4000/movies")
+    fetch(`${BACKEND_URL}/movies`)
       .then((resp) => resp.json())
       .then((data) => {
         console.log(data);
