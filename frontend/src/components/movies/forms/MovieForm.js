@@ -1,0 +1,358 @@
+import { useEffect, useState } from "react";
+import styles from "./MovieForm.module.css";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Badge from "react-bootstrap/Badge";
+import CastAvatar from "./CastAvatar";
+import HorizontalScrollContainer from "../../../ui/HorizontalScrollContainer";
+
+const MovieForm = (props) => {
+  const isNew = props.isNew !== undefined ? props.isNew : true;
+
+  const [title, setTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [originalTitle, setOriginalTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [runtime, setRuntime] = useState("");
+  const [productionCountry, setProductionCountry] = useState("");
+  const [productionYear, setProductionYear] = useState("");
+  const [ageRestriction, setAgeRestriction] = useState("");
+  const [keywords, setKeywords] = useState([]);
+  const [keywordInput, setKeywordInput] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [genreInput, setGenreInput] = useState("");
+  const [director, setDirector] = useState("");
+  const [screenwriter, setScreenwriter] = useState("");
+  const [castInput, setCastInput] = useState();
+  const [cast, setCast] = useState([]);
+  const [poster, setPoster] = useState("");
+
+  /*
+{
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Leonardo di Caprio",
+      roleName: "Jordan Belfort",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+    {
+      name: "Keanu Reeves",
+      roleName: "Neo",
+      img: "https://image.tmdb.org/t/p/w500/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+    },
+  ]
+*/
+
+  useEffect(() => {
+    setTitle(props.default?.title ?? "");
+    setSubtitle(props.default?.subtitle ?? "");
+    setOriginalTitle(props.default?.originalTitle ?? "");
+    setDescription(props.default?.description ?? "");
+    setRuntime(props.default?.runtime ?? "");
+    setProductionCountry(props.default?.release?.productionCountry ?? "");
+    setProductionYear(props.default?.release?.productionYear ?? "");
+    setAgeRestriction(props.default?.release?.ageRestriction ?? "");
+    setDirector(props.default?.credits?.crew?.director?.name ?? "");
+    setScreenwriter(props.default?.credits?.crew?.screenwriter?.name ?? "");
+    setPoster(props.default?.media?.images.poster ?? "");
+    setKeywords(props.default?.keywords ?? []);
+    setGenres(props.default?.genres ?? []);
+    setCast(props.default?.credits?.cast ?? []);
+  }, [props.default]);
+
+  const submitHandler = async (ev) => {
+    ev.preventDefault();
+    const movie = {
+      title,
+      subtitle,
+      originalTitle,
+      description,
+      runtime,
+      release: {
+        productionCountry,
+        productionYear,
+        ageRestriction,
+      },
+      keywords,
+      genres,
+      credits: {
+        crew: {
+          director: { name: director },
+          screenwriter: { name: screenwriter },
+        },
+        cast,
+      },
+      media: {
+        images: {
+          poster,
+        },
+      },
+    };
+    const res = await props.onSubmit(movie);
+    console.log("FORM RES",res);
+    if(res?.code === 200) {
+      setTitle("");
+      setSubtitle("");
+      setOriginalTitle("");
+      setDescription("");
+      setRuntime("");
+      setProductionCountry("");
+      setProductionYear("");
+      setAgeRestriction("");
+      setDirector("");
+      setScreenwriter("");
+      setPoster("");
+      setKeywords([]);
+      setKeywordInput("");
+      setGenres([]);
+      setGenreInput("");
+      setCast([]);
+      setCastInput("");
+    }
+  };
+
+  const addCastHandler = () => {
+
+  };
+
+  const addGenreHandler = () => {
+    setGenres(genres => [...genres, genreInput]);
+  };
+
+  const addKeywordHandler = () => {
+    setKeywords(keywords => [...keywords, keywordInput]);
+  };
+
+  const keywordsElements = keywords.map((el, i) => (
+    <Badge bg="secondary" key={i}>
+      {el}
+    </Badge>
+  ));
+
+  const genreElements = genres.map((el, i) => (
+    <Badge bg="secondary" key={i}>
+      {el}
+    </Badge>
+  ));
+
+  const castElements = cast.map((el, i) => <CastAvatar key={i} person={el} />);
+
+  return (
+    <Card className="mt-4 mb-3 p-4">
+      <Form onSubmit={submitHandler}>
+        <Form.Group className="mb-3" controlId="title">
+          <Form.Label>Titel</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Titel eingeben..."
+            onChange={(e) => setTitle(e.target.value)}
+            value={title}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="subtitle">
+          <Form.Label>Subtitel</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Subtitel eingeben..."
+            onChange={(e) => setSubtitle(e.target.value)}
+            value={subtitle}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="originalTitle">
+          <Form.Label>Original Titel</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Original Titel eingeben..."
+            onChange={(e) => setOriginalTitle(e.target.value)}
+            value={originalTitle}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="runtime">
+          <Form.Label>Laufzeit (min)</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="Laufzeit eingeben (Minuten)..."
+            onChange={(e) => setRuntime(e.target.value)}
+            value={runtime}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="productionCountry">
+          <Form.Label>Produktionsland</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Produktionsland eingeben..."
+            onChange={(e) => setProductionCountry(e.target.value)}
+            value={productionCountry}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="productionYear">
+          <Form.Label>Produktionjahr</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="Jahr eingeben..."
+            onChange={(e) => setProductionYear(e.target.value)}
+            value={productionYear}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="ageRestriction">
+          <Form.Label>Altersfreigabe</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="Altersfreigabe eingeben..."
+            onChange={(e) => setAgeRestriction(e.target.value)}
+            value={ageRestriction}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="poster">
+          <Form.Label>Poster</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Bild URL eingeben..."
+            onChange={(e) => setPoster(e.target.value)}
+            value={poster}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="description">
+          <Form.Label>Beschreibung</Form.Label>
+          <textarea
+            className="form-control"
+            id="description"
+            rows="4"
+            placeholder="Beschreibung eingeben..."
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+          ></textarea>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="genres">
+          <Form.Label>Genres</Form.Label>
+          <div className={styles.inputButtonGroup}>
+            <Form.Control
+              type="text"
+              placeholder="Genre eingeben..."
+              onChange={(e) => setGenreInput(e.target.value)}
+            />
+            <Button onClick={addGenreHandler}>Hinzufügen</Button>
+          </div>
+
+          <div className={styles.badgeContainer}>{genreElements}</div>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="keywords">
+          <Form.Label>Keywords</Form.Label>
+          <div className={styles.inputButtonGroup}>
+            <Form.Control
+              type="text"
+              placeholder="Keyword eingeben..."
+              onChange={(e) => setKeywordInput(e.target.value)}
+            />
+            <Button onClick={addKeywordHandler}>Hinzufügen</Button>
+          </div>
+          <div className={styles.badgeContainer}>{keywordsElements}</div>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="director">
+          <Form.Label>Regie</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Regie eingeben..."
+            onChange={(e) => setDirector(e.target.value)}
+            value={director}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="screenwriter">
+          <Form.Label>Drehbuch</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Drehbuch eingeben..."
+            onChange={(e) => setScreenwriter(e.target.value)}
+            value={screenwriter}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="cast">
+          <Form.Label>Cast</Form.Label>
+          <div className={styles.inputButtonGroup}>
+            <Form.Control
+              type="text"
+              placeholder="Schauspieler eingeben..."
+              onChange={(e) => setCastInput(e.target.value)}
+            />
+            <Button onClick={addCastHandler}>Hinzufügen</Button>
+          </div>
+          <HorizontalScrollContainer>{castElements}</HorizontalScrollContainer>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          {isNew ? "Erstellen" : "Aktualisieren"}
+        </Button>
+      </Form>
+    </Card>
+  );
+};
+
+export default MovieForm;

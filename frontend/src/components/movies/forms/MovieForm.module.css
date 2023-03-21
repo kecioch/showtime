@@ -1,0 +1,19 @@
+.listGroup {
+  color: red;
+  position: fixed;
+  width: 80vw;
+  z-index: 100;
+}
+
+.inputButtonGroup {
+  display: flex;
+  flexDirection: row; 
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.badgeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
