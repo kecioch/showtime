@@ -21,9 +21,11 @@ const MovieListItem = (props) => {
             {movie.release.productionYear} ({movie.release.productionCountry}) •{" "}
             {movie.genres.join(", ")} • {movie.runtime}min
           </p>
-          <Card.Subtitle className="mb-2 text-muted">
-            {movie.subtitle}
-          </Card.Subtitle>
+          {movie.subtitle && (
+            <Card.Subtitle className="mb-2 text-muted">
+              {movie.subtitle}
+            </Card.Subtitle>
+          )}
           <Card.Text className={styles.description}>
             {movie.description}
           </Card.Text>

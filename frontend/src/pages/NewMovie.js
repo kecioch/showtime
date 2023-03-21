@@ -9,7 +9,7 @@ import MovieConfig from "../components/movies/forms/MovieConfig";
 
 const NewMovie = (props) => {
   const addMovieHandler = async (movie) => {
-    let msg;
+    console.log("POST",movie)
     const res = await fetch(`${BACKEND_URL}/movies`, {
       method: "POST",
       headers: {

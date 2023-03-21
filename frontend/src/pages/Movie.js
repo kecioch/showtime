@@ -55,7 +55,9 @@ const Movie = (props) => {
                   {movie.release.productionCountry}) • {movie.genres.join(", ")}{" "}
                   • {movie.runtime}min
                 </p>
-                <h3 className="text-muted">{movie.subtitle}</h3>
+                {movie.subtitle && (
+                  <h3 className="text-muted">{movie.subtitle}</h3>
+                )}
                 <p className={styles.description}>{movie.description}</p>
                 <div className="d-flex gap-5">
                   <div>
@@ -82,8 +84,14 @@ const Movie = (props) => {
               <p>
                 <b>Originaltitel:</b> {movie.originalTitle}
               </p>
-              <h4>Schlüsselwörter</h4>
-              <div className="d-flex gap-1">{keywordElements}</div>
+              {movie.keywords && (
+                <section>
+                  <h4>Schlüsselwörter</h4>
+                  <div className="d-flex gap-1 flex-wrap">
+                    {keywordElements}
+                  </div>
+                </section>
+              )}
             </div>
           </section>
         </Content>
