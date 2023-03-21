@@ -133,6 +133,10 @@ const MovieForm = (props) => {
     setKeywords((keywords) => keywords.filter((el) => el !== name));
   };
 
+  const deleteCastHandler = (person) => {
+    setCast((cast) => cast.filter(el => el.name !== person.name && el.roleName !== person.roleName));
+  };
+
   const keywordsElements = keywords.map((el, i) => (
     <BadgeAction
       bg="secondary"
@@ -157,7 +161,14 @@ const MovieForm = (props) => {
     </BadgeAction>
   ));
 
-  const castElements = cast.map((el, i) => <CastAvatar key={i} person={el} />);
+  const castElements = cast.map((el, i) => (
+    <CastAvatar
+      key={i}
+      person={el}
+      isDeleteable={true}
+      onDelete={deleteCastHandler}
+    />
+  ));
 
   return (
     <Card className="mt-4 mb-3 p-4">
