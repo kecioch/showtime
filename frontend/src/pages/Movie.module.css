@@ -12,3 +12,16 @@
 .description {
     text-align: justify;
 }
+
+.details {
+    display: flex;
+    flex-direction: row;
+}
+
+.sideInformation {
+    width: 30em;
+}
+
+.cast {
+    width: 100%;
+}
