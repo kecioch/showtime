@@ -6,7 +6,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
   },
   subtitle: {
-    required: true,
+    required: false,
     type: String,
   },
   originalTitle: {
@@ -82,8 +82,8 @@ const movieSchema = new mongoose.Schema({
         },
         img: {
           required: true,
-          type: String
-        }
+          type: String,
+        },
       },
     ],
   },
