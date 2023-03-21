@@ -10,9 +10,8 @@ const MovieConfig = (props) => {
   const searchMovieHandler = async (ev) => {
     if (ev.key !== "Enter") return;
 
-    const searchName = searchInput.replace(/\s/g, '%20');
-    console.log(`${BACKEND_URL}/search/movie?name=${searchName}`);
-    const res = await fetch(`${BACKEND_URL}/search/movie?name=${searchName}`)
+    console.log(`${BACKEND_URL}/search/movie?name=${searchInput}`);
+    const res = await fetch(`${BACKEND_URL}/search/movie?name=${searchInput}`)
     const data = await res.json();
 
     if(res.status === 200)

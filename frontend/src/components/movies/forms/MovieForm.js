@@ -24,7 +24,9 @@ const MovieForm = (props) => {
   const [genreInput, setGenreInput] = useState("");
   const [director, setDirector] = useState("");
   const [screenwriter, setScreenwriter] = useState("");
-  const [castInput, setCastInput] = useState();
+  const [castNameInput, setCastNameInput] = useState("");
+  const [castCharacterInput, setCastCharacterInput] = useState("");
+  const [castImageInput, setCastImageInput] = useState("");
   const [cast, setCast] = useState([]);
   const [poster, setPoster] = useState("");
 
@@ -74,8 +76,8 @@ const MovieForm = (props) => {
       },
     };
     const res = await props.onSubmit(movie);
-    console.log("FORM RES",res);
-    if(res?.code === 200) {
+    console.log("FORM RES", res);
+    if (res?.code === 200) {
       setTitle("");
       setSubtitle("");
       setOriginalTitle("");
@@ -92,20 +94,32 @@ const MovieForm = (props) => {
       setGenres([]);
       setGenreInput("");
       setCast([]);
-      setCastInput("");
+      setCastNameInput("");
+      setCastCharacterInput("");
+      setCastImageInput("");
     }
   };
 
   const addCastHandler = () => {
-
+    const member = {
+      name: castNameInput,
+      roleName: castCharacterInput,
+      img: castImageInput
+    };
+    setCast((cast) => [...cast, member]);
+    setCastCharacterInput("");
+    setCastImageInput("");
+    setCastNameInput("");
   };
 
   const addGenreHandler = () => {
-    setGenres(genres => [...genres, genreInput]);
+    setGenres((genres) => [...genres, genreInput]);
+    setGenreInput("");
   };
 
   const addKeywordHandler = () => {
-    setKeywords(keywords => [...keywords, keywordInput]);
+    setKeywords((keywords) => [...keywords, keywordInput]);
+    setKeywordInput("");
   };
 
   const keywordsElements = keywords.map((el, i) => (
@@ -215,6 +229,7 @@ const MovieForm = (props) => {
               type="text"
               placeholder="Genre eingeben..."
               onChange={(e) => setGenreInput(e.target.value)}
+              value={genreInput}
             />
             <Button onClick={addGenreHandler}>Hinzufügen</Button>
           </div>
@@ -228,6 +243,7 @@ const MovieForm = (props) => {
               type="text"
               placeholder="Keyword eingeben..."
               onChange={(e) => setKeywordInput(e.target.value)}
+              value={keywordInput}
             />
             <Button onClick={addKeywordHandler}>Hinzufügen</Button>
           </div>
@@ -253,11 +269,26 @@ const MovieForm = (props) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="cast">
           <Form.Label>Cast</Form.Label>
-          <div className={styles.inputButtonGroup}>
+          <div className="d-flex">
             <Form.Control
               type="text"
               placeholder="Schauspieler eingeben..."
-              onChange={(e) => setCastInput(e.target.value)}
+              onChange={(e) => setCastNameInput(e.target.value)}
+              value={castNameInput}
+            />
+            <Form.Control
+              type="text"
+              placeholder="Charakter eingeben..."
+              onChange={(e) => setCastCharacterInput(e.target.value)}
+              value={castCharacterInput}
+            />
+          </div>
+          <div className={styles.inputButtonGroup}>
+            <Form.Control
+              type="text"
+              placeholder="Bild URL eingeben..."
+              onChange={(e) => setCastImageInput(e.target.value)}
+              value={castImageInput}
             />
             <Button onClick={addCastHandler}>Hinzufügen</Button>
           </div>
