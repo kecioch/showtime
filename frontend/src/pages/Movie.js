@@ -84,7 +84,7 @@ const Movie = (props) => {
               <p>
                 <b>Originaltitel:</b> {movie.originalTitle}
               </p>
-              {movie.keywords && (
+              {movie.keywords?.length > 0 && (
                 <section>
                   <h4>Schlüsselwörter</h4>
                   <div className="d-flex gap-1 flex-wrap">
