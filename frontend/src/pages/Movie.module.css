@@ -2,3 +2,13 @@
     display: flex;
     flex-direction: row;
 }
+
+.poster {
+    width: 300;
+    height: 450px;
+    margin-right: 2em;
+}
+
+.description {
+    text-align: justify;
+}

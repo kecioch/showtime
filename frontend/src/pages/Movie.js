@@ -22,16 +22,15 @@ const Movie = (props) => {
 
   return (
     <Container>
-      <Link to="../">Back</Link>
       {movie && (
         <Content>
           <div className={styles.headerInfo}>
-            <Image src={movie.poster} fluid={true}/>
+            <Image src={movie.media.images.poster}  className={styles.poster} />
 
             <div>
               <h1>{movie.title}</h1>
-              <h2>{movie.subtitle}</h2>
-              <p>{movie.description}</p>
+              <h3 className="text-muted">{movie.subtitle}</h3>
+              <p className={styles.description}>{movie.description}</p>
             </div>
           </div>
         </Content>
