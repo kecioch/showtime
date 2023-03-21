@@ -12,7 +12,7 @@ const MovieListItem = (props) => {
       <Card.Body className={styles.movieListItem}>
         <div className={styles.cover}>
           <Image
-            src={movie.poster}
+            src={movie.media.images.poster}
             fluid={true}
           />
         </div>
