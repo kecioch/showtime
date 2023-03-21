@@ -9,7 +9,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     type: String,
   },
-  original_title: {
+  originalTitle: {
     required: true,
     type: String,
   },
@@ -30,15 +30,15 @@ const movieSchema = new mongoose.Schema({
     type: Number,
   },
   release: {
-    production_country: {
+    productionCountry: {
       required: true,
       type: String,
     },
-    production_year: {
+    productionYear: {
       required: true,
       type: Number,
     },
-    age_restriction: {
+    ageRestriction: {
       required: true,
       type: Number,
     },
@@ -76,10 +76,14 @@ const movieSchema = new mongoose.Schema({
           required: true,
           type: String,
         },
-        character_name: {
+        roleName: {
           required: true,
           type: String,
         },
+        img: {
+          required: true,
+          type: String
+        }
       },
     ],
   },
