@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
 import CastAvatar from "./CastAvatar";
 import HorizontalScrollContainer from "../../../ui/HorizontalScrollContainer";
+import BadgeAction from "../../../ui/BadgeAction";
 
 const MovieForm = (props) => {
   const isNew = props.isNew !== undefined ? props.isNew : true;
@@ -104,7 +105,7 @@ const MovieForm = (props) => {
     const member = {
       name: castNameInput,
       roleName: castCharacterInput,
-      img: castImageInput
+      img: castImageInput,
     };
     setCast((cast) => [...cast, member]);
     setCastCharacterInput("");
@@ -113,25 +114,47 @@ const MovieForm = (props) => {
   };
 
   const addGenreHandler = () => {
-    setGenres((genres) => [...genres, genreInput]);
+    if (!genres.find((el) => el === genreInput))
+      setGenres((genres) => [...genres, genreInput]);
     setGenreInput("");
   };
 
   const addKeywordHandler = () => {
-    setKeywords((keywords) => [...keywords, keywordInput]);
+    if (!keywords.find((el) => el === keywordInput))
+      setKeywords((keywords) => [...keywords, keywordInput]);
     setKeywordInput("");
   };
 
+  const deleteGenreHandler = (name) => {
+    setGenres((genres) => genres.filter((el) => el !== name));
+  };
+
+  const deleteKeywordHandler = (name) => {
+    setKeywords((keywords) => keywords.filter((el) => el !== name));
+  };
+
   const keywordsElements = keywords.map((el, i) => (
-    <Badge bg="secondary" key={i}>
+    <BadgeAction
+      bg="secondary"
+      key={i}
+      id={el}
+      onDelete={deleteKeywordHandler}
+      isDeleteable={true}
+    >
       {el}
-    </Badge>
+    </BadgeAction>
   ));
 
   const genreElements = genres.map((el, i) => (
-    <Badge bg="secondary" key={i}>
+    <BadgeAction
+      bg="secondary"
+      id={el}
+      key={i}
+      onDelete={deleteGenreHandler}
+      isDeleteable={true}
+    >
       {el}
-    </Badge>
+    </BadgeAction>
   ));
 
   const castElements = cast.map((el, i) => <CastAvatar key={i} person={el} />);
