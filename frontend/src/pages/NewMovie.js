@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/Card";
 import Container from "../ui/Container";
-import ContentCard from "../ui/Content";
+import Content from "../ui/Content";
 import ListGroup from "react-bootstrap/ListGroup";
 import styles from "./NewMovie.module.css";
 import { BACKEND_URL } from "../constants";
@@ -23,10 +23,10 @@ const NewMovie = (props) => {
 
   return (
     <Container>
-      <ContentCard>
+      <Content styles={{width: "40vw"}}>
         <h2>Neuen Film hinzufügen</h2>
         <MovieConfig onSubmit={addMovieHandler} isNew={true} />
-      </ContentCard>
+      </Content>
     </Container>
   );
 };
