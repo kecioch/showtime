@@ -1,8 +1,8 @@
-import Container from "../ui/Container";
-import Content from "../ui/Content";
+import Container from "../../ui/Container";
+import Content from "../../ui/Content";
 import styles from "./NewMovie.module.css";
-import { BACKEND_URL } from "../constants";
-import MovieConfig from "../components/movies/forms/MovieConfig";
+import { BACKEND_URL } from "../../constants";
+import MovieConfig from "../../components/movies/forms/MovieConfig";
 
 const NewMovie = (props) => {
   const addMovieHandler = async (movie) => {
