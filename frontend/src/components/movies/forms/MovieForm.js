@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
-import CastAvatar from "./CastAvatar";
+import CastAvatar from "../CastAvatar";
 import HorizontalScrollContainer from "../../../ui/HorizontalScrollContainer";
 import BadgeAction from "../../../ui/BadgeAction";
 

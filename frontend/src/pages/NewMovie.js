@@ -1,10 +1,7 @@
-import Card from "react-bootstrap/Card";
 import Container from "../ui/Container";
 import Content from "../ui/Content";
-import ListGroup from "react-bootstrap/ListGroup";
 import styles from "./NewMovie.module.css";
 import { BACKEND_URL } from "../constants";
-import MovieForm from "../components/movies/forms/MovieForm";
 import MovieConfig from "../components/movies/forms/MovieConfig";
 
 const NewMovie = (props) => {

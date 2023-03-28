@@ -6,7 +6,7 @@ import Image from "react-bootstrap/Image";
 import styles from "./Movie.module.css";
 import { BACKEND_URL } from "../constants";
 import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
-import CastAvatar from "../components/movies/forms/CastAvatar";
+import CastAvatar from "../components/movies/CastAvatar";
 import Badge from "react-bootstrap/Badge";
 
 const Movie = (props) => {

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import MovieForm from "./MovieForm";
-import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../../../constants";
 
 const MovieConfig = (props) => {
