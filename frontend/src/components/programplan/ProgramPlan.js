@@ -33,10 +33,15 @@ const ProgramPlan = (props) => {
 
   return (
     <Content>
-      <div style={{ width: "100%" }}>
+      <div className="d-flex gap-2">
         <Link to="/movies/new">
           <Button className="mb-4" variant="primary">
             Neuen Film hinzufügen
+          </Button>
+        </Link>
+        <Link to="/cinemas/new">
+          <Button className="mb-4" variant="primary">
+            Neuen Kinosaal erstellen
           </Button>
         </Link>
       </div>

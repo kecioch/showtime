@@ -1,0 +1,33 @@
+.seat {
+    width: 3em;
+    height: 3em;
+    /* background-color: lightgray; */
+}
+
+.unselected {
+    /* background-color: lightgray; */
+}
+
+.selected {
+    background-color: green;
+}
+
+.booked {
+    background-color: black;
+    cursor:not-allowed;
+    /* pointer-events: none; */
+}
+
+.standard {
+    background-color: lightgray;
+}
+
+.empty {
+    background-color: whitesmoke;
+}
+
+.blank {
+    background-color: white;
+}
+
+

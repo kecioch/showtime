@@ -2,7 +2,8 @@ import logo from "./logo.svg";
 import "./App.css";
 import Home from "./pages/Home";
 import Movie from "./pages/Movie";
-import NewMovie from "./pages/NewMovie";
+import NewMovie from "./pages/admin/NewMovie";
+import NewCinema from "./pages/admin/NewCinema";
 import { Route, Routes, Link } from "react-router-dom";
 import React from "react";
 import Container from "react-bootstrap/Container";
@@ -28,6 +29,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/movies/new" element={<NewMovie />} />
         <Route path="/movies/:id" element={<Movie />} />
+        <Route path="/cinemas/new" element={<NewCinema />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>

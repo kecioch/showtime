@@ -1,0 +1,13 @@
+.seatMap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 5px;
+}
+
+.screen {
+    width: 35em;
+    height: 10em;
+    background-color: gray;
+    margin-bottom: 3em;
+}
