@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cinemaSchema = new mongoose.Schema({
   title: {
     required: true,
-    unique: false,
+    unique: true,
     type: String,
   },
   map: {
