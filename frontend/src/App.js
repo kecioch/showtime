@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Home from "./pages/Home";
 import Movie from "./pages/Movie";
@@ -10,6 +9,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Cinema from "./pages/Cinema";
 
 function App() {
   return (
@@ -30,6 +30,7 @@ function App() {
         <Route path="/movies/new" element={<NewMovie />} />
         <Route path="/movies/:id" element={<Movie />} />
         <Route path="/cinemas/new" element={<NewCinema />} />
+        <Route path="/cinemas/:id" element={<Cinema />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>

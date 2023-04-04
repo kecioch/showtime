@@ -26,6 +26,15 @@ router.post("/", async (req, res) => {
     }
 });
 
-
+router.get("/:title", async (req, res) => {
+    const title = req.params.title;
+    let foundCinema;
+    console.log(`GET /cinemas/${title}`);
+  
+    if (title) foundCinema = await Cinema.findOne({ title });
+  
+    if (foundCinema) res.status(200).send(foundCinema);
+    else res.status(404).send({ code: 404, message: "cinema not found" });
+});
 
 module.exports = router;
