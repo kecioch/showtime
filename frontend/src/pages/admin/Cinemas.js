@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
-import CinemasList from "../../components/cinemas/CinemasList";
+import EditList from "../../components/lists/EditList";
 import Modal from "react-bootstrap/Modal";
 
 const Cinemas = (props) => {
@@ -17,7 +17,11 @@ const Cinemas = (props) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setCinemas(data);
+        const cinemaItems = data.map((el) => ({
+          title: el.title,
+          editPath: `/cinemas/${el.title}`,
+        }));
+        setCinemas(cinemaItems);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -54,9 +58,11 @@ const Cinemas = (props) => {
             </Button>
           </Link>
           {cinemas.length > 0 && (
-            <CinemasList data={cinemas} onDelete={onDeleteCinema} />
+            <EditList data={cinemas} onDelete={onDeleteCinema} />
           )}
-          {cinemas.length <= 0 && <h2 className="text-muted text-center">Keine Kinosäle vorhanden</h2>}
+          {cinemas.length <= 0 && (
+            <h2 className="text-muted text-center">Keine Kinosäle vorhanden</h2>
+          )}
         </Content>
       </Container>
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
