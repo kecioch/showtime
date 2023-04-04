@@ -30,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // ROUTES
 app.use("/search", require("./routes/Search")); // TMDB API
 app.use("/movies", require("./routes/Movies"));
+app.use("/cinemas", require("./routes/Cinemas"));
 
 app.get("/", (req, res) => {
   console.log("GET /");

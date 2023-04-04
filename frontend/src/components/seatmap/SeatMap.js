@@ -2,7 +2,7 @@ import styles from "./SeatMap.module.css";
 import SeatRow from "./SeatRow";
 
 const SeatMap = (props) => {
-  const rows = props.data.map((el, i) => (
+  const rows = props.data?.map?.rows?.map((el, i) => (
     <SeatRow
       key={i}
       data={el}
