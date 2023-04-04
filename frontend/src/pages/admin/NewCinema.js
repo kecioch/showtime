@@ -10,6 +10,26 @@ const NewCinema = () => {
   const [colCnt, setColCnt] = useState(10);
   const [seatMap, setSeatMap] = useState([]);
 
+  const seatClickHandler = (seat) => {
+    console.log("SEATCLICKHANDLER", seat);
+
+    if (seat.type === "standard") seat.type = "empty";
+    else seat.type = "standard";
+
+    // if (seat.status === "empty") seat.status = "unselected";
+    // else if (seat.status === "unselected") seat.status = "selected";
+    // else if (seat.status === "selected") seat.status = "booked";
+    // else return;
+
+    setSeatMap((map) => {
+      const updatedMap = [...map];
+      updatedMap[seat.row] = [...map[seat.row]];
+      updatedMap[seat.row][seat.col] = seat;
+      return updatedMap;
+    });
+    console.log("NEW SEAT MAP", seatMap);
+  };
+
   useEffect(() => {
     console.log("USEEFFECT");
     const DATA = [];
@@ -27,26 +47,7 @@ const NewCinema = () => {
     }
     setSeatMap(DATA);
     console.log(seatMap);
-  }, []);
-
-  const seatClickHandler = (seat) => {
-    if (seat.type === "standard") return;
-
-    console.log("SEATCLICKHANDLER", seat);
-    // if (seat.status === "empty") seat.status = "unselected";
-    // else if (seat.status === "unselected") seat.status = "selected";
-    // else if (seat.status === "selected") seat.status = "booked";
-    // else return;
-    seat.type = "standard";
-
-    setSeatMap((map) => {
-      const updatedMap = [...map];
-      updatedMap[seat.row] = [...map[seat.row]];
-      updatedMap[seat.row][seat.col] = seat;
-      return updatedMap;
-    });
-    console.log("NEW SEAT MAP", seatMap);
-  };
+  }, [rowCnt,colCnt]);
 
   return (
     <Container>
@@ -55,16 +56,23 @@ const NewCinema = () => {
         <Form>
           <Form.Group className="mb-3" controlId="title">
             <Form.Label>Titel</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Titel eingeben..."
-            />
+            <Form.Control type="text" placeholder="Titel eingeben..." />
             <Button variant="primary" type="submit" className="mt-2">
-                Erstellen
+              Erstellen
             </Button>
           </Form.Group>
         </Form>
         <hr />
+        <div className="d-flex flex-row justify-content-center gap-3">
+          <Form.Group className="mb-3" controlId="rowCnt">
+            <Form.Label>Reihen</Form.Label>
+            <Form.Control type="number" defaultValue={rowCnt} min={1} onChange={(ev) => setRowCnt(ev.target.value)}/>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="colCnt">
+            <Form.Label>Sitzplätze</Form.Label>
+            <Form.Control type="number" defaultValue={colCnt} min={1} onChange={(ev) => setColCnt(ev.target.value)}/>
+          </Form.Group>
+        </div>
         <SeatMap
           data={seatMap}
           editMode={true}
