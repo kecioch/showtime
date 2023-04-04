@@ -1,9 +1,6 @@
 import styles from "./ProgramPlan.module.css";
 import MovieListItem from "./MovieListItem";
-import Button from "react-bootstrap/Button";
 import React from "react";
-import { Link } from "react-router-dom";
-import Content from "../../ui/Content";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 
@@ -31,23 +28,7 @@ const ProgramPlan = (props) => {
       });
   }, []);
 
-  return (
-    <Content>
-      <div className="d-flex gap-2">
-        <Link to="/movies/new">
-          <Button className="mb-4" variant="primary">
-            Neuen Film hinzufügen
-          </Button>
-        </Link>
-        <Link to="/cinemas">
-          <Button className="mb-4" variant="primary">
-            Kinosaal Verwaltung
-          </Button>
-        </Link>
-      </div>
-      {content}
-    </Content>
-  );
+  return <>{content}</>;
 };
 
 export default ProgramPlan;
