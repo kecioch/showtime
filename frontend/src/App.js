@@ -10,6 +10,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Cinema from "./pages/Cinema";
+import Cinemas from "./pages/admin/Cinemas";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/movies/new" element={<NewMovie />} />
         <Route path="/movies/:id" element={<Movie />} />
+        <Route path="/cinemas" element={<Cinemas />} />
         <Route path="/cinemas/new" element={<NewCinema />} />
         <Route path="/cinemas/:id" element={<Cinema />} />
         <Route path="*" element={<Home />} />

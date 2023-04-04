@@ -39,9 +39,9 @@ const ProgramPlan = (props) => {
             Neuen Film hinzufügen
           </Button>
         </Link>
-        <Link to="/cinemas/new">
+        <Link to="/cinemas">
           <Button className="mb-4" variant="primary">
-            Neuen Kinosaal erstellen
+            Kinosaal Verwaltung
           </Button>
         </Link>
       </div>
