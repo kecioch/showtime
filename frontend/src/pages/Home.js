@@ -10,9 +10,9 @@ const Home = (props) => {
     <Container>
       <Content>
         <div className="d-flex gap-2">
-          <Link to="/movies/new">
+          <Link to="/movies">
             <Button className="mb-4" variant="primary">
-              Neuen Film hinzufügen
+              Film Verwaltung
             </Button>
           </Link>
           <Link to="/cinemas">
