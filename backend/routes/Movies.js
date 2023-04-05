@@ -25,6 +25,18 @@ router.get("/:title", async (req, res) => {
   else res.status(404).send({ code: 404, message: "movie not found" });
 });
 
+router.delete("/:title", async (req, res) => {
+  const title = req.params.title;
+  console.log(`DELETE /cinemas/${title}`);
+
+  try {
+    const movie = await Movie.findOneAndDelete({ title });
+    res.status(200).send(movie);
+  } catch (err) {
+    res.status(404).send({ code: 404, message: "delete error" });
+  }
+});
+
 router.post("/", async (req, res) => {
   console.log("POST /movies");
   console.log(req.body);

@@ -41,7 +41,6 @@ const Cinemas = (props) => {
   };
 
   const onDeleteCinema = (cinema) => {
-    console.log(cinema);
     setDeleteCinema(cinema);
     setShowDeleteModal(true);
   };
