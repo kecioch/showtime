@@ -15,28 +15,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:title", async (req, res) => {
-  const title = req.params.title;
-  let foundMovie;
-
-  if (title) foundMovie = await Movie.findOne({ title });
-
-  if (foundMovie) res.status(200).send(foundMovie);
-  else res.status(404).send({ code: 404, message: "movie not found" });
-});
-
-router.delete("/:title", async (req, res) => {
-  const title = req.params.title;
-  console.log(`DELETE /cinemas/${title}`);
-
-  try {
-    const movie = await Movie.findOneAndDelete({ title });
-    res.status(200).send(movie);
-  } catch (err) {
-    res.status(404).send({ code: 404, message: "delete error" });
-  }
-});
-
 router.post("/", async (req, res) => {
   console.log("POST /movies");
   console.log(req.body);
@@ -49,6 +27,43 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json({ code: 400, message: err.message });
+  }
+});
+
+router.get("/:title", async (req, res) => {
+  const title = req.params.title;
+  let foundMovie;
+
+  if (title) foundMovie = await Movie.findOne({ title });
+
+  if (foundMovie) res.status(200).send(foundMovie);
+  else res.status(404).send({ code: 404, message: "movie not found" });
+});
+
+router.put("/:title", async (req, res) => {
+  console.log("PUT /movies");
+  const title = req.params.title;
+  const body = req.body;
+  console.log(body);
+  try {
+    const updatedMovie = await Movie.findOneAndUpdate({ title }, body);
+    console.log("UPDATED", updatedMovie);
+    res.status(200).json(updatedMovie);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ code: 400, message: err.message });
+  }
+});
+
+router.delete("/:title", async (req, res) => {
+  const title = req.params.title;
+  console.log(`DELETE /cinemas/${title}`);
+
+  try {
+    const movie = await Movie.findOneAndDelete({ title });
+    res.status(200).send(movie);
+  } catch (err) {
+    res.status(404).send({ code: 404, message: "delete error" });
   }
 });
 

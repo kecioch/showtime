@@ -6,7 +6,7 @@ import MovieConfig from "../../components/movies/forms/MovieConfig";
 
 const NewMovie = (props) => {
   const addMovieHandler = async (movie) => {
-    console.log("POST",movie)
+    console.log("POST", movie);
     const res = await fetch(`${BACKEND_URL}/movies`, {
       method: "POST",
       headers: {
@@ -15,12 +15,12 @@ const NewMovie = (props) => {
       },
       body: JSON.stringify(movie),
     });
-    return {code: res.status};
+    return { code: res.status };
   };
 
   return (
     <Container>
-      <Content styles={{width: "40vw"}}>
+      <Content styles={{ maxWidth: "50em" }}>
         <h2>Neuen Film hinzufügen</h2>
         <MovieConfig onSubmit={addMovieHandler} isNew={true} />
       </Content>

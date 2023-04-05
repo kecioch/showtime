@@ -12,6 +12,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Cinema from "./pages/Cinema";
 import Cinemas from "./pages/admin/Cinemas";
 import Movies from "./pages/admin/Movies";
+import EditMovie from "./pages/admin/EditMovie";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/movies" element={<Movies />} />
         <Route path="/movies/new" element={<NewMovie />} />
         <Route path="/movies/:id" element={<Movie />} />
+        <Route path="/movies/:id/edit" element={<EditMovie />} />
         <Route path="/cinemas" element={<Cinemas />} />
         <Route path="/cinemas/new" element={<NewCinema />} />
         <Route path="/cinemas/:id" element={<Cinema />} />

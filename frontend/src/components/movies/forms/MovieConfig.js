@@ -1,31 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieForm from "./MovieForm";
 import { BACKEND_URL } from "../../../constants";
 
 const MovieConfig = (props) => {
   const [searchInput, setSearchInput] = useState();
-  const [searchedMovie, setSearchedMovie] = useState();
+  const [defaultMovie, setDefaultMovie] = useState();
 
   const searchMovieHandler = async (ev) => {
     if (ev.key !== "Enter") return;
 
     console.log(`${BACKEND_URL}/search/movie?name=${searchInput}`);
-    const res = await fetch(`${BACKEND_URL}/search/movie?name=${searchInput}`)
+    const res = await fetch(`${BACKEND_URL}/search/movie?name=${searchInput}`);
     const data = await res.json();
 
-    if(res.status === 200)
-      setSearchedMovie(data);
+    if (res.status === 200) setDefaultMovie(data);
   };
 
   const submitHandler = async (movie) => {
     const res = await props.onSubmit(movie);
     console.log("CONFIG RES", res);
     if (res?.code === 200) {
-      console.log("DELTE SEACRCHED");
-      setSearchedMovie();
+      setDefaultMovie();
     }
     return res;
   };
+
+  useEffect(() => {
+    if (props.isNew) return;
+    setDefaultMovie(props.default);
+  }, [props.isNew, props.default]);
 
   return (
     <React.Fragment>
@@ -50,7 +53,7 @@ const MovieConfig = (props) => {
       <MovieForm
         onSubmit={submitHandler}
         isNew={props.isNew}
-        default={searchedMovie}
+        default={defaultMovie}
       />
     </React.Fragment>
   );

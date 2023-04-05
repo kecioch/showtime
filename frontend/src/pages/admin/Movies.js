@@ -19,7 +19,7 @@ const Movies = (props) => {
         console.log(data);
         const movieItems = data.map((el) => ({
           title: el.title,
-          editPath: `/movies/${el.title}`,
+          editPath: `/movies/${el.title}/edit`,
         }));
         setMovies(movieItems);
       })
