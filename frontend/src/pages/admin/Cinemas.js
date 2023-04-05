@@ -1,4 +1,4 @@
-import Container from "react-bootstrap/esm/Container";
+import Container from "../../ui/Container";
 import Content from "../../ui/Content";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
