@@ -8,7 +8,7 @@ const EditListItem = (props) => {
   return (
     <div className={styles.listItem}>
       <h3>{item.title}</h3>
-      <div className="d-flex gap-2">
+      <div className="d-flex flex-row gap-2">
         <Link to={item.editPath}>
           <Button variant="primary">Bearbeiten</Button>
         </Link>

@@ -19,7 +19,7 @@ const Cinemas = (props) => {
         console.log(data);
         const cinemaItems = data.map((el) => ({
           title: el.title,
-          editPath: `/cinemas/${el.title}`,
+          editPath: `/cinemas/${el.title}/edit`,
         }));
         setCinemas(cinemaItems);
       })

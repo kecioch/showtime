@@ -37,6 +37,21 @@ router.get("/:title", async (req, res) => {
   else res.status(404).send({ code: 404, message: "cinema not found" });
 });
 
+router.put("/:title", async (req, res) => {
+  console.log("PUT /cinemas");
+  const title = req.params.title;
+  const body = req.body;
+  console.log(body);
+  try {
+    const updatedCinema = await Cinema.findOneAndUpdate({ title }, body);
+    console.log("UPDATED", updatedCinema);
+    res.status(200).json(updatedCinema);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ code: 400, message: err.message });
+  }
+});
+
 router.delete("/:title", async (req, res) => {
   const title = req.params.title;
   console.log(`DELETE /cinemas/${title}`);

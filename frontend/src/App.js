@@ -13,6 +13,7 @@ import Cinema from "./pages/Cinema";
 import Cinemas from "./pages/admin/Cinemas";
 import Movies from "./pages/admin/Movies";
 import EditMovie from "./pages/admin/EditMovie";
+import EditCinema from "./pages/admin/EditCinema";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/cinemas" element={<Cinemas />} />
         <Route path="/cinemas/new" element={<NewCinema />} />
         <Route path="/cinemas/:id" element={<Cinema />} />
+        <Route path="/cinemas/:id/edit" element={<EditCinema />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>
