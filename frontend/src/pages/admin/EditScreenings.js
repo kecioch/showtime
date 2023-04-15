@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import FormSelect from "react-bootstrap/FormSelect";
 import Form from "react-bootstrap/Form";
 import Screeningplan from "../../components/screeningplan/Screeningplan";
+import DeleteModal from "../../components/modals/DeleteModal";
 
 const EditScreenings = (props) => {
   /**
@@ -41,6 +42,8 @@ const EditScreenings = (props) => {
   const [selectedCinema, setSelectedCinema] = useState();
   const [selectedTime, setSelectedTime] = useState();
   const [selectedWeekday, setSelectedWeekday] = useState("Monday");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteScreening, setDeleteScreening] = useState();
 
   const addScreeningHandler = () => {
     const movie = movies.find((m) => m.title === selectedMovie);
@@ -69,19 +72,25 @@ const EditScreenings = (props) => {
       });
   };
 
-  const deleteScreeningHandler = (screeningID) => {
-    console.log("DELETE SCREENING", screeningID);
-    fetch(`${BACKEND_URL}/screenings/schedule/${screeningID}`, {
+  const deleteScreeningHandler = () => {
+    console.log("DELETE SCREENING", deleteScreening);
+    fetch(`${BACKEND_URL}/screenings/schedule/${deleteScreening}`, {
       method: "DELETE",
     }).then((res) => {
       console.log(res);
       if (res.status !== 200) return;
-      // setShowDeleteModal(false);
+      setShowDeleteModal(false);
       setScreenings((prev) => {
-        const screenings = prev.filter((el) => el._id !== screeningID);
+        const screenings = prev.filter((el) => el._id !== deleteScreening);
         return screenings;
       });
     });
+  };
+
+  const onDeleteScreening = (screeningID) => {
+    setDeleteScreening(screeningID);
+    console.log("SCREENINGID", screeningID);
+    setShowDeleteModal(true);
   };
 
   useEffect(() => {
@@ -136,7 +145,7 @@ const EditScreenings = (props) => {
             <Screeningplan
               cinemas={cinemas}
               screenings={screenings}
-              onDelete={deleteScreeningHandler}
+              onDelete={onDeleteScreening}
             />
           ) : (
             <h3>Keine Filmvorführungen</h3>
@@ -205,6 +214,13 @@ const EditScreenings = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <DeleteModal
+        show={showDeleteModal}
+        title="Filmvorführung"
+        text="Wollen Sie wirklich die Filmvorführung löschen?"
+        onClose={() => setShowDeleteModal(false)}
+        onDelete={deleteScreeningHandler}
+      />
     </>
   );
 };
