@@ -1,5 +1,12 @@
 .content {
-    width: 80vw;
-    margin-top: 2em;
-    margin-bottom: 2em;
+  width: 80vw;
+  max-width: 90em;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+@media (max-width: 750px) {
+  .content {
+    width: 100%;
+  }
 }
