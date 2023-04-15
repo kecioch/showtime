@@ -65,7 +65,7 @@ const EditScreenings = (props) => {
       .then((res) => res.json())
       .then((data) => {
         console.log("POST RESULT DATA",data)
-        setScreenings(screenings => [...screenings, screening]);
+        setScreenings(screenings => [...screenings, data]);
       });
   };
 

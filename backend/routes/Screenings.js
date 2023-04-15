@@ -19,7 +19,9 @@ router.post("/schedule", async (req, res) => {
 
   try {
     const screening = new ScheduledScreening(body);
-    const savedScreening = await screening.save();
+    let savedScreening = await screening.save();
+    savedScreening = await savedScreening.populate("movie");
+    savedScreening = await savedScreening.populate("cinema");
     res.status(200).json(savedScreening);
   } catch (err) {
     console.log(err);
