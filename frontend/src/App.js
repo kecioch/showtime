@@ -14,6 +14,7 @@ import Cinemas from "./pages/admin/Cinemas";
 import Movies from "./pages/admin/Movies";
 import EditMovie from "./pages/admin/EditMovie";
 import EditCinema from "./pages/admin/EditCinema";
+import EditScreenings from "./pages/admin/EditScreenings";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/cinemas/new" element={<NewCinema />} />
         <Route path="/cinemas/:id" element={<Cinema />} />
         <Route path="/cinemas/:id/edit" element={<EditCinema />} />
+        <Route path="/screenings/edit" element={<EditScreenings />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>

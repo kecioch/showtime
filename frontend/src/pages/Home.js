@@ -20,6 +20,11 @@ const Home = (props) => {
               Kinosaal Verwaltung
             </Button>
           </Link>
+          <Link to="/screenings/edit">
+            <Button className="mb-4" variant="primary">
+              Vorführungen Verwaltung
+            </Button>
+          </Link>
         </div>
         <ProgramPlan />
       </Content>

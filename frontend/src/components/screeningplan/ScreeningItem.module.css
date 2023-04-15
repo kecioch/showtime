@@ -1,0 +1,22 @@
+.item {
+    background-color: ghostwhite;
+    border-radius: 0.5em;
+    padding: 0.2em;
+}
+
+.item p {
+    margin: 0;
+    text-align: center;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.time {
+
+}
+
+.delete {
+   
+}
