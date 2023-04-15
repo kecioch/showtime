@@ -33,14 +33,14 @@ const Screeningplan = (props) => {
           )
           .map((el, i) => (
             <ScreeningItem
-              key={el.movie.title + i}
+              key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
               title={el.movie.title}
               time={el.time}
             />
           ));
 
         itemsWeek.push(
-          <td key={cinema.title + day + "_items"}>
+          <td key={`${cinema.title}_${day}_items`}>
             <div className={styles.items}>{items}</div>
           </td>
         );
