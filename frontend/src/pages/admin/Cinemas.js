@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
-import Modal from "react-bootstrap/Modal";
+import DeleteModal from "../../components/modals/DeleteModal";
 
 const Cinemas = (props) => {
   const [cinemas, setCinemas] = useState([]);
@@ -64,20 +64,7 @@ const Cinemas = (props) => {
           )}
         </Content>
       </Container>
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{deleteCinema?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Wollen Sie wirklich den Kinosaal löschen?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Abbrechen
-          </Button>
-          <Button variant="danger" onClick={deleteCinemaHandler}>
-            Löschen
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteModal show={showDeleteModal} title={deleteCinema?.title} text="Wollen Sie wirklich den Kinosaal löschen?" onClose={() => setShowDeleteModal(false)} onDelete={deleteCinemaHandler} />
     </>
   );
 };

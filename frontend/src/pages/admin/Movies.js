@@ -5,7 +5,7 @@ import Button from "react-bootstrap/esm/Button";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
-import Modal from "react-bootstrap/Modal";
+import DeleteModal from "../../components/modals/DeleteModal";
 
 const Movies = (props) => {
   const [movies, setMovies] = useState([]);
@@ -64,20 +64,13 @@ const Movies = (props) => {
           )}
         </Content>
       </Container>
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{deleteMovie?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Wollen Sie wirklich den Film löschen?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Abbrechen
-          </Button>
-          <Button variant="danger" onClick={deleteMovieHandler}>
-            Löschen
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <DeleteModal
+        show={showDeleteModal}
+        title={deleteMovie?.title}
+        text="Wollen Sie wirklich den Film löschen?"
+        onClose={() => setShowDeleteModal(false)}
+        onDelete={deleteMovieHandler}
+      />
     </>
   );
 };
