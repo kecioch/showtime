@@ -1,3 +1,32 @@
 .screeningPlan {
     width: 100%;
 }
+
+.screeningPlan td {
+    /* width: 10em; */
+    min-width: 8em;
+    max-width: 8em;
+    vertical-align: top;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.2em;
+    /* background-color: aqua; */
+}
+
+.screeningPlan tr td:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+.weekdays {
+    background-color: #212529;
+    color: white;
+}
+
+.weekdays th {
+    padding-left: 0.5em;
+    height: 2em;
+}

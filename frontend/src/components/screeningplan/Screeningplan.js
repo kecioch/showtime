@@ -1,6 +1,7 @@
 import { DAYS_OF_WEEK } from "../../constants";
 import ScreeningItem from "./ScreeningItem";
 import styles from "./Screeningplan.module.css";
+import HorizontalScrollContainer from "../../ui/HorizontalScrollContainer";
 
 const Screeningplan = (props) => {
   const cinemas = props.cinemas;
@@ -12,7 +13,9 @@ const Screeningplan = (props) => {
     // Cinema header title
     content.push(
       <tr key={cinema.title}>
-        <th colSpan={7} className="text-center bg-secondary">{cinema.title}</th>
+        <th colSpan={7} className="text-center bg-secondary">
+          {cinema.title}
+        </th>
       </tr>
     );
 
@@ -32,26 +35,28 @@ const Screeningplan = (props) => {
           />
         ));
 
-      itemsWeek.push(<td key={cinema.title + "_items"}>{items}</td>);
+      itemsWeek.push(<td key={cinema.title + "_items"}><div className={styles.items}>{items}</div></td>);
     });
     content.push(<tr>{itemsWeek}</tr>);
   });
 
   return (
-    <table className={styles.screeningPlan}>
-      <thead>
-        <tr>
-          <th>Mo</th>
-          <th>Di</th>
-          <th>Mi</th>
-          <th>Do</th>
-          <th>Fr</th>
-          <th>Sa</th>
-          <th>So</th>
-        </tr>
-      </thead>
-      <tbody>{content}</tbody>
-    </table>
+    <HorizontalScrollContainer>
+      <table className={styles.screeningPlan}>
+        <thead>
+          <tr className={styles.weekdays}>
+            <th>Mo</th>
+            <th>Di</th>
+            <th>Mi</th>
+            <th>Do</th>
+            <th>Fr</th>
+            <th>Sa</th>
+            <th>So</th>
+          </tr>
+        </thead>
+        <tbody>{content}</tbody>
+      </table>
+    </HorizontalScrollContainer>
   );
 };
 

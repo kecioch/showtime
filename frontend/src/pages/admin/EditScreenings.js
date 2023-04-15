@@ -6,7 +6,6 @@ import { BACKEND_URL } from "../../constants";
 import Modal from "react-bootstrap/Modal";
 import FormSelect from "react-bootstrap/FormSelect";
 import Form from "react-bootstrap/Form";
-import FormCheckInput from "react-bootstrap/esm/FormCheckInput";
 import Screeningplan from "../../components/screeningplan/Screeningplan";
 
 const EditScreenings = (props) => {
@@ -64,7 +63,10 @@ const EditScreenings = (props) => {
       body: JSON.stringify(screening),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        console.log(data)
+        setScreenings(screenings => [...screenings, data]);
+      });
   };
 
   useEffect(() => {
@@ -112,7 +114,8 @@ const EditScreenings = (props) => {
       <Container>
         <Content>
           <h1>Filmvorführungen</h1>
-          <Button onClick={() => setShowNewScreeningModal(true)}>
+          <hr />
+          <Button className="mb-3" onClick={() => setShowNewScreeningModal(true)}>
             Hinzufügen
           </Button>
           {screenings?.length > 0 ? (
