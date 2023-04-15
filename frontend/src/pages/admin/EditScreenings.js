@@ -64,9 +64,24 @@ const EditScreenings = (props) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("POST RESULT DATA",data)
-        setScreenings(screenings => [...screenings, data]);
+        console.log("POST RESULT DATA", data);
+        setScreenings((screenings) => [...screenings, data]);
       });
+  };
+
+  const deleteScreeningHandler = (screeningID) => {
+    console.log("DELETE SCREENING", screeningID);
+    fetch(`${BACKEND_URL}/screenings/schedule/${screeningID}`, {
+      method: "DELETE",
+    }).then((res) => {
+      console.log(res);
+      if (res.status !== 200) return;
+      // setShowDeleteModal(false);
+      setScreenings((prev) => {
+        const screenings = prev.filter((el) => el._id !== screeningID);
+        return screenings;
+      });
+    });
   };
 
   useEffect(() => {
@@ -105,21 +120,24 @@ const EditScreenings = (props) => {
     <option key={i}>{c.title}</option>
   ));
 
-  //   const screeningItems = screenings?.map((s, i) => (
-  //     <p key={i}>{`${s.cinema.title} / ${s.movie.title} / ${s.weekday} / ${s.time}`}</p>
-  //   ));
-
   return (
     <>
       <Container>
         <Content>
           <h1>Filmvorführungen</h1>
           <hr />
-          <Button className="mb-3" onClick={() => setShowNewScreeningModal(true)}>
+          <Button
+            className="mb-3"
+            onClick={() => setShowNewScreeningModal(true)}
+          >
             Hinzufügen
           </Button>
           {screenings?.length > 0 ? (
-            <Screeningplan cinemas={cinemas} screenings={screenings} />
+            <Screeningplan
+              cinemas={cinemas}
+              screenings={screenings}
+              onDelete={deleteScreeningHandler}
+            />
           ) : (
             <h3>Keine Filmvorführungen</h3>
           )}

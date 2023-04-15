@@ -36,6 +36,8 @@ const Screeningplan = (props) => {
               key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
               title={el.movie.title}
               time={el.time}
+              id={el._id}
+              onDelete={props.onDelete}
             />
           ));
 

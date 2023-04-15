@@ -29,4 +29,16 @@ router.post("/schedule", async (req, res) => {
   }
 });
 
+router.delete("/schedule/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(`DELETE /screenings/schedule/${id}`);
+
+  try {
+    const deletedScreening = await ScheduledScreening.findByIdAndDelete(id);
+    res.status(200).send(deletedScreening);
+  } catch (err) {
+    res.status(404).send({ code: 404, message: "delete error" });
+  }
+});
+
 module.exports = router;

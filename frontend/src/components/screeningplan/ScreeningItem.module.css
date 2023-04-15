@@ -2,6 +2,7 @@
     background-color: #cccccc;
     border-radius: 0.5em;
     padding: 0.2em;
+    position: relative;
 }
 
 .item p {
@@ -19,5 +20,4 @@
 }
 
 .delete {
-   
 }
