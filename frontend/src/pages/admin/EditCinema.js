@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState,useEffect } from "react";
-import Container from "../../ui/Container";
-import Content from "../../ui/Content";
+import Container from "../../components/ui/Container";
+import Content from "../../components/ui/Content";
 import CinemaConfig from "../../components/cinemas/forms/CinemaConfig";
 import { BACKEND_URL } from "../../constants";
 

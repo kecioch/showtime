@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import styles from "./Home.module.css";
 import ProgramPlan from "../components/programplan/ProgramPlan";
-import Container from "../ui/Container";
-import Content from "../ui/Content";
+import Container from "../components/ui/Container";
+import Content from "../components/ui/Content";
 import Button from "react-bootstrap/Button";
 
 const Home = (props) => {

@@ -3,10 +3,9 @@ import styles from "./MovieForm.module.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Badge from "react-bootstrap/Badge";
 import CastAvatar from "../CastAvatar";
-import HorizontalScrollContainer from "../../../ui/HorizontalScrollContainer";
-import BadgeAction from "../../../ui/BadgeAction";
+import HorizontalScrollContainer from "../../ui/HorizontalScrollContainer";
+import BadgeAction from "../../ui/BadgeAction";
 
 const MovieForm = (props) => {
   const isNew = props.isNew !== undefined ? props.isNew : true;

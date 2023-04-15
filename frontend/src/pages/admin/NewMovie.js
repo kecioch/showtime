@@ -1,5 +1,5 @@
-import Container from "../../ui/Container";
-import Content from "../../ui/Content";
+import Container from "../../components/ui/Container";
+import Content from "../../components/ui/Content";
 import styles from "./NewMovie.module.css";
 import { BACKEND_URL } from "../../constants";
 import MovieConfig from "../../components/movies/forms/MovieConfig";

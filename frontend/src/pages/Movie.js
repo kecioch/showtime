@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Container from "../ui/Container";
-import Content from "../ui/Content";
+import Container from "../components/ui/Container";
+import Content from "../components/ui/Content";
 import Image from "react-bootstrap/Image";
 import styles from "./Movie.module.css";
 import { BACKEND_URL } from "../constants";
-import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
+import HorizontalScrollContainer from "../components/ui/HorizontalScrollContainer";
 import CastAvatar from "../components/movies/CastAvatar";
 import Badge from "react-bootstrap/Badge";
 

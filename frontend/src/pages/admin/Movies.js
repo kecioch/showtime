@@ -1,5 +1,5 @@
-import Container from "../../ui/Container";
-import Content from "../../ui/Content";
+import Container from "../../components/ui/Container";
+import Content from "../../components/ui/Content";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
 import { useEffect, useState } from "react";

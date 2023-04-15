@@ -1,6 +1,6 @@
 import SeatMap from "../components/seatmap/SeatMap";
-import Container from "../ui/Container";
-import Content from "../ui/Content";
+import Container from "../components/ui/Container";
+import Content from "../components/ui/Content";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../constants";
 import { useParams } from "react-router-dom";

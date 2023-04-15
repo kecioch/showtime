@@ -1,7 +1,7 @@
 import { DAYS_OF_WEEK } from "../../constants";
 import ScreeningItem from "./ScreeningItem";
 import styles from "./Screeningplan.module.css";
-import HorizontalScrollContainer from "../../ui/HorizontalScrollContainer";
+import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
 import { useEffect, useState } from "react";
 
 const Screeningplan = (props) => {
