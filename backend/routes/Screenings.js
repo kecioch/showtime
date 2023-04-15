@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const ScreeningScheduled = require("../models/ScreeningScheduled");
+const ScheduledScreening = require("../models/ScheduledScreening");
 
 // BASIC URL /screenings
 
 router.get("/schedule", async (req, res) => {
-  const screeningsScheduled = await ScreeningScheduled.find()
+  const scheduledScreenings = await ScheduledScreening.find()
     .populate("movie")
     .populate("cinema");
-  res.send(screeningsScheduled);
+  res.send(scheduledScreenings);
 });
 
 router.post("/schedule", async (req, res) => {
@@ -18,7 +18,7 @@ router.post("/schedule", async (req, res) => {
   const body = req.body;
 
   try {
-    const screening = new ScreeningScheduled(body);
+    const screening = new ScheduledScreening(body);
     const savedScreening = await screening.save();
     res.status(200).json(savedScreening);
   } catch (err) {
