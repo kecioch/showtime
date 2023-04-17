@@ -54,7 +54,12 @@ router.get("/", async (req, res) => {
           },
         ]);
 
-        let screening = screeningFound[0];
+        let screening = await Screening.findOne(screeningFound[0])
+          .populate("scheduledScreening")
+          .populate({
+            path: "scheduledScreening",
+            populate: { path: "cinema" }
+          });
 
         // Create new screening when it doesnt exist
         if (!screening) {
@@ -66,6 +71,7 @@ router.get("/", async (req, res) => {
           });
           await screening.save();
         }
+
         return screening;
       })
     );
@@ -92,7 +98,7 @@ router.post("/schedule", async (req, res) => {
   try {
     const time = body.time;
     const date = new Date(`2000-01-01T${time}:00`);
-    const screening = new ScheduledScreening({...body, time: date});
+    const screening = new ScheduledScreening({ ...body, time: date });
     let savedScreening = await screening.save();
     savedScreening = await savedScreening.populate("movie");
     savedScreening = await savedScreening.populate("cinema");
