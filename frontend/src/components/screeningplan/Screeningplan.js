@@ -3,6 +3,7 @@ import ScreeningItem from "./ScreeningItem";
 import styles from "./Screeningplan.module.css";
 import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
 import { useEffect, useState } from "react";
+import { getTimeString } from "../../services/FormatTime";
 
 const Screeningplan = (props) => {
   const cinemas = props.cinemas;
@@ -34,14 +35,16 @@ const Screeningplan = (props) => {
           .sort((elA, elB) => new Date(elA.time) - new Date(elB.time))
           .map((el, i) => {
             const timeDate = new Date(el.time);
-            return <ScreeningItem
-              key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
-              title={el.movie.title}
-              time={`${timeDate.getHours()}:${timeDate.getMinutes()}`}
-              id={el._id}
-              onDelete={props.onDelete}
-            />
-      });
+            return (
+              <ScreeningItem
+                key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
+                title={el.movie.title}
+                time={getTimeString(timeDate)}
+                id={el._id}
+                onDelete={props.onDelete}
+              />
+            );
+          });
 
         itemsWeek.push(
           <td key={`${cinema.title}_${day}_items`}>
