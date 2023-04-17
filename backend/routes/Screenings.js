@@ -90,7 +90,9 @@ router.post("/schedule", async (req, res) => {
   const body = req.body;
 
   try {
-    const screening = new ScheduledScreening(body);
+    const time = body.time;
+    const date = new Date(`2000-01-01T${time}:00`);
+    const screening = new ScheduledScreening({...body, time: date});
     let savedScreening = await screening.save();
     savedScreening = await savedScreening.populate("movie");
     savedScreening = await savedScreening.populate("cinema");

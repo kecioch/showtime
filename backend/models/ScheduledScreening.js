@@ -15,7 +15,7 @@ const scheduledScreeningSchema = new mongoose.Schema({
     ],
   },
   time: {
-    type: String,
+    type: Date,
     required: true,
   },
   movie: {

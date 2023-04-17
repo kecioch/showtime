@@ -31,15 +31,16 @@ const Screeningplan = (props) => {
               screening.cinema.title === cinema.title &&
               screening.weekday === day
           )
-          .map((el, i) => (
-            <ScreeningItem
+          .map((el, i) => {
+            const timeDate = new Date(el.time);
+            return <ScreeningItem
               key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
               title={el.movie.title}
-              time={el.time}
+              time={`${timeDate.getHours()}:${timeDate.getMinutes()}`}
               id={el._id}
               onDelete={props.onDelete}
             />
-          ));
+      });
 
         itemsWeek.push(
           <td key={`${cinema.title}_${day}_items`}>

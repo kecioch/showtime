@@ -1,7 +1,7 @@
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import Button from "react-bootstrap/esm/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import Modal from "react-bootstrap/Modal";
 import FormSelect from "react-bootstrap/FormSelect";
@@ -14,19 +14,21 @@ const EditScreenings = (props) => {
   const [movies, setMovies] = useState([]);
   const [screenings, setScreenings] = useState([]);
   const [showNewScreeningModal, setShowNewScreeningModal] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState();
-  const [selectedCinema, setSelectedCinema] = useState();
   const [selectedTime, setSelectedTime] = useState();
-  const [selectedWeekday, setSelectedWeekday] = useState("Monday");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteScreening, setDeleteScreening] = useState();
+  const selectedCinema = useRef();
+  const selectedMovie = useRef();
+  const selectedWeekday = useRef();
 
   const addScreeningHandler = () => {
-    const movie = movies.find((m) => m.title === selectedMovie);
-    const cinema = cinemas.find((c) => c.title === selectedCinema);
+    const movie = movies.find((m) => m.title === selectedMovie.current.value);
+    const cinema = cinemas.find(
+      (c) => c.title === selectedCinema.current.value
+    );
 
     const screening = {
-      weekday: selectedWeekday,
+      weekday: selectedWeekday.current.value,
       time: selectedTime,
       movie,
       cinema,
@@ -83,7 +85,6 @@ const EditScreenings = (props) => {
       .then((data) => {
         console.log("FETCH MOVIES", data);
         setMovies(data);
-        setSelectedMovie(data[0].title);
       })
       .catch((err) => console.log(err));
 
@@ -92,7 +93,6 @@ const EditScreenings = (props) => {
       .then((data) => {
         console.log("FETCH CINEMAS", data);
         setCinemas(data);
-        setSelectedCinema(data[0].title);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -138,19 +138,13 @@ const EditScreenings = (props) => {
         <Modal.Body>
           <Form.Group className="mb-3" controlId="movie">
             <Form.Label>Film</Form.Label>
-            <FormSelect
-              onChange={(ev) => setSelectedMovie(ev.target.value)}
-              required={true}
-            >
+            <FormSelect ref={selectedMovie} required={true}>
               {movieOptions}
             </FormSelect>
           </Form.Group>
           <Form.Group className="mb-3" controlId="cinema">
             <Form.Label>Kinosaal</Form.Label>
-            <FormSelect
-              onChange={(ev) => setSelectedCinema(ev.target.value)}
-              required={true}
-            >
+            <FormSelect ref={selectedCinema} required={true}>
               {cinemaOptions}
             </FormSelect>
           </Form.Group>
@@ -164,10 +158,7 @@ const EditScreenings = (props) => {
           </Form.Group>
           <Form.Group className="mb-3" controlId="weekday">
             <Form.Label>Wochentag</Form.Label>
-            <FormSelect
-              onChange={(ev) => setSelectedWeekday(ev.target.value)}
-              required={true}
-            >
+            <FormSelect ref={selectedWeekday} required={true}>
               <option value="Monday">Montag</option>
               <option value="Tuesday">Dienstag</option>
               <option value="Wednesday">Mittwoch</option>
