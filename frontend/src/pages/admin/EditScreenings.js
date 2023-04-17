@@ -10,34 +10,10 @@ import Screeningplan from "../../components/screeningplan/Screeningplan";
 import DeleteModal from "../../components/modals/DeleteModal";
 
 const EditScreenings = (props) => {
-  /**
-   * SCREENING_SCHEDULED
-   * date: weekday
-   * time
-   * movie_id
-   * cinema_id
-   *
-   * SCREENING
-   * screening_scheduled_id
-   * date
-   * bookedSeats
-   *
-   * TICKET
-   * screening_id
-   * qrcode_url
-   * customer
-   *      vorname
-   *      nachname
-   *      email
-   * seat
-   *      row
-   *      col
-   */
-
   const [cinemas, setCinemas] = useState([]);
   const [movies, setMovies] = useState([]);
   const [screenings, setScreenings] = useState([]);
-  const [showNewScreeningModal, setShowNewScreeningModal] = useState(true);
+  const [showNewScreeningModal, setShowNewScreeningModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState();
   const [selectedCinema, setSelectedCinema] = useState();
   const [selectedTime, setSelectedTime] = useState();
