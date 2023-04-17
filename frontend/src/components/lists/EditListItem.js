@@ -10,7 +10,7 @@ const EditListItem = (props) => {
       <h3>{item.title}</h3>
       <div className="d-flex flex-row gap-2">
         <Link to={item.editPath}>
-          <Button variant="primary">Bearbeiten</Button>
+          <Button variant="primary" style={{height: "100%"}}>Bearbeiten</Button>
         </Link>
         <Button variant="danger" onClick={() => props.onDelete(item)}>
           Löschen
