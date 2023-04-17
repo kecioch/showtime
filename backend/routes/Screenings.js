@@ -2,8 +2,80 @@ const express = require("express");
 const router = express.Router();
 
 const ScheduledScreening = require("../models/ScheduledScreening");
+const Screening = require("../models/Screening");
+const Movie = require("../models/Movie");
+
+const {
+  weekdayToIndex,
+  indexToWeekDay,
+  getNextDate,
+} = require("../services/Weekdays");
 
 // BASIC URL /screenings
+
+router.get("/", async (req, res) => {
+  const { title } = req.query;
+  try {
+    // Find movie
+    const movie = await Movie.findOne({ title });
+
+    if (!movie)
+      return res.status(400).json({ code: 400, message: "not found" });
+
+    // Find schedule of movie
+    const screeningsScheduled = await ScheduledScreening.find({ movie });
+
+    // Find / create screenings for every scheduled screening
+    const screenings = await Promise.all(
+      screeningsScheduled.map(async (scheduledScreening) => {
+        const dayIndex = weekdayToIndex(scheduledScreening.weekday);
+        const nextDate = getNextDate(dayIndex);
+        const screeningFound = await Screening.aggregate([
+          {
+            $lookup: {
+              from: "scheduledscreenings",
+              localField: "scheduledScreening",
+              foreignField: "_id",
+              as: "scheduledScreening",
+            },
+          },
+          {
+            $unwind: "$scheduledScreening",
+          },
+          {
+            $match: {
+              "scheduledScreening.weekday": scheduledScreening.weekday,
+              date: nextDate,
+              scheduledScreening: scheduledScreening,
+            },
+          },
+          {
+            $limit: 1,
+          },
+        ]);
+
+        let screening = screeningFound[0];
+
+        // Create new screening when it doesnt exist
+        if (!screening) {
+          console.log("CREATE NEW SCREENING");
+          screening = new Screening({
+            scheduledScreening,
+            date: nextDate,
+            bookedSeats: [],
+          });
+          await screening.save();
+        }
+        return screening;
+      })
+    );
+
+    res.status(200).json(screenings);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ code: 400, message: err.message });
+  }
+});
 
 router.get("/schedule", async (req, res) => {
   const scheduledScreenings = await ScheduledScreening.find()

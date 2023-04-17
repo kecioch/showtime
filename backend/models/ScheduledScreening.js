@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const scheduledScreening = new mongoose.Schema({
+const scheduledScreeningSchema = new mongoose.Schema({
   weekday: {
     type: String,
     required: true,
@@ -30,4 +30,4 @@ const scheduledScreening = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("ScheduledScreening", scheduledScreening);
+module.exports = mongoose.model("ScheduledScreening", scheduledScreeningSchema);
