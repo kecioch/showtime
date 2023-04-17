@@ -21,7 +21,13 @@ const Cinemas = (props) => {
           title: el.title,
           editPath: `/cinemas/${el.title}/edit`,
         }));
-        setCinemas(cinemaItems);
+        return cinemaItems;
+      })
+      .then((cinemaItems) => {
+        const cinemaItemsSorted = cinemaItems.sort(
+          (cinemaA, cinemaB) => cinemaA.title.localeCompare(cinemaB.title)
+        );
+        setCinemas(cinemaItemsSorted);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -64,7 +70,13 @@ const Cinemas = (props) => {
           )}
         </Content>
       </Container>
-      <DeleteModal show={showDeleteModal} title={deleteCinema?.title} text="Wollen Sie wirklich den Kinosaal löschen?" onClose={() => setShowDeleteModal(false)} onDelete={deleteCinemaHandler} />
+      <DeleteModal
+        show={showDeleteModal}
+        title={deleteCinema?.title}
+        text="Wollen Sie wirklich den Kinosaal löschen?"
+        onClose={() => setShowDeleteModal(false)}
+        onDelete={deleteCinemaHandler}
+      />
     </>
   );
 };
