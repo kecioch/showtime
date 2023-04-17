@@ -21,7 +21,11 @@ const Movies = (props) => {
           title: el.title,
           editPath: `/movies/${el.title}/edit`,
         }));
-        setMovies(movieItems);
+        setMovies(
+          movieItems.sort((movieA, movieB) =>
+            movieA.title.localeCompare(movieB.title)
+          )
+        );
       })
       .catch((err) => console.log(err));
   }, []);
