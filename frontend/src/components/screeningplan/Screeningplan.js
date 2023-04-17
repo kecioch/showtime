@@ -31,6 +31,7 @@ const Screeningplan = (props) => {
               screening.cinema.title === cinema.title &&
               screening.weekday === day
           )
+          .sort((elA, elB) => new Date(elA.time) - new Date(elB.time))
           .map((el, i) => {
             const timeDate = new Date(el.time);
             return <ScreeningItem
