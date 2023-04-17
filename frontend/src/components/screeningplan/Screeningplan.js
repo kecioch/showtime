@@ -13,47 +13,49 @@ const Screeningplan = (props) => {
   useEffect(() => {
     const tableContent = [];
 
-    cinemas.forEach((cinema, i) => {
-      // Cinema header title
-      tableContent.push(
-        <tr key={cinema.title}>
-          <th colSpan={7} className="text-center bg-secondary">
-            {cinema.title}
-          </th>
-        </tr>
-      );
-
-      // Items for weekdays
-      const itemsWeek = [];
-      DAYS_OF_WEEK.forEach((day) => {
-        const items = screenings
-          ?.filter(
-            (screening) =>
-              screening.cinema.title === cinema.title &&
-              screening.weekday === day
-          )
-          .sort((elA, elB) => new Date(elA.time) - new Date(elB.time))
-          .map((el, i) => {
-            const timeDate = new Date(el.time);
-            return (
-              <ScreeningItem
-                key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
-                title={el.movie.title}
-                time={getTimeString(timeDate)}
-                id={el._id}
-                onDelete={props.onDelete}
-              />
-            );
-          });
-
-        itemsWeek.push(
-          <td key={`${cinema.title}_${day}_items`}>
-            <div className={styles.items}>{items}</div>
-          </td>
+    cinemas
+      .sort((cinemaA, cinemaB) => cinemaA.title.localeCompare(cinemaB.title))
+      .forEach((cinema, i) => {
+        // Cinema header title
+        tableContent.push(
+          <tr key={cinema.title}>
+            <th colSpan={7} className="text-center bg-secondary">
+              {cinema.title}
+            </th>
+          </tr>
         );
+
+        // Items for weekdays
+        const itemsWeek = [];
+        DAYS_OF_WEEK.forEach((day) => {
+          const items = screenings
+            ?.filter(
+              (screening) =>
+                screening.cinema.title === cinema.title &&
+                screening.weekday === day
+            )
+            .sort((elA, elB) => new Date(elA.time) - new Date(elB.time))
+            .map((el, i) => {
+              const timeDate = new Date(el.time);
+              return (
+                <ScreeningItem
+                  key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
+                  title={el.movie.title}
+                  time={getTimeString(timeDate)}
+                  id={el._id}
+                  onDelete={props.onDelete}
+                />
+              );
+            });
+
+          itemsWeek.push(
+            <td key={`${cinema.title}_${day}_items`}>
+              <div className={styles.items}>{items}</div>
+            </td>
+          );
+        });
+        tableContent.push(<tr key={cinema.title + "_week"}>{itemsWeek}</tr>);
       });
-      tableContent.push(<tr key={cinema.title + "_week"}>{itemsWeek}</tr>);
-    });
 
     setContent(tableContent);
   }, [cinemas, screenings]);
