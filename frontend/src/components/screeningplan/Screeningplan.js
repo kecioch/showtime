@@ -4,6 +4,7 @@ import styles from "./Screeningplan.module.css";
 import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
 import { useEffect, useState } from "react";
 import { getTimeString } from "../../services/FormatDate";
+import { getNextDate } from "../../services/Weekdays";
 
 const Screeningplan = (props) => {
   const [content, setContent] = useState([]);
@@ -86,13 +87,13 @@ const Screeningplan = (props) => {
       <table className={styles.screeningPlan}>
         <thead>
           <tr className={styles.weekdays}>
-            <th>Mo</th>
-            <th>Di</th>
-            <th>Mi</th>
-            <th>Do</th>
-            <th>Fr</th>
-            <th>Sa</th>
-            <th>So</th>
+            <th>Mo, {getNextDate(1).toLocaleDateString()}</th>
+            <th>Di, {getNextDate(2).toLocaleDateString()}</th>
+            <th>Mi, {getNextDate(3).toLocaleDateString()}</th>
+            <th>Do, {getNextDate(4).toLocaleDateString()}</th>
+            <th>Fr, {getNextDate(5).toLocaleDateString()}</th>
+            <th>Sa, {getNextDate(6).toLocaleDateString()}</th>
+            <th>So, {getNextDate(0).toLocaleDateString()}</th>
           </tr>
         </thead>
         <tbody>{content}</tbody>
