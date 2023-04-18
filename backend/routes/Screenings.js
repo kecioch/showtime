@@ -15,6 +15,7 @@ const {
 
 router.get("/", async (req, res) => {
   const { title } = req.query;
+  console.log(`GET /screenings?title=${title}`);
   try {
     // Find movie
     const movie = await Movie.findOne({ title });
@@ -54,25 +55,32 @@ router.get("/", async (req, res) => {
           },
         ]);
 
-        let screening = await Screening.findOne(screeningFound[0])
-          .populate("scheduledScreening")
-          .populate({
-            path: "scheduledScreening",
-            populate: { path: "cinema" }
-          });
+        if (screeningFound[0]) {
+          const screening = await Screening.findOne(screeningFound[0])
+            .populate("scheduledScreening")
+            .populate({
+              path: "scheduledScreening",
+              populate: { path: "cinema" },
+            });
 
-        // Create new screening when it doesnt exist
-        if (!screening) {
+          return screening;
+        } else {
+          // Create new screening when it doesnt exist
           console.log("CREATE NEW SCREENING");
-          screening = new Screening({
+          const screening = new Screening({
             scheduledScreening,
             date: nextDate,
             bookedSeats: [],
           });
-          await screening.save();
+          const savedScreening = await screening.save();
+          return await Screening.findOne(savedScreening)
+            .populate("scheduledScreening")
+            .populate({
+              path: "scheduledScreening",
+              populate: { path: "cinema" },
+            
+          });
         }
-
-        return screening;
       })
     );
 
