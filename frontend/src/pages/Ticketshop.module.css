@@ -1,0 +1,15 @@
+.headerInfo {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+}
+
+.poster {
+    max-width: 300px;
+    height: 350px;
+    margin-right: 2em;
+}
+
+.description {
+    text-align: justify;
+}

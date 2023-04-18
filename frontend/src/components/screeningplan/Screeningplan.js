@@ -3,7 +3,7 @@ import ScreeningItem from "./ScreeningItem";
 import styles from "./Screeningplan.module.css";
 import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
 import { useEffect, useState } from "react";
-import { getTimeString } from "../../services/FormatTime";
+import { getTimeString } from "../../services/FormatDate";
 
 const Screeningplan = (props) => {
   const [content, setContent] = useState([]);

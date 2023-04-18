@@ -78,13 +78,35 @@ router.get("/", async (req, res) => {
             .populate({
               path: "scheduledScreening",
               populate: { path: "cinema" },
-            
-          });
+            });
         }
       })
     );
 
     res.status(200).json(screenings);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ code: 400, message: err.message });
+  }
+});
+
+router.get("/ticketshop/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const screening = await Screening.findById(id)
+      .populate("scheduledScreening")
+      .populate({
+        path: "scheduledScreening",
+        populate: { path: "cinema" },
+      })
+      .populate({
+        path: "scheduledScreening",
+        populate: { path: "movie" },
+      });
+
+    if (!screening)
+      return res.status(400).json({ code: 400, message: "not found" });
+    res.send(screening);
   } catch (err) {
     console.log(err);
     res.status(400).json({ code: 400, message: err.message });
