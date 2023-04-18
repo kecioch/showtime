@@ -14,7 +14,7 @@ const indexToWeekDay = (index) => weekdays[index];
 
 const getNextDate = (dayIndex) => {
   const now = new Date();
-  const daysUntilNextDayOfWeek = (dayIndex - now.getDay() + 7) % 7 + 1;
+  const daysUntilNextDayOfWeek = (dayIndex - now.getDay() + 7) % 7;
   const nextDate = new Date(
     now.getFullYear(),
     now.getMonth(),
