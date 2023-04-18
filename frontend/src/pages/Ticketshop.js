@@ -28,37 +28,59 @@ const Ticketshop = (props) => {
   }, []);
 
   return (
-    <Container>
-      <Content>
-        <h1 className="mb-4">Ticketshop</h1>
-        {screening && (
-          <section>
-            <div className={styles.headerInfo}>
-              <Image
-                src={screening.scheduledScreening.movie.media.images.poster}
-                className={styles.poster}
-              />
+    <>
+      {" "}
+      <Container className={styles.containerHeader}>
+        <Content>
+          {screening && (
+            <section>
+              <div className={styles.headerInfo}>
+                <Image
+                  src={screening.scheduledScreening.movie.media.images.poster}
+                  className={styles.poster}
+                />
 
-              <div>
-                <h1 className="mt-4">{screening.scheduledScreening.movie.title}</h1>
-                <p>
-                  <Badge>
-                    {screening.scheduledScreening.movie.release.ageRestriction}
-                  </Badge>{" "}
-                  • {screening.scheduledScreening.movie.release.productionYear}{" "}
-                  (
-                  {screening.scheduledScreening.movie.release.productionCountry}
-                  ) • {screening.scheduledScreening.movie.genres.join(", ")} •{" "}
-                  {screening.scheduledScreening.movie.runtime}min
-                </p>
-                <h2 className="mt-5">{screening.scheduledScreening.cinema.title}</h2>
-                <h3>{new Date(screening.date).toLocaleDateString()}, {getTimeString(new Date(screening.scheduledScreening.time))} Uhr</h3>
+                <div>
+                  <h1 className="mt-4">
+                    {screening.scheduledScreening.movie.title}
+                  </h1>
+                  <p>
+                    <Badge>
+                      {
+                        screening.scheduledScreening.movie.release
+                          .ageRestriction
+                      }
+                    </Badge>{" "}
+                    •{" "}
+                    {screening.scheduledScreening.movie.release.productionYear}{" "}
+                    (
+                    {
+                      screening.scheduledScreening.movie.release
+                        .productionCountry
+                    }
+                    ) • {screening.scheduledScreening.movie.genres.join(", ")} •{" "}
+                    {screening.scheduledScreening.movie.runtime}min
+                  </p>
+                  <h2 className="mt-5">
+                    {screening.scheduledScreening.cinema.title}
+                  </h2>
+                  <h3>
+                    {new Date(screening.date).toLocaleDateString()},{" "}
+                    {getTimeString(new Date(screening.scheduledScreening.time))}{" "}
+                    Uhr
+                  </h3>
+                </div>
               </div>
-            </div>
-          </section>
-        )}
-      </Content>
-    </Container>
+            </section>
+          )}
+        </Content>
+      </Container>
+      <Container>
+        <Content>
+          <h2>Ticket Auswahl</h2>
+        </Content>
+      </Container>
+    </>
   );
 };
 

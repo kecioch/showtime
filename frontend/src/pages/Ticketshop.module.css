@@ -13,3 +13,9 @@
 .description {
     text-align: justify;
 }
+
+
+.containerHeader {
+    background-color: #5e6a75;
+    color: #202428;
+}
