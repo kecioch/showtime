@@ -6,12 +6,25 @@ import { useEffect, useState } from "react";
 import { getTimeString } from "../../services/FormatTime";
 
 const Screeningplan = (props) => {
-  const cinemas = props.cinemas;
-  const screenings = props.screenings;
   const [content, setContent] = useState([]);
 
   useEffect(() => {
+    let cinemas = props.cinemas;
+    const screenings = props.screenings;
+    const editMode = props.editMode;
     const tableContent = [];
+
+    if (!editMode) {
+      // cinemas = [...new Set(screenings.map(screening => screening.cinema))]
+      cinemas = Array.from(
+        new Set(screenings.map((screening) => screening.cinema.title))
+      ).map(
+        (title) =>
+          screenings.find((screening) => screening.cinema.title === title)
+            .cinema
+      );
+      console.log("CINEMAS", cinemas);
+    }
 
     cinemas
       .sort((cinemaA, cinemaB) => cinemaA.title.localeCompare(cinemaB.title))
@@ -37,13 +50,21 @@ const Screeningplan = (props) => {
             .sort((elA, elB) => new Date(elA.time) - new Date(elB.time))
             .map((el, i) => {
               const timeDate = new Date(el.time);
-              return (
+              return editMode ? (
                 <ScreeningItem
                   key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
                   title={el.movie.title}
                   time={getTimeString(timeDate)}
                   id={el._id}
                   onDelete={props.onDelete}
+                  editMode={true}
+                />
+              ) : (
+                <ScreeningItem
+                  key={`${el.cinema.title}_${el.weekday}_${el.time}_${i}`}
+                  time={getTimeString(timeDate)}
+                  id={el._id}
+                  editMode={false}
                 />
               );
             });
@@ -58,7 +79,7 @@ const Screeningplan = (props) => {
       });
 
     setContent(tableContent);
-  }, [cinemas, screenings]);
+  }, [props.cinemas, props.editMode, props.screenings, props.onDelete]);
 
   return (
     <HorizontalScrollContainer>

@@ -122,6 +122,7 @@ const EditScreenings = (props) => {
               cinemas={cinemas}
               screenings={screenings}
               onDelete={onDeleteScreening}
+              editMode={true}
             />
           ) : (
             <h3>Keine Filmvorführungen</h3>

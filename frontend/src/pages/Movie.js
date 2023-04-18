@@ -8,10 +8,12 @@ import { BACKEND_URL } from "../constants";
 import HorizontalScrollContainer from "../components/ui/HorizontalScrollContainer";
 import CastAvatar from "../components/movies/CastAvatar";
 import Badge from "react-bootstrap/Badge";
+import Screeningplan from "../components/screeningplan/Screeningplan";
 
 const Movie = (props) => {
   const { id } = useParams();
   const [movie, setMovie] = useState();
+  const [screenings, setScreenings] = useState([]);
 
   useEffect(() => {
     console.log(BACKEND_URL);
@@ -20,20 +22,31 @@ const Movie = (props) => {
       .then((data) => {
         console.log(data);
         setMovie(data);
+      })
+      .then(() => {
+        fetch(`${BACKEND_URL}/screenings?title=${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("SCREENINGS",data);
+            setScreenings(data.map(screening =>  ({
+              date: screening.date,
+              weekday: screening.scheduledScreening.weekday,
+              cinema: screening.scheduledScreening.cinema,
+              time: screening.scheduledScreening.time,
+              _id: screening.scheduledScreening._id
+            })));
+          });
       });
-  }, []);
+  }, [id]);
 
   const castElements = movie?.credits?.cast?.map((el, i) => (
     <CastAvatar key={i} person={el} />
   ));
+
   const keywordElements = movie?.keywords?.map((el, i) => (
     <Badge key={i} bg="secondary">
       {el}
     </Badge>
-  ));
-
-  const genreElements = movie?.genres?.map((el, i) => (
-    <span key={i}>{el}</span>
   ));
 
   return (
@@ -78,6 +91,8 @@ const Movie = (props) => {
               <HorizontalScrollContainer>
                 {castElements}
               </HorizontalScrollContainer>
+              <h4 className="mt-3">Tickets</h4>
+              {screenings?.length > 0 ? <Screeningplan screenings={screenings} /> : <h3 className="text-muted text-center mt-4">Keine Vorführungen im Programmplan vorhanden</h3>}
             </div>
             <div className={styles.sideInformation}>
               <h4>Informationen</h4>
