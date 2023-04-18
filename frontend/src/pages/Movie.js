@@ -33,7 +33,7 @@ const Movie = (props) => {
               weekday: screening.scheduledScreening.weekday,
               cinema: screening.scheduledScreening.cinema,
               time: screening.scheduledScreening.time,
-              _id: screening.scheduledScreening._id
+              _id: screening._id
             })));
           });
       });
