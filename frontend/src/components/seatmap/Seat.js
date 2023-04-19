@@ -3,7 +3,8 @@ import styles from "./Seat.module.css";
 const Seat = (props) => {
   const data = props.data;
 
-  const status = data.type === "empty" && !props.editMode ? "blank" : data.type;
+  let status = data.type === "empty" && !props.editMode ? "blank" : data.type;
+  if(data.status !== "unselected") status = data.status;
   const classes = `${styles.seat} ${styles[status]}`;
 
   const onMouseEnterHandler = (ev) => {
