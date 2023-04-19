@@ -8,12 +8,15 @@ import Image from "react-bootstrap/esm/Image";
 import styles from "./Ticketshop.module.css";
 import { getTimeString } from "../services/FormatDate";
 import SeatMap from "../components/seatmap/SeatMap";
+import Button from "react-bootstrap/esm/Button";
 
 const Ticketshop = (props) => {
   const { id } = useParams();
   const [screening, setScreening] = useState();
   const navigate = useNavigate();
   const [seatMap, setSeatMap] = useState();
+  const [selectedTickets, setSelectedTickets] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     console.log("REQ ID", id);
@@ -29,11 +32,43 @@ const Ticketshop = (props) => {
         console.log("MAP", data.scheduledScreening.cinema);
       })
       .catch((err) => navigate("/"));
-  }, []);
+  }, [id, navigate]);
 
   const onSeatClickHandler = (seat) => {
+    if (!seat || seat?.type === "empty" || seat?.status === "booked") return;
     console.log("SEATCLICKED", seat);
+
+    if (seat.status === "unselected") seat.status = "selected";
+    else seat.status = "unselected";
+
+    setSeatMap((prev) => {
+      const updatedMap = {
+        map: {
+          rows: [...prev.map.rows],
+        },
+      };
+      updatedMap.map.rows[seat.row] = [...prev.map.rows[seat.row]];
+      updatedMap.map.rows[seat.row][seat.col] = seat;
+      return updatedMap;
+    });
   };
+
+  useEffect(() => {
+    setSelectedTickets(
+      seatMap?.map?.rows
+        .flatMap((row) => row)
+        .filter((seat) => seat.status === "selected")
+    );
+  }, [seatMap]);
+
+  useEffect(() => {
+    console.log("ST",selectedTickets)
+    setTotalPrice(selectedTickets?.reduce((acc,curr) => acc + 8, 0));
+  },[selectedTickets]);
+
+  const selectedTicketsElements = selectedTickets?.map((seat, i) => (
+    <li key={i}>{i}</li>
+  ));
 
   return (
     <>
@@ -72,7 +107,11 @@ const Ticketshop = (props) => {
                   <h2 className="mt-5">
                     {screening.scheduledScreening.cinema.title}
                   </h2>
-                  <h4 className="mt-3">{new Date(screening.date).toLocaleString('de-de', {weekday:'long'})}</h4>
+                  <h4 className="mt-3">
+                    {new Date(screening.date).toLocaleString("de-de", {
+                      weekday: "long",
+                    })}
+                  </h4>
                   <h4>
                     {new Date(screening.date).toLocaleDateString()},{" "}
                     {getTimeString(new Date(screening.scheduledScreening.time))}{" "}
@@ -95,7 +134,14 @@ const Ticketshop = (props) => {
             />
             <section>
               <h3>Ausgewählte Tickets</h3>
-              <p>asd</p>
+              <h6>Gesamtpreis: {totalPrice} € </h6>
+              <Button
+                disabled={selectedTickets?.length <= 0}
+                onClick={() => console.log(selectedTickets)}
+              >
+                Zur Kasse gehen
+              </Button>
+              <ul>{selectedTicketsElements}</ul>
             </section>
           </div>
         </Content>
