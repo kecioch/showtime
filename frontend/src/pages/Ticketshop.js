@@ -62,13 +62,20 @@ const Ticketshop = (props) => {
   }, [seatMap]);
 
   useEffect(() => {
-    console.log("ST",selectedTickets)
-    setTotalPrice(selectedTickets?.reduce((acc,curr) => acc + 8, 0));
-  },[selectedTickets]);
+    console.log("ST", selectedTickets);
+    setTotalPrice(selectedTickets?.reduce((acc, curr) => acc + 8, 0));
+  }, [selectedTickets]);
 
-  const selectedTicketsElements = selectedTickets?.map((seat, i) => (
-    <li key={i}>{i}</li>
-  ));
+  const selectedTicketsElements = (
+    <ul className={styles.cartList}>
+      {selectedTickets?.map((seat, i) => {
+        console.log("SEAT", seat);
+        return (
+          <li key={i}>{`1x Reihe: ${seat.row}, Platz: ${seat.col} (${seat.type})`}</li>
+        );
+      })}
+    </ul>
+  );
 
   return (
     <>
@@ -133,15 +140,18 @@ const Ticketshop = (props) => {
               editMode={false}
             />
             <section>
-              <h3>Ausgewählte Tickets</h3>
-              <h6>Gesamtpreis: {totalPrice} € </h6>
-              <Button
-                disabled={selectedTickets?.length <= 0}
-                onClick={() => console.log(selectedTickets)}
-              >
-                Zur Kasse gehen
-              </Button>
-              <ul>{selectedTicketsElements}</ul>
+              <div className={styles.cart}>
+                <h3>Ausgewählte Tickets</h3>
+                <h5 className="mt-3">Gesamtpreis: {totalPrice} € </h5>
+                <Button
+                  disabled={selectedTickets?.length <= 0}
+                  onClick={() => console.log(selectedTickets)}
+                  className="mb-3"
+                >
+                  Zur Kasse gehen
+                </Button>
+                {selectedTickets?.length > 0 ? selectedTicketsElements : <h6 className="text-muted">Keine Tickets ausgewählt</h6>}
+              </div>
             </section>
           </div>
         </Content>

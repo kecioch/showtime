@@ -19,3 +19,23 @@
     background-color: #c4c9cd;
     color: #202428;
 }
+
+.cart {
+    border-left: 1px solid #202428;
+    padding-left: 1em;
+    margin-left: 1em;
+}
+
+.cartList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.cartList li {
+    border-bottom: 1px solid #c4c9cd;
+    padding: 0.2em;
+}
+
+.cartList li:last-child {
+    border-bottom: none;
+}
