@@ -16,6 +16,7 @@ import EditMovie from "./pages/admin/EditMovie";
 import EditCinema from "./pages/admin/EditCinema";
 import EditScreenings from "./pages/admin/EditScreenings";
 import Ticketshop from "./pages/Ticketshop";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/cinemas/:id/edit" element={<EditCinema />} />
         <Route path="/screenings/edit" element={<EditScreenings />} />
         <Route path="/ticketshop/:id" element={<Ticketshop />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>

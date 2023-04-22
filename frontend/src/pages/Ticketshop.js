@@ -84,6 +84,16 @@ const Ticketshop = (props) => {
     });
   };
 
+  const goToCartHandler = () => {
+    console.log(screening);
+    const cart = {
+      screening,
+      tickets: selectedTickets
+    };
+    console.log(cart);
+    navigate("/cart");
+  };
+
   useEffect(() => {
     setSelectedTickets(
       seatMap?.map?.rows
@@ -178,7 +188,7 @@ const Ticketshop = (props) => {
                 <h5 className="mt-3">Gesamtpreis: {totalPrice} € </h5>
                 <Button
                   disabled={selectedTickets?.length <= 0}
-                  onClick={() => console.log(selectedTickets)}
+                  onClick={goToCartHandler}
                   className="mb-3"
                 >
                   Zur Kasse gehen
