@@ -8,9 +8,10 @@ const CinemaConfig = (props) => {
   const [title, setTitle] = useState("");
   const [rowCnt, setRowCnt] = useState(10);
   const [colCnt, setColCnt] = useState(10);
-  const [seatMap, setSeatMap] = useState({});
+  const [seatMap, setSeatMap] = useState();
   const [selectedSeatType, setSelecteSeatType] = useState();
   const [seatTypes, setSeatTypes] = useState();
+  const [isInit, setIsInit] = useState(false);
 
   const seatClickHandler = (seat) => {
     console.log("SEATCLICKHANDLER", seat);
@@ -47,8 +48,6 @@ const CinemaConfig = (props) => {
   };
 
   useEffect(() => {
-    console.log("USEEFFECT");
-
     // Fetch SeatTypes
     fetch(`${BACKEND_URL}/seattypes`)
       .then((res) => res.json())
@@ -56,14 +55,87 @@ const CinemaConfig = (props) => {
         console.log("SEATTYPES", data);
         setSeatTypes(data);
         setSelecteSeatType(data[0]);
+      });
+  });
 
-        // Create SeatMap
-        const DATA = {
-          map: {
-            rows: [],
-          },
-        };
-        for (let r = 0; r < rowCnt; r++) {
+  // useEffect(() => {
+  //   // Create SeatMap
+  //   const DATA = {
+  //     map: {
+  //       rows: [],
+  //     },
+  //   };
+  //   for (let r = 0; r < rowCnt; r++) {
+  //     const row = [];
+  //     for (let c = 0; c < colCnt; c++) {
+  //       row.push({
+  //         row: r,
+  //         col: c,
+  //         status: "unselected",
+  //       });
+  //     }
+  //     DATA.map.rows.push(row);
+  //   }
+  //   setSeatMap(DATA);
+  //   console.log(seatMap);
+  // }, [rowCnt, colCnt]);
+
+  // useEffect(() => {
+  //   if (!props.cinema) return;
+
+  //   console.log("CINEMA CONFIG", props.cinema);
+  //   setTitle(props.cinema.title);
+  //   setRowCnt(props?.cinema?.map?.rows?.length);
+  //   setColCnt(props?.cinema?.map?.rows[0]?.length);
+  //   setSeatMap({ map: props.cinema.map });
+  //   console.log(seatMap);
+  // }, [props.cinema]);
+
+  useEffect(() => {
+    if (props.cinema) {
+      setTitle(props.cinema.title);
+      if (!isInit) {
+        setRowCnt(props?.cinema?.map?.rows?.length);
+        setColCnt(props?.cinema?.map?.rows[0]?.length);
+        setIsInit(true);
+      }
+      setSeatMap({ map: props.cinema.map });
+    } else {
+      const DATA = {
+        map: {
+          rows: [],
+        },
+      };
+      for (let r = 0; r < rowCnt; r++) {
+        const row = [];
+        for (let c = 0; c < colCnt; c++) {
+          row.push({
+            row: r,
+            col: c,
+            status: "unselected",
+          });
+        }
+        DATA.map.rows.push(row);
+      }
+      setSeatMap(DATA);
+    }
+  }, [props.cinema, rowCnt, colCnt]);
+
+  useEffect(() => {
+    if (seatMap) {
+      const newRows = [];
+      for (let r = 0; r < rowCnt; r++) {
+        if (r < seatMap.map.rows.length) {
+          const row = seatMap.map.rows[r].slice(0, colCnt);
+          for (let c = seatMap.map.rows[r].length; c < colCnt; c++) {
+            row.push({
+              row: r,
+              col: c,
+              status: "unselected",
+            });
+          }
+          newRows.push(row);
+        } else {
           const row = [];
           for (let c = 0; c < colCnt; c++) {
             row.push({
@@ -72,24 +144,16 @@ const CinemaConfig = (props) => {
               status: "unselected",
             });
           }
-          DATA.map.rows.push(row);
+          newRows.push(row);
         }
-        setSeatMap(DATA);
-        console.log(seatMap);
+      }
+      setSeatMap({
+        map: {
+          rows: newRows,
+        },
       });
+    }
   }, [rowCnt, colCnt]);
-
-  useEffect(() => {
-    if (!props.cinema) return;
-
-    console.log("CINEMA CONFIG", props.cinema);
-    console.log("LEN", props?.cinema?.map?.rows?.length);
-    setTitle(props.cinema.title);
-    setRowCnt(props?.cinema?.map?.rows?.length);
-    setColCnt(props?.cinema?.map?.rows[0]?.length);
-    setSeatMap({ map: props.cinema.map });
-    console.log(seatMap);
-  }, [props.cinema]);
 
   return (
     <>
