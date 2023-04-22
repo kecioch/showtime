@@ -90,7 +90,8 @@ const Ticketshop = (props) => {
       screening,
       tickets: selectedTickets
     };
-    console.log(cart);
+    // console.log(cart);
+    localStorage.setItem("cart",JSON.stringify(cart));
     navigate("/cart");
   };
 

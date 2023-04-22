@@ -1,0 +1,14 @@
+.header{
+    display: flex;
+    background-color: #cccccc;
+    color: #3e464e;
+    border-radius: 0.5em;
+    gap: 1em;
+    overflow: hidden;
+    margin-top: 1em;
+}
+
+.poster {
+    height: 280px;
+    object-fit: cover;
+}
