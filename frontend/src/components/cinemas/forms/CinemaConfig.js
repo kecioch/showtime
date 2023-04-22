@@ -2,18 +2,21 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import SeatMap from "../../seatmap/SeatMap";
 import { useState, useEffect } from "react";
+import { BACKEND_URL } from "../../../constants";
 
 const CinemaConfig = (props) => {
   const [title, setTitle] = useState("");
   const [rowCnt, setRowCnt] = useState(10);
   const [colCnt, setColCnt] = useState(10);
   const [seatMap, setSeatMap] = useState({});
+  const [selectedSeatType, setSelecteSeatType] = useState();
+  const [seatTypes, setSeatTypes] = useState();
 
   const seatClickHandler = (seat) => {
     console.log("SEATCLICKHANDLER", seat);
 
-    if (seat.type === "standard") seat.type = "empty";
-    else seat.type = "standard";
+    if (seat.type?.title === selectedSeatType.title) seat.type = null;
+    else seat.type = selectedSeatType;
 
     // if (seat.status === "empty") seat.status = "unselected";
     // else if (seat.status === "unselected") seat.status = "selected";
@@ -45,36 +48,46 @@ const CinemaConfig = (props) => {
 
   useEffect(() => {
     console.log("USEEFFECT");
-    const DATA = {
-      map: {
-        rows: [],
-      },
-    };
-    for (let r = 0; r < rowCnt; r++) {
-      const row = [];
-      for (let c = 0; c < colCnt; c++) {
-        row.push({
-          row: r,
-          col: c,
-          status: "unselected",
-          type: "empty",
-        });
-      }
-      DATA.map.rows.push(row);
-    }
-    setSeatMap(DATA);
-    console.log(seatMap);
+
+    // Fetch SeatTypes
+    fetch(`${BACKEND_URL}/seattypes`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("SEATTYPES", data);
+        setSeatTypes(data);
+        setSelecteSeatType(data[0]);
+
+        // Create SeatMap
+        const DATA = {
+          map: {
+            rows: [],
+          },
+        };
+        for (let r = 0; r < rowCnt; r++) {
+          const row = [];
+          for (let c = 0; c < colCnt; c++) {
+            row.push({
+              row: r,
+              col: c,
+              status: "unselected",
+            });
+          }
+          DATA.map.rows.push(row);
+        }
+        setSeatMap(DATA);
+        console.log(seatMap);
+      });
   }, [rowCnt, colCnt]);
 
   useEffect(() => {
     if (!props.cinema) return;
 
     console.log("CINEMA CONFIG", props.cinema);
-    console.log("LEN",props?.cinema?.map?.rows?.length);
+    console.log("LEN", props?.cinema?.map?.rows?.length);
     setTitle(props.cinema.title);
     setRowCnt(props?.cinema?.map?.rows?.length);
     setColCnt(props?.cinema?.map?.rows[0]?.length);
-    setSeatMap({map: props.cinema.map});
+    setSeatMap({ map: props.cinema.map });
     console.log(seatMap);
   }, [props.cinema]);
 

@@ -13,7 +13,10 @@ const cinemaSchema = new mongoose.Schema({
           row: { type: Number, required: true },
           col: { type: Number, required: true },
           status: { type: String, default: "unselected" },
-          type: { type: String, required: true },
+          type: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "SeatType",
+          },
         },
       ],
     ],

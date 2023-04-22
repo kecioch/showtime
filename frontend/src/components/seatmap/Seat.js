@@ -2,8 +2,10 @@ import styles from "./Seat.module.css";
 
 const Seat = (props) => {
   const data = props.data;
+  // console.log("SEAT TYPE",data.type,!data.type)
+  const type = !data.type ? "empty" : data.type.title.toLowerCase();
 
-  let status = data.type === "empty" && !props.editMode ? "blank" : data.type;
+  let status = type === "empty" && !props.editMode ? "blank" : type;
   if(data.status !== "unselected") status = data.status;
   const classes = `${styles.seat} ${styles[status]}`;
 

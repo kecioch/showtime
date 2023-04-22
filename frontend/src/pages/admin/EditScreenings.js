@@ -46,7 +46,8 @@ const EditScreenings = (props) => {
       .then((res) => res.json())
       .then((data) => {
         console.log("POST RESULT DATA", data);
-        setScreenings((screenings) => [...screenings, data]);
+        if (data.code !== 400)
+          setScreenings((screenings) => [...screenings, data]);
       });
   };
 

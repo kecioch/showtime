@@ -20,22 +20,53 @@ const Ticketshop = (props) => {
 
   useEffect(() => {
     console.log("REQ ID", id);
+    // Fetching screening data
     fetch(`${BACKEND_URL}/screenings/ticketshop/${id}`)
       .then((res) => {
         if (res.status !== 200) navigate("/");
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-        setScreening(data);
-        setSeatMap(data.scheduledScreening.cinema);
-        console.log("MAP", data.scheduledScreening.cinema);
+        // Fetching seattypes
+        fetch(`${BACKEND_URL}/seattypes`)
+          .then((res) => res.json())
+          .then((types) => {
+            console.log("TYPES", types);
+            console.log("DATA", data);
+
+            // Replace seattypes in data with actual seattype objects
+            for (
+              let i = 0;
+              i < data.scheduledScreening.cinema.map.rows.length;
+              i++
+            ) {
+              const row = data.scheduledScreening.cinema.map.rows[i];
+
+              // loop through each seat in the row
+              for (let j = 0; j < row.length; j++) {
+                const seat = row[j];
+
+                // find the SeatType object with the matching id
+                const matchingSeatType = types.find(
+                  (seatType) => seatType._id === seat.type
+                );
+
+                // replace the string with the SeatType object
+                if (matchingSeatType) {
+                  seat.type = matchingSeatType;
+                }
+              }
+            }
+
+            setScreening(data);
+            setSeatMap(data.scheduledScreening.cinema);
+          });
       })
       .catch((err) => navigate("/"));
   }, [id, navigate]);
 
   const onSeatClickHandler = (seat) => {
-    if (!seat || seat?.type === "empty" || seat?.status === "booked") return;
+    if (!seat || !seat?.type || seat?.status === "booked") return;
     console.log("SEATCLICKED", seat);
 
     if (seat.status === "unselected") seat.status = "selected";
@@ -63,7 +94,7 @@ const Ticketshop = (props) => {
 
   useEffect(() => {
     console.log("ST", selectedTickets);
-    setTotalPrice(selectedTickets?.reduce((acc, curr) => acc + 8, 0));
+    setTotalPrice(selectedTickets?.reduce((acc, seat) => acc + seat.type.price, 0));
   }, [selectedTickets]);
 
   const selectedTicketsElements = (
@@ -71,7 +102,9 @@ const Ticketshop = (props) => {
       {selectedTickets?.map((seat, i) => {
         console.log("SEAT", seat);
         return (
-          <li key={i}>{`1x Reihe: ${seat.row}, Platz: ${seat.col} (${seat.type})`}</li>
+          <li
+            key={i}
+          >{`1x Reihe: ${seat.row}, Platz: ${seat.col} (${seat.type.title})`}</li>
         );
       })}
     </ul>
@@ -150,7 +183,11 @@ const Ticketshop = (props) => {
                 >
                   Zur Kasse gehen
                 </Button>
-                {selectedTickets?.length > 0 ? selectedTicketsElements : <h6 className="text-muted">Keine Tickets ausgewählt</h6>}
+                {selectedTickets?.length > 0 ? (
+                  selectedTicketsElements
+                ) : (
+                  <h6 className="text-muted">Keine Tickets ausgewählt</h6>
+                )}
               </div>
             </section>
           </div>

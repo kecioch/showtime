@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const Cinema = require("../models/Cinema");
+const SeatType = require("../models/SeatType");
 
 // BASE URL /cinemas
-
 router.get("/", async (req, res) => {
   const cinemas = await Cinema.find();
   res.send(cinemas);
@@ -31,7 +31,7 @@ router.get("/:title", async (req, res) => {
   let foundCinema;
   console.log(`GET /cinemas/${title}`);
 
-  if (title) foundCinema = await Cinema.findOne({ title });
+  if (title) foundCinema = await Cinema.findOne({ title }).populate("map.rows.type");
 
   if (foundCinema) res.status(200).send(foundCinema);
   else res.status(404).send({ code: 404, message: "cinema not found" });
