@@ -4,11 +4,11 @@ import Button from "react-bootstrap/Button";
 const LoginForm = (props) => {
   return (
     <Form className="mt-3">
-      <Form.Group className="mb-3" controlId="title">
+      <Form.Group className="mb-3" controlId="id">
         <Form.Label>Benutzername</Form.Label>
         <Form.Control type="text" placeholder="Benutzernamen eingeben..." />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="title">
+      <Form.Group className="mb-3" controlId="password">
         <Form.Label>Passwort</Form.Label>
         <Form.Control type="password" placeholder="Passwort eingeben..." />
       </Form.Group>
