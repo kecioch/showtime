@@ -8,11 +8,15 @@ import Image from "react-bootstrap/Image";
 import { getTimeString } from "../services/FormatDate";
 import LoginForm from "../components/authentication/forms/LoginForm";
 import styles from "./Cart.module.css";
+import { isEmailValid } from "../services/EmailValidation";
 
 const Cart = (props) => {
   const [cart, setCart] = useState();
   const [tab, setTab] = useState("login");
   const [totalPrice, setTotalPrice] = useState(0);
+  const [guestFirstName, setGuestFirstName] = useState("");
+  const [guestLastName, setGuestLastName] = useState("");
+  const [guestMail, setGuestMail] = useState("");
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart"));
@@ -24,21 +28,40 @@ const Cart = (props) => {
     setTotalPrice(total);
   }, []);
 
+  const isPaymentDisabled =
+    tab === "guest" &&
+    (guestFirstName.length <= 0 ||
+      guestLastName.length <= 0 ||
+      guestMail.length <= 0 ||
+      !isEmailValid(guestMail));
+
   const loginForm = <LoginForm />;
 
   const guestForm = (
     <Form className="mt-3">
-      <Form.Group className="mb-3" controlId="title">
+      <Form.Group className="mb-3" controlId="guestFirstName">
         <Form.Label>Vorname</Form.Label>
-        <Form.Control type="text" placeholder="Vorname eingeben..." />
+        <Form.Control
+          type="text"
+          placeholder="Vorname eingeben..."
+          onChange={(ev) => setGuestFirstName(ev.target.value)}
+        />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="title">
+      <Form.Group className="mb-3" controlId="guestLastName">
         <Form.Label>Nachname</Form.Label>
-        <Form.Control type="text" placeholder="Nachname eingeben..." />
+        <Form.Control
+          type="text"
+          placeholder="Nachname eingeben..."
+          onChange={(ev) => setGuestLastName(ev.target.value)}
+        />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="title">
+      <Form.Group className="mb-3" controlId="guestEmail">
         <Form.Label>E-Mail</Form.Label>
-        <Form.Control type="mail" placeholder="E-Mail eingeben..." />
+        <Form.Control
+          type="email"
+          placeholder="E-Mail eingeben..."
+          onChange={(ev) => setGuestMail(ev.target.value)}
+        />
       </Form.Group>
     </Form>
   );
@@ -99,10 +122,14 @@ const Cart = (props) => {
               {tab === "guest" && guestForm}
               <hr />
               <h3 className="mt-3 mb-3">Gesamtpreis: {totalPrice}€</h3>
-              <Button style={{ width: "100%" }}>Bezahlen</Button>
+              <Button className={styles.payBtn} disabled={isPaymentDisabled}>
+                Bezahlen
+              </Button>
             </section>
           </>
-        ): <h3 className="text-muted text-center">Warenkorb ist leer</h3>}
+        ) : (
+          <h3 className="text-muted text-center">Warenkorb ist leer</h3>
+        )}
       </Content>
     </Container>
   );
