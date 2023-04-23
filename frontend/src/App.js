@@ -17,17 +17,20 @@ import EditCinema from "./pages/admin/EditCinema";
 import EditScreenings from "./pages/admin/EditScreenings";
 import Ticketshop from "./pages/Ticketshop";
 import Cart from "./pages/Cart";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <React.Fragment>
       <Navbar bg="dark" variant="dark" sticky="top">
         <Container>
-          <Navbar.Brand>
-            Showtime
-          </Navbar.Brand>
+          <Navbar.Brand>Showtime</Navbar.Brand>
           <Nav className="me-auto">
             <Link to="/">Home</Link>
+          </Nav>
+          <Nav>
+            <Link to="/login">Einloggen</Link>
           </Nav>
         </Container>
       </Navbar>
@@ -45,6 +48,8 @@ function App() {
         <Route path="/screenings/edit" element={<EditScreenings />} />
         <Route path="/ticketshop/:id" element={<Ticketshop />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>
