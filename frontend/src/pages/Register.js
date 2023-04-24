@@ -1,28 +1,34 @@
-import Button  from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
+import RegisterForm from "../components/authentication/forms/RegisterForm";
 import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
-import Form from "react-bootstrap/Form";
+import styles from "./Register.module.css";
+import useAuth from "../hooks/useAuth";
+import { useState } from "react";
 
 const Register = (props) => {
+  const {register} = useAuth();
+  const navigate = useNavigate();
+  const [error,setError] = useState();
+
+  const submitHandler = async (user) => {
+    console.log("REGISTER", user);
+
+    const res = await register(user);
+    console.log("REGISTER RES", res);
+    if (res.status === 200) navigate("/")
+    else setError(res.message);
+  };
+
   return (
     <Container>
       <Content>
-        <h1>Register</h1>
-        <Form className="mt-3">
-          <Form.Group className="mb-3" controlId="firstName">
-            <Form.Label>Vorname</Form.Label>
-            <Form.Control type="text" placeholder="Vorname eingeben..." />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="lastName">
-            <Form.Label>Nachname</Form.Label>
-            <Form.Control type="text" placeholder="Nachname eingeben..." />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="eMail">
-            <Form.Label>E-Mail</Form.Label>
-            <Form.Control type="email" placeholder="E-Mail eingeben..." />
-          </Form.Group>
-          <Button type="submit">Registrieren</Button>
-        </Form>
+      <div className="d-flex justify-content-center">
+        <div className={styles.register}>
+          <h1>Registrieren</h1>
+          <RegisterForm error={error} onSubmit={submitHandler} />
+        </div>
+        </div>
       </Content>
     </Container>
   );

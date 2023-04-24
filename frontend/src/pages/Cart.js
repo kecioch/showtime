@@ -9,6 +9,7 @@ import { getTimeString } from "../services/FormatDate";
 import LoginForm from "../components/authentication/forms/LoginForm";
 import styles from "./Cart.module.css";
 import { isEmailValid } from "../services/EmailValidation";
+import useAuth from "../hooks/useAuth";
 
 const Cart = (props) => {
   const [cart, setCart] = useState();
@@ -17,6 +18,7 @@ const Cart = (props) => {
   const [guestFirstName, setGuestFirstName] = useState("");
   const [guestLastName, setGuestLastName] = useState("");
   const [guestMail, setGuestMail] = useState("");
+  const { login, isLoggedIn } = useAuth();
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart"));
@@ -29,13 +31,20 @@ const Cart = (props) => {
   }, []);
 
   const isPaymentDisabled =
-    tab === "guest" &&
+    (!isLoggedIn && tab === "login") || (tab === "guest" &&
     (guestFirstName.length <= 0 ||
       guestLastName.length <= 0 ||
       guestMail.length <= 0 ||
-      !isEmailValid(guestMail));
+      !isEmailValid(guestMail)));
 
-  const loginForm = <LoginForm />;
+  const loginSubmitHandler = async (user) => {
+    await login(user.username, user.password).then((success) => {
+      console.log("LOGIN SUCCESS ?", success);
+      if (!success) return;
+    });
+  };
+
+  const loginForm = <LoginForm onSubmit={loginSubmitHandler} />;
 
   const guestForm = (
     <Form className="mt-3">
@@ -45,6 +54,7 @@ const Cart = (props) => {
           type="text"
           placeholder="Vorname eingeben..."
           onChange={(ev) => setGuestFirstName(ev.target.value)}
+          value={guestFirstName}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="guestLastName">
@@ -53,6 +63,7 @@ const Cart = (props) => {
           type="text"
           placeholder="Nachname eingeben..."
           onChange={(ev) => setGuestLastName(ev.target.value)}
+          value={guestLastName}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="guestEmail">
@@ -61,6 +72,7 @@ const Cart = (props) => {
           type="email"
           placeholder="E-Mail eingeben..."
           onChange={(ev) => setGuestMail(ev.target.value)}
+          value={guestMail}
         />
       </Form.Group>
     </Form>
@@ -106,20 +118,22 @@ const Cart = (props) => {
             </section>
 
             <section className="mt-4">
-              <Nav
-                variant="tabs"
-                defaultActiveKey="login"
-                onSelect={(key) => setTab(key)}
-              >
-                <Nav.Item>
-                  <Nav.Link eventKey="login">Login</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="guest">Gast</Nav.Link>
-                </Nav.Item>
-              </Nav>
-              {tab === "login" && loginForm}
-              {tab === "guest" && guestForm}
+              {!isLoggedIn && <div>
+                <Nav
+                  variant="tabs"
+                  defaultActiveKey="login"
+                  onSelect={(key) => setTab(key)}
+                >
+                  <Nav.Item>
+                    <Nav.Link eventKey="login">Login</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="guest">Gast</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                {tab === "login" && loginForm}
+                {tab === "guest" && guestForm}
+              </div>}
               <hr />
               <h3 className="mt-3 mb-3">Gesamtpreis: {totalPrice}€</h3>
               <Button className={styles.payBtn} disabled={isPaymentDisabled}>

@@ -19,25 +19,34 @@ import Ticketshop from "./pages/Ticketshop";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import useAuth from "./hooks/useAuth";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
+  const { isLoggedIn, logout, user, token } = useAuth();
   return (
     <React.Fragment>
-      <Navbar bg="dark" variant="dark" sticky="top">
+      <Navbar bg="dark" variant="dark" sticky="top" className="navbar">
         <Container>
           <Navbar.Brand>Showtime</Navbar.Brand>
           <Nav className="me-auto">
             <Link to="/">Home</Link>
           </Nav>
           <Nav>
-            <Link to="/login">Einloggen</Link>
+            {isLoggedIn ? (
+              <Link onClick={() => logout()}>Ausloggen</Link>
+            ) : (
+              <Link to="/login">Einloggen</Link>
+            )}
           </Nav>
         </Container>
       </Navbar>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/movies" element={<Movies />} />
+        <Route element={<ProtectedRoute hasPermission={isLoggedIn} />}>
+          <Route path="/movies" element={<Movies />} />
+        </Route>
         <Route path="/movies/new" element={<NewMovie />} />
         <Route path="/movies/:id" element={<Movie />} />
         <Route path="/movies/:id/edit" element={<EditMovie />} />
