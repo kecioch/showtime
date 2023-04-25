@@ -21,6 +21,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import useAuth from "./hooks/useAuth";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Completion from "./pages/payment/Completion";
 
 function App() {
   const { isLoggedIn, logout, user, token } = useAuth();
@@ -56,6 +57,7 @@ function App() {
         <Route path="/cinemas/:id/edit" element={<EditCinema />} />
         <Route path="/screenings/edit" element={<EditScreenings />} />
         <Route path="/ticketshop/:id" element={<Ticketshop />} />
+        <Route path="/ticketshop/payment/completion" element={<Completion />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

@@ -10,6 +10,9 @@ import LoginForm from "../components/authentication/forms/LoginForm";
 import styles from "./Cart.module.css";
 import { isEmailValid } from "../services/EmailValidation";
 import useAuth from "../hooks/useAuth";
+import Modal from "react-bootstrap/Modal";
+import Payment from "../components/payment/forms/Payment";
+import PaymentModal from "../components/modals/PaymentModal";
 
 const Cart = (props) => {
   const [cart, setCart] = useState();
@@ -18,6 +21,7 @@ const Cart = (props) => {
   const [guestFirstName, setGuestFirstName] = useState("");
   const [guestLastName, setGuestLastName] = useState("");
   const [guestMail, setGuestMail] = useState("");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const { login, isLoggedIn } = useAuth();
 
   useEffect(() => {
@@ -31,11 +35,12 @@ const Cart = (props) => {
   }, []);
 
   const isPaymentDisabled =
-    (!isLoggedIn && tab === "login") || (tab === "guest" &&
-    (guestFirstName.length <= 0 ||
-      guestLastName.length <= 0 ||
-      guestMail.length <= 0 ||
-      !isEmailValid(guestMail)));
+    (!isLoggedIn && tab === "login") ||
+    (tab === "guest" &&
+      (guestFirstName.length <= 0 ||
+        guestLastName.length <= 0 ||
+        guestMail.length <= 0 ||
+        !isEmailValid(guestMail)));
 
   const loginSubmitHandler = async (user) => {
     await login(user.username, user.password).then((success) => {
@@ -43,6 +48,8 @@ const Cart = (props) => {
       if (!success) return;
     });
   };
+
+  const paymentHandler = () => setShowPaymentModal(true);
 
   const loginForm = <LoginForm onSubmit={loginSubmitHandler} />;
 
@@ -79,73 +86,86 @@ const Cart = (props) => {
   );
 
   return (
-    <Container>
-      <Content>
-        <h1>Warenkorb</h1>
-        {cart ? (
-          <>
-            <section className={styles.header}>
-              <Image
-                src={
-                  cart.screening.scheduledScreening.movie.media.images.poster
-                }
-                className={styles.poster}
-              />
-              <div>
-                <h2 className="mt-4">
-                  {cart.screening.scheduledScreening.movie.title}
-                </h2>
-                <h3 className="mt-4">
-                  {cart.screening.scheduledScreening.cinema.title}
-                </h3>
-                <h4 className="mt-3">
-                  {new Date(cart.screening.date).toLocaleString("de-de", {
-                    weekday: "long",
-                  })}
-                </h4>
-                <h4>
-                  {new Date(cart.screening.date).toLocaleDateString()},{" "}
-                  {getTimeString(
-                    new Date(cart.screening.scheduledScreening.time)
-                  )}{" "}
-                  Uhr
-                </h4>
-                <h4 className="mt-3">
-                  Ticketanzahl:{" "}
-                  {cart.tickets.reduce((acc, ticket) => acc + 1, 0)}
-                </h4>
-              </div>
-            </section>
+    <>
+      {" "}
+      <Container>
+        <Content>
+          <h1>Warenkorb</h1>
+          {cart ? (
+            <>
+              <section className={styles.header}>
+                <Image
+                  src={
+                    cart.screening.scheduledScreening.movie.media.images.poster
+                  }
+                  className={styles.poster}
+                />
+                <div>
+                  <h2 className="mt-4">
+                    {cart.screening.scheduledScreening.movie.title}
+                  </h2>
+                  <h3 className="mt-4">
+                    {cart.screening.scheduledScreening.cinema.title}
+                  </h3>
+                  <h4 className="mt-3">
+                    {new Date(cart.screening.date).toLocaleString("de-de", {
+                      weekday: "long",
+                    })}
+                  </h4>
+                  <h4>
+                    {new Date(cart.screening.date).toLocaleDateString()},{" "}
+                    {getTimeString(
+                      new Date(cart.screening.scheduledScreening.time)
+                    )}{" "}
+                    Uhr
+                  </h4>
+                  <h4 className="mt-3">
+                    Ticketanzahl:{" "}
+                    {cart.tickets.reduce((acc, ticket) => acc + 1, 0)}
+                  </h4>
+                </div>
+              </section>
 
-            <section className="mt-4">
-              {!isLoggedIn && <div>
-                <Nav
-                  variant="tabs"
-                  defaultActiveKey="login"
-                  onSelect={(key) => setTab(key)}
+              <section className="mt-4">
+                {!isLoggedIn && (
+                  <div>
+                    <Nav
+                      variant="tabs"
+                      defaultActiveKey="login"
+                      onSelect={(key) => setTab(key)}
+                    >
+                      <Nav.Item>
+                        <Nav.Link eventKey="login">Login</Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="guest">Gast</Nav.Link>
+                      </Nav.Item>
+                    </Nav>
+                    {tab === "login" && loginForm}
+                    {tab === "guest" && guestForm}
+                  </div>
+                )}
+                <hr />
+                <h3 className="mt-3 mb-3">Gesamtpreis: {totalPrice}€</h3>
+                <Button
+                  className={styles.payBtn}
+                  disabled={isPaymentDisabled}
+                  onClick={paymentHandler}
                 >
-                  <Nav.Item>
-                    <Nav.Link eventKey="login">Login</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="guest">Gast</Nav.Link>
-                  </Nav.Item>
-                </Nav>
-                {tab === "login" && loginForm}
-                {tab === "guest" && guestForm}
-              </div>}
-              <hr />
-              <h3 className="mt-3 mb-3">Gesamtpreis: {totalPrice}€</h3>
-              <Button className={styles.payBtn} disabled={isPaymentDisabled}>
-                Bezahlen
-              </Button>
-            </section>
-          </>
-        ) : (
-          <h3 className="text-muted text-center">Warenkorb ist leer</h3>
-        )}
-      </Content>
-    </Container>
+                  Bezahlen
+                </Button>
+              </section>
+            </>
+          ) : (
+            <h3 className="text-muted text-center">Warenkorb ist leer</h3>
+          )}
+        </Content>
+      </Container>
+      <PaymentModal
+        show={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+      />
+    </>
   );
 };
 
