@@ -22,7 +22,7 @@ const Cart = (props) => {
   const [guestLastName, setGuestLastName] = useState("");
   const [guestMail, setGuestMail] = useState("");
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const { login, isLoggedIn } = useAuth();
+  const { login, isLoggedIn, user } = useAuth();
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart"));
@@ -49,7 +49,15 @@ const Cart = (props) => {
     });
   };
 
-  const paymentHandler = () => setShowPaymentModal(true);
+  const paymentHandler = () => {
+    console.log("CART", cart);
+    const customer = isLoggedIn
+      ? { name: `${user.firstName} ${user.lastName}`, email: user.email }
+      : { name: `${guestFirstName} ${guestLastName}`, email: guestMail };
+    console.log("CUSTOMER", customer);
+    setCart((oldCart) => ({ ...oldCart, customer }));
+    setShowPaymentModal(true);
+  };
 
   const loginForm = <LoginForm onSubmit={loginSubmitHandler} />;
 
@@ -163,6 +171,7 @@ const Cart = (props) => {
       </Container>
       <PaymentModal
         show={showPaymentModal}
+        cart={cart}
         onClose={() => setShowPaymentModal(false)}
       />
     </>

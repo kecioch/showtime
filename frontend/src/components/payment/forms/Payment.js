@@ -16,9 +16,14 @@ const Payment = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("CART PAYMENT", props.cart);
     fetch(`${BACKEND_URL}/payment/create-payment-intent`, {
       method: "POST",
-      body: JSON.stringify({}),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(props.cart),
     }).then(async (res) => {
       const { clientSecret } = await res.json();
       setClientSecret(clientSecret);

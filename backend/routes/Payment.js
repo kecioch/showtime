@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const Screening = require("../models/Screening");
+const Ticket = require("../models/Ticket");
+const Order = require("../models/Order");
+
+const { transformAmount } = require("../services/TransformNumber");
+const {
+  checkSeatAvailability,
+  getSeats,
+} = require("../services/ScreeningValidation");
+const { createDatetime } = require("../services/Datetime");
 
 // BASIC URL /payment
 
@@ -11,12 +21,60 @@ router.get("/config", (req, res) => {
 
 router.post("/create-payment-intent", async (req, res) => {
   try {
+    const cart = req.body;
+    // console.log("CART", cart);
+
+    const screening = await Screening.findById(cart.screening._id)
+      .populate("scheduledScreening")
+      .populate({ path: "scheduledScreening", populate: { path: "cinema" } })
+      .populate({
+        path: "scheduledScreening",
+        populate: { path: "cinema", populate: { path: "map.rows.type" } },
+      });
+    // console.log("SCREENING", screening);
+    if (!screening)
+      return res.status(400).send({
+        message: "Screening existiert nicht",
+      });
+
+    // Get seats from screening
+    let seats = getSeats(
+      screening.scheduledScreening.cinema.map.rows,
+      cart.tickets
+    );
+    if (seats.length <= 0)
+      return res.status(400).send({
+        message: "Sitzplatz existieren nicht",
+      });
+    console.log("SEATS", seats);
+
+    // Check whether tickets are available
+    const available = checkSeatAvailability(screening.bookedSeats, seats);
+    if (!available)
+      return res.status(400).send({
+        message: "Sitzplatz wurde bereits gebucht",
+      });
+
+    // Sum up seat prices
+    const prices = seats.reduce((acc, seat) => acc + seat.type.price, 0);
+    // console.log("PRICES", prices);
+    const amount = transformAmount(prices);
+    console.log("AMOUNT", amount);
+
+    // Create Order for seats
+    // console.log("SEATS",seats);
+    const order = new Order({seats});
+    const savedOrder = await order.save();
+
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "EUR",
-      amount: 1999,
+      amount,
       metadata: {
-        tickets: "coole Tickets"
-      },  
+        screening_id: cart.screening._id,
+        order_id: savedOrder.id,
+        customer_name: cart.customer.name,
+        customer_mail: cart.customer.email,
+      },
       automatic_payment_methods: { enabled: true },
     });
 
@@ -25,10 +83,9 @@ router.post("/create-payment-intent", async (req, res) => {
       clientSecret: paymentIntent.client_secret,
     });
   } catch (e) {
+    console.log(e);
     return res.status(400).send({
-      error: {
-        message: e.message,
-      },
+      message: e.message,
     });
   }
 });
@@ -36,34 +93,86 @@ router.post("/create-payment-intent", async (req, res) => {
 router.post(
   "/webhook",
   express.raw({ type: "application/json" }),
-  (req, res) => {
+  async (req, res) => {
     console.log("POST /payment/webhook");
     const sig = req.headers["stripe-signature"];
 
     let event;
 
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_ENDPOINT_SECRET);
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig,
+        process.env.STRIPE_ENDPOINT_SECRET
+      );
+
+      // Handle the event
+      switch (event.type) {
+        case "payment_intent.succeeded":
+          const paymentIntentSucceeded = event.data.object;
+          const metadata = paymentIntentSucceeded.metadata;
+          console.log("BEZAHLUNG ERFOLGREICH");
+
+          // Get metadata from payment
+          const { customer_mail, customer_name, screening_id, order_id } = metadata;
+          const order = await Order.findById(order_id);
+          console.log("METADATA",metadata);
+          console.log("ORDER_ID",metadata.order_id)
+          console.log("ORDER",order)
+          const seats = order.seats;
+          const customer = { name: customer_name, email: customer_mail };
+
+          console.log(screening_id);
+          console.log(customer);
+          console.log(seats);
+
+          // Get screening
+          const screening = await Screening.findById(screening_id)
+            .populate("scheduledScreening")
+            .populate({
+              path: "scheduledScreening",
+              populate: { path: "cinema" },
+            })
+            .populate({
+              path: "scheduledScreening",
+              populate: { path: "movie" },
+            });
+          // console.log("SCREENING", screening);
+
+          // Create Ticket
+          const datetime = createDatetime(
+            screening.date,
+            screening.scheduledScreening.time
+          );
+          console.log("DATE", screening.date);
+          console.log("TIME", screening.scheduledScreening.time);
+          console.log("DATETIME", datetime);
+          const ticket = new Ticket({ customer, datetime, screening });
+          ticket.save();
+
+          // Add booked seats
+          const bookedSeats = seats.map((seat) => ({
+            col: seat.col,
+            row: seat.row,
+          }));
+          screening.bookedSeats = [...screening.bookedSeats, ...bookedSeats];
+          await screening.save();
+
+          // Delete order
+          await Order.findByIdAndRemove(order_id);
+
+          break;
+        default:
+        // console.log(`Unhandled event type ${event.type}`);
+      }
+
+      // Return a 200 respond to acknowledge receipt of the event
+      res.send();
     } catch (err) {
       console.log("WEBHOOK ERROR", err);
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
-    console.log("CHECK EVENT TYPE");
-    // Handle the event
-    switch (event.type) {
-      case "payment_intent.succeeded":
-        const paymentIntentSucceeded = event.data.object;
-        // Then define and call a function to handle the event payment_intent.succeeded
-        console.log("BEZAHLUNG ERFOLGREICH",paymentIntentSucceeded.metadata);
-        break;
-      // ... handle other event types
-      default:
-        console.log(`Unhandled event type ${event.type}`);
-    }
-
-    // Return a 200 respond to acknowledge receipt of the event
-    res.send();
   }
 );
 

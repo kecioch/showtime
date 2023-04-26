@@ -58,6 +58,28 @@ const Ticketshop = (props) => {
               }
             }
 
+            // Set booked seats
+            console.log("BOOKED", data.bookedSeats);
+            for (
+              let i = 0;
+              i < data.scheduledScreening.cinema.map.rows.length;
+              i++
+            ) {
+              const row = data.scheduledScreening.cinema.map.rows[i];
+              for (let j = 0; j < row.length; j++) {
+                const mapSeat = row[j];
+                for (var k = 0; k < data.bookedSeats.length; k++) {
+                  var bookedSeat = data.bookedSeats[k];
+                  if (
+                    mapSeat.col === bookedSeat.col &&
+                    mapSeat.row === bookedSeat.row
+                  ) {
+                    mapSeat.status = "booked";
+                  }
+                }
+              }
+            }
+
             setScreening(data);
             setSeatMap(data.scheduledScreening.cinema);
           });
@@ -88,10 +110,10 @@ const Ticketshop = (props) => {
     console.log(screening);
     const cart = {
       screening,
-      tickets: selectedTickets
+      tickets: selectedTickets,
     };
     // console.log(cart);
-    localStorage.setItem("cart",JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
     navigate("/cart");
   };
 
@@ -105,7 +127,9 @@ const Ticketshop = (props) => {
 
   useEffect(() => {
     console.log("ST", selectedTickets);
-    setTotalPrice(selectedTickets?.reduce((acc, seat) => acc + seat.type.price, 0));
+    setTotalPrice(
+      selectedTickets?.reduce((acc, seat) => acc + seat.type.price, 0)
+    );
   }, [selectedTickets]);
 
   const selectedTicketsElements = (

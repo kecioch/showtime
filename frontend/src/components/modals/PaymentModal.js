@@ -13,7 +13,7 @@ const PaymentModal = props => {
           <Modal.Title>Bezahlung</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <Payment />
+            <Payment cart={props.cart} />
         </Modal.Body>
       </Modal>
     );
