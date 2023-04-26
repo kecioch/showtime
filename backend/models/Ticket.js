@@ -14,6 +14,10 @@ const ticketSchema = new mongoose.Schema({
   codeSVG: {
     type: String
   },
+  checked: {
+    type: Boolean,
+    default: false
+  },
   seats: [
     {
       row: { type: Number, required: true },
