@@ -1,6 +1,7 @@
 const { sendMail } = require("./Nodemailer");
 const fs = require("fs");
 const path = require("path");
+const ical = require("ical-generator");
 
 const sendTicket = async (ticket) => {
   try {
@@ -10,6 +11,24 @@ const sendTicket = async (ticket) => {
       `../static/${ticket.code.filename}`
     );
     const codeImg = fs.readFileSync(ticketFilePath);
+
+    // Create ical event
+    const calendar = ical({
+      name: "Filmvorführung | Showtime",
+    });
+
+    calendar.createEvent({
+      start: new Date(),
+      end: new Date(),
+      summary: "John Wick: Chapter 4",
+      location: "Kino 1",
+      organizer: {
+        name: "Showtime",
+        email: process.env.MAIL_USERNAME
+      }
+    });
+
+    const icalString = calendar.toString();
 
     // Create mail informtion
     const mail = {
@@ -23,6 +42,9 @@ const sendTicket = async (ticket) => {
           cid: "ticket",
         },
       ],
+      icalEvent: {
+        content: icalString,
+      },
     };
 
     // Send mail to customer

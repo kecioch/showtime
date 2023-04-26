@@ -15,7 +15,8 @@ const send = async (mail) => {
     priority: "high",
     subject: mail.subject,
     html: mail.html,
-    attachments: mail.attachments
+    attachments: mail.attachments,
+    icalEvent: mail.icalEvent
   });
 
   console.log("Mail sent: %s", info.messageId);
