@@ -63,17 +63,21 @@ router.post("/create-payment-intent", async (req, res) => {
 
     // Create Order for seats
     // console.log("SEATS",seats);
-    const order = new Order({ seats });
+    const order = new Order({
+      screening: cart.screening,
+      customer: cart.customer,
+      seats,
+    });
     const savedOrder = await order.save();
 
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "EUR",
       amount,
       metadata: {
-        screening_id: cart.screening._id,
+        // screening_id: cart.screening._id,
         order_id: savedOrder.id,
-        customer_name: cart.customer.name,
-        customer_mail: cart.customer.email,
+        // customer_name: cart.customer.name,
+        // customer_mail: cart.customer.email,
       },
       automatic_payment_methods: { enabled: true },
     });
@@ -114,14 +118,15 @@ router.post(
           console.log("BEZAHLUNG ERFOLGREICH");
 
           // Get metadata from payment
-          const { customer_mail, customer_name, screening_id, order_id } =
-            metadata;
+          const { order_id } = metadata;
           const order = await Order.findById(order_id);
           console.log("METADATA", metadata);
           console.log("ORDER_ID", metadata.order_id);
           console.log("ORDER", order);
+
           const seats = order.seats;
-          const customer = { name: customer_name, email: customer_mail };
+          const customer = order.customer;
+          const screening_id = order.screening;
 
           console.log(screening_id);
           console.log(customer);
@@ -157,8 +162,10 @@ router.post(
           screening.bookedSeats = [...screening.bookedSeats, ...bookedSeats];
           await screening.save();
 
-          // Delete order
-          await Order.findByIdAndRemove(order_id);
+          // Complete order
+          order.completed = true;
+          await order.save();
+          // await Order.findByIdAndRemove(order_id);
 
           break;
         default:
