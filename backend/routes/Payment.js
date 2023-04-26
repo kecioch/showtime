@@ -12,6 +12,7 @@ const {
   getSeats,
 } = require("../services/ScreeningValidation");
 const { createDatetime } = require("../services/Datetime");
+const { sendTickets } = require("../services/Tickets");
 
 // BASIC URL /payment
 
@@ -92,6 +93,11 @@ router.post("/create-payment-intent", async (req, res) => {
       message: e.message,
     });
   }
+});
+
+router.get("/testmail", async (req, res) => {
+  sendTickets();
+  res.send("TESTMAIL");
 });
 
 router.post(
