@@ -63,7 +63,7 @@ router.post("/create-payment-intent", async (req, res) => {
 
     // Create Order for seats
     // console.log("SEATS",seats);
-    const order = new Order({seats});
+    const order = new Order({ seats });
     const savedOrder = await order.save();
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -114,11 +114,12 @@ router.post(
           console.log("BEZAHLUNG ERFOLGREICH");
 
           // Get metadata from payment
-          const { customer_mail, customer_name, screening_id, order_id } = metadata;
+          const { customer_mail, customer_name, screening_id, order_id } =
+            metadata;
           const order = await Order.findById(order_id);
-          console.log("METADATA",metadata);
-          console.log("ORDER_ID",metadata.order_id)
-          console.log("ORDER",order)
+          console.log("METADATA", metadata);
+          console.log("ORDER_ID", metadata.order_id);
+          console.log("ORDER", order);
           const seats = order.seats;
           const customer = { name: customer_name, email: customer_mail };
 
@@ -144,10 +145,8 @@ router.post(
             screening.date,
             screening.scheduledScreening.time
           );
-          console.log("DATE", screening.date);
-          console.log("TIME", screening.scheduledScreening.time);
-          console.log("DATETIME", datetime);
-          const ticket = new Ticket({ customer, datetime, screening });
+          console.log("TICKET SEATS", seats);
+          const ticket = new Ticket({ customer, datetime, seats, screening });
           ticket.save();
 
           // Add booked seats

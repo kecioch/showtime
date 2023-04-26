@@ -5,6 +5,11 @@ const orderSchema = new mongoose.Schema({
     {
       row: { type: Number, required: true },
       col: { type: Number, required: true },
+      type: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SeatType",
+        required: true,
+      },
     },
   ],
 });
