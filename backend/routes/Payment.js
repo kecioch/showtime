@@ -96,15 +96,6 @@ router.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-router.get("/testmail", async (req, res) => {
-  const text = "Bestellung der Tickets! 10101010101010101010000000000000000000000000001111111111101010101010110";
-  const code = await createQRCodeFile(text);
-  const svg = createQRCodeSVG(text);
-  const ticket = { code };
-  sendTicket(ticket);
-  res.send(svg);
-});
-
 router.post(
   "/webhook",
   express.raw({ type: "application/json" }),
@@ -130,7 +121,7 @@ router.post(
 
           // Get metadata from payment
           const { order_id } = metadata;
-          const order = await Order.findById(order_id);
+          const order = await Order.findById(order_id).populate("seats.type");
           console.log("METADATA", metadata);
           console.log("ORDER_ID", metadata.order_id);
           console.log("ORDER", order);
@@ -162,8 +153,26 @@ router.post(
             screening.scheduledScreening.time
           );
           console.log("TICKET SEATS", seats);
-          const ticket = new Ticket({ customer, datetime, seats, screening });
-          ticket.save();
+          console.log("TICKET SCREENING_ID", screening.id);
+          const ticket = new Ticket({
+            customer,
+            datetime,
+            seats,
+            screening,
+          });
+          const savedTicket = await ticket.save();
+          const codeSVG = createQRCodeSVG(savedTicket.id);
+          ticket.codeSVG = codeSVG;
+          await ticket.save();
+
+          // Send ticket
+          const codeFile = await createQRCodeFile(savedTicket.id);
+          sendTicket({ id: savedTicket.id, customer, datetime, seats, screening, code: codeFile });
+
+          // Complete order
+          order.completed = true;
+          await order.save();
+          // await Order.findByIdAndRemove(order_id);
 
           // Add booked seats
           const bookedSeats = seats.map((seat) => ({
@@ -172,11 +181,6 @@ router.post(
           }));
           screening.bookedSeats = [...screening.bookedSeats, ...bookedSeats];
           await screening.save();
-
-          // Complete order
-          order.completed = true;
-          await order.save();
-          // await Order.findByIdAndRemove(order_id);
 
           break;
         default:

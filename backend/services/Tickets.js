@@ -5,10 +5,21 @@ const ical = require("ical-generator");
 
 const sendTicket = async (ticket) => {
   try {
+    console.log("SEND TICKET");
+    const { customer, code, seats, screening, datetime, id } = ticket;
+    console.log("T_id", id);
+    console.log("T_customer", customer);
+    console.log("T_seats", seats);
+    console.log("T_screening", screening);
+    console.log("T_datetime", datetime);
+
+    const movie = screening.scheduledScreening.movie;
+    const cinema = screening.scheduledScreening.cinema;
+
     // Load QRCode
     const ticketFilePath = path.resolve(
       __dirname,
-      `../static/${ticket.code.filename}`
+      `../static/${code.filename}`
     );
     const codeImg = fs.readFileSync(ticketFilePath);
 
@@ -18,26 +29,35 @@ const sendTicket = async (ticket) => {
     });
 
     calendar.createEvent({
-      start: new Date(),
-      end: new Date(),
-      summary: "John Wick: Chapter 4",
-      location: "Kino 1",
+      start: datetime,
+      end: datetime,
+      summary: movie.title,
+      location: cinema.title,
       organizer: {
         name: "Showtime",
-        email: process.env.MAIL_USERNAME
-      }
+        email: process.env.MAIL_USERNAME, //customer.email
+      },
     });
 
     const icalString = calendar.toString();
 
     // Create mail informtion
+    const idHTML = `<h2>ID: ${id}</h2>`;
+    const movieHTML = `<h3>${movie.title}</h2>`;
+    const cinemaHTML = `<h3>${cinema.title}</h2>`;
+    const datetimeHTML = `<h2>${datetime.toLocaleString("de-de")}</h2>`;
+    let seatsHTML = "" 
+    seats.map(seat => seatsHTML += `<li>Reihe: ${seat.row} / Platz: ${seat.col} [${seat.type.title}]</li>`);
+    console.log("SEATSHTML",seatsHTML);
     const mail = {
       to: process.env.MAIL_SEND_TO,
       subject: "Ticketbestellung",
-      html: `<h1>Ihre Tickets wurden gebucht!</h1><img src="cid:ticket"/>`,
+      html: `<h1>Ihre Tickets wurden gebucht!</h1>${idHTML}<img src="cid:ticket"/>${
+        movieHTML + cinemaHTML + datetimeHTML
+      }<br/><h3>Sitzplatz:</h3><ul>${seatsHTML}</ul>`,
       attachments: [
         {
-          filename: ticket.code.filename,
+          filename: code.filename,
           content: codeImg,
           cid: "ticket",
         },

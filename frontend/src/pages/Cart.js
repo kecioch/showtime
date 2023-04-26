@@ -10,8 +10,6 @@ import LoginForm from "../components/authentication/forms/LoginForm";
 import styles from "./Cart.module.css";
 import { isEmailValid } from "../services/EmailValidation";
 import useAuth from "../hooks/useAuth";
-import Modal from "react-bootstrap/Modal";
-import Payment from "../components/payment/forms/Payment";
 import PaymentModal from "../components/modals/PaymentModal";
 
 const Cart = (props) => {

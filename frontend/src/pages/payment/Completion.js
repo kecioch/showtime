@@ -1,4 +1,4 @@
-import { Navigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams, Link } from "react-router-dom";
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import { useEffect } from "react";
@@ -7,15 +7,26 @@ const Completion = (props) => {
   const [params] = useSearchParams();
   const redirect_status = params.get("redirect_status");
   const payment_intent = params.get("payment_intent");
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    localStorage.removeItem("cart");
+    const timer = setTimeout(() => {
+      navigate('/');
+    }, 10000);
+    return () => clearTimeout(timer);
+  },[navigate]);
+  
   if (!redirect_status || !payment_intent) return <Navigate to="/" />;
 
   const success = (
     <>
       {" "}
       <h1>Der Bezahlvorgang war erfolgreich!</h1>
-      <h2>Wir sehen uns im Kino 🎬</h2>
-      
+      <h2 className="mt-2">Wir sehen uns im Kino 🎬</h2>
+      <h3 className="mt-5">Die Tickets wurden an Ihre Email gesendet</h3>
+      <h6 className="mt-5">Weiterleitung in 10 Sekunden...</h6>
+      <p>Sollten Sie nicht weitergeleitet werden, <Link to="/">klicke hier</Link></p>
     </>
   );
 
