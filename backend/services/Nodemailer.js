@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const send = async () => {
+const send = async (mail) => {
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -11,17 +11,18 @@ const send = async () => {
 
   let info = await transporter.sendMail({
     from: `"Showtime 🎬" <${process.env.MAIL_USERNAME}>`,
-    to: process.env.MAIL_SEND_TO, 
+    to: mail.to, 
     priority: "high",
-    subject: "Ticketbestellung",
-    html: "<b>Ihre Tickets wurden gebucht!</b>",
+    subject: mail.subject,
+    html: mail.html,
+    attachments: mail.attachments
   });
 
   console.log("Mail sent: %s", info.messageId);
 };
 
-const sendMail = async () => {
-  send().catch(console.error);
+const sendMail = async (mail) => {
+  send(mail).catch(console.error);
 };
 
 module.exports = { sendMail };

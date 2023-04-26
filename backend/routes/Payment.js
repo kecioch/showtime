@@ -12,7 +12,8 @@ const {
   getSeats,
 } = require("../services/ScreeningValidation");
 const { createDatetime } = require("../services/Datetime");
-const { sendTickets } = require("../services/Tickets");
+const { sendTicket } = require("../services/Tickets");
+const { createQRCodeSVG, createQRCodeFile } = require("../services/QRCode");
 
 // BASIC URL /payment
 
@@ -96,8 +97,12 @@ router.post("/create-payment-intent", async (req, res) => {
 });
 
 router.get("/testmail", async (req, res) => {
-  sendTickets();
-  res.send("TESTMAIL");
+  const text = "Bestellung der Tickets! 10101010101010101010000000000000000000000000001111111111101010101010110";
+  const code = await createQRCodeFile(text);
+  const svg = createQRCodeSVG(text);
+  const ticket = { code };
+  sendTicket(ticket);
+  res.send(svg);
 });
 
 router.post(
