@@ -10,16 +10,20 @@ const TicketValidationModal = (props) => {
 
   const validateHandler = async () => {
     console.log("VALIDATE", ticket.id);
-    
-    setIsValidating(true);
-    const res = await fetch(`${BACKEND_URL}/tickets/validate/${ticket.id}`, {
-      method: "PATCH",
-    });
-    setIsValidating(false);
-    
-    if(res.status === 200) {
+
+    try {
+      setIsValidating(true);
+      const res = await fetch(`${BACKEND_URL}/tickets/validate/${ticket.id}`, {
+        method: "PATCH",
+      });
+      setIsValidating(false);
+
+      if (res.status === 200) {
         console.log("SUCCESS VALIDATING");
         props.onClose();
+      }
+    } catch (err) {
+        setIsValidating(false);
     }
   };
 

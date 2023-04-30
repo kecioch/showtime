@@ -21,7 +21,6 @@ const TicketValidation = (props) => {
     if (!code || showValidationModal) return;
     console.log("FETCH TICKET");
 
-    setShowValidationModal(true);
     fetch(`${BACKEND_URL}/tickets/validate/${code}`).then(async (res) => {
       if (res.status !== 200) return;
       const data = await res.json();
@@ -35,6 +34,7 @@ const TicketValidation = (props) => {
         cinema: data.screening.scheduledScreening.cinema.title,
       };
       setTicket(ticket);
+      setShowValidationModal(true);
     });
   };
 
