@@ -44,6 +44,7 @@ app.use("/seattypes", require("./routes/SeatTypes"));
 app.use("/screenings", require("./routes/Screenings"));
 app.use("/authentication", require("./routes/Authentication"));
 app.use("/payment", require("./routes/Payment"));
+app.use("/tickets", require("./routes/Tickets"));
 
 app.get("/", (req, res) => {
   console.log("GET /");

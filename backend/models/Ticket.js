@@ -34,16 +34,6 @@ const ticketSchema = new mongoose.Schema({
     ref: "Screening",
     required: true,
   },
-  //   movie: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Movie",
-  //     required: true,
-  //   },
-  //   cinema: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Cinema",
-  //     required: true,
-  //   },
   datetime: {
     type: Date,
     required: true,

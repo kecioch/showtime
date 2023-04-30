@@ -41,7 +41,7 @@ const sendTicket = async (ticket) => {
 
     const icalString = calendar.toString();
 
-    // Create mail informtion
+    // Create mail information
     const idHTML = `<h2>ID: ${id}</h2>`;
     const movieHTML = `<h3>${movie.title}</h2>`;
     const cinemaHTML = `<h3>${cinema.title}</h2>`;
