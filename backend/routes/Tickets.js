@@ -19,9 +19,21 @@ router.get("/:cust_mail", async (req, res) => {
   const { cust_mail } = req.params;
   console.log(`GET /tickets/${cust_mail}`);
   try {
-    const tickets = await Ticket.find({ "customer.email": cust_mail });
+    const tickets = await Ticket.find({ "customer.email": cust_mail })
+      .populate("screening")
+      .populate("seats.type")
+      .populate({ path: "screening", populate: { path: "scheduledScreening" } })
+      .populate({
+        path: "screening",
+        populate: { path: "scheduledScreening", populate: { path: "cinema" } },
+      })
+      .populate({
+        path: "screening",
+        populate: { path: "scheduledScreening", populate: { path: "movie" } },
+      });
     res.send(tickets);
   } catch (err) {
+    console.log(err);
     res.sendStatus(400);
   }
 });

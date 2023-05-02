@@ -23,6 +23,7 @@ import useAuth from "./hooks/useAuth";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Completion from "./pages/payment/Completion";
 import TicketValidation from "./pages/staff/TicketValidation";
+import Tickets from "./pages/user/Tickets";
 
 function App() {
   const { isLoggedIn, logout, user, token } = useAuth();
@@ -63,6 +64,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/validation" element={<TicketValidation />} />
+        <Route path="/user/tickets" element={<Tickets />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>

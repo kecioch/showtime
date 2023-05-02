@@ -1,0 +1,15 @@
+.listItem {
+    border: 1px solid #212529;
+    border-radius: 0.5em;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    overflow: hidden;
+    margin-bottom: 0.5em;
+}
+
+.poster {
+    height: 220px;
+    object-fit: cover;
+}

@@ -28,7 +28,7 @@ const TicketValidationModal = (props) => {
   };
 
   const seats = ticket?.seats.map((seat, i) => (
-    <li key={i}>
+    <li className="list-group-item" key={i}>
       Reihe: {seat.row} / Platz: {seat.col} [{seat.type.title}]
     </li>
   ));
@@ -61,7 +61,7 @@ const TicketValidationModal = (props) => {
               {ticket.customer.name} {`<${ticket.customer.email}>`}
             </p>
             <h4>Sitzplätze:</h4>
-            <ul>{seats}</ul>
+            <ul className="list-group">{seats}</ul>
           </>
         )}
       </Modal.Body>
