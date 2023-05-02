@@ -56,7 +56,7 @@ const CinemaConfig = (props) => {
         setSeatTypes(data);
         setSelecteSeatType(data[0]);
       });
-  });
+  },[]);
 
   // useEffect(() => {
   //   // Create SeatMap

@@ -45,14 +45,18 @@ exports.register = async (req, res) => {
   console.log("POST /authentication/register");
   try {
     const { username, password, firstName, lastName, email } = req.body;
-    let foundUser = await User.findOne({ username });
+    let foundUser = await User.findOne({
+      username: { $regex: new RegExp(username, "i") },
+    });
 
     if (foundUser)
       return res
         .status(400)
         .json({ status: 400, message: "Benutzername existiert bereits" });
 
-    foundUser = await User.findOne({ email });
+    foundUser = await User.findOne({
+      email: { $regex: new RegExp(email, "i") },
+    });
     if (foundUser)
       return res
         .status(400)
