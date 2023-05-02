@@ -9,7 +9,7 @@ const CinemaConfig = (props) => {
   const [rowCnt, setRowCnt] = useState(10);
   const [colCnt, setColCnt] = useState(10);
   const [seatMap, setSeatMap] = useState();
-  const [selectedSeatType, setSelecteSeatType] = useState();
+  const [selectedSeatType, setSelectedSeatType] = useState();
   const [seatTypes, setSeatTypes] = useState();
   const [isInit, setIsInit] = useState(false);
 
@@ -54,9 +54,9 @@ const CinemaConfig = (props) => {
       .then((data) => {
         console.log("SEATTYPES", data);
         setSeatTypes(data);
-        setSelecteSeatType(data[0]);
+        setSelectedSeatType(data[0]);
       });
-  },[]);
+  }, []);
 
   // useEffect(() => {
   //   // Create SeatMap
@@ -155,6 +155,18 @@ const CinemaConfig = (props) => {
     }
   }, [rowCnt, colCnt]);
 
+  const seatTypeOptions = seatTypes?.map((type, i) => (
+    <option key={i} value={type.title}>
+      {type.title}
+    </option>
+  ));
+
+  const changeSeatTypeHandler = (ev) => {
+    const type = seatTypes.find((type) => type.title === ev.target.value);
+    setSelectedSeatType(type);
+    console.log(type);
+  };
+
   return (
     <>
       <Form>
@@ -197,6 +209,13 @@ const CinemaConfig = (props) => {
           />
         </Form.Group>
       </div>
+      <hr />
+      <Form.Group className="mb-5" controlId="colCnt">
+        <Form.Label>Sitzplatz Typ</Form.Label>
+        <Form.Select aria-label="Sitzplatztyp" onChange={changeSeatTypeHandler}>
+          {seatTypeOptions}
+        </Form.Select>
+      </Form.Group>
       <SeatMap data={seatMap} editMode={true} onSeatClick={seatClickHandler} />
     </>
   );
