@@ -47,7 +47,7 @@ const RegisterForm = (props) => {
       <Form.Group className="mb-3" controlId="password">
         <Form.Label>Passwort</Form.Label>
         <Form.Control
-          type="text"
+          type="password"
           placeholder="Passwort eingeben..."
           onChange={(ev) => setPassword(ev.target.value)}
         />
