@@ -1,33 +1,81 @@
 .seat {
-    width: 3em;
-    height: 3em;
-    /* background-color: lightgray; */
+  width: 3em;
+  height: 3em;
+  /* background-color: lightgray; */
+  border-radius: 0.5em;
+  overflow: hidden;
 }
 
 .unselected {
-    /* background-color: lightgray; */
+  /* background-color: lightgray; */
 }
 
 .selected {
-    background-color: green;
+  /* background-color: green; */
+  border: 3px solid green;
+  position: relative;
+}
+
+.selected::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 10px,
+      #00671a 10px,
+      #00671a 20px
+    ),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      #00671a 10px,
+      #00671a 20px
+    );
+  background-position: left top, right top;
+  background-repeat: repeat-y;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.booked::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    #000 10px,
+    #000 20px
+  );
+  opacity: 0.5;
+  z-index: 1;
 }
 
 .booked {
-    background-color: black;
-    cursor:not-allowed;
-    /* pointer-events: none; */
+  background-color: grey;
+  cursor: not-allowed;
+  position: relative;
+  /* pointer-events: none; */
 }
 
 .standard {
-    background-color: lightgray;
+  /* background-color: #d3d3d3; */
 }
 
 .empty {
-    background-color: whitesmoke;
+  background-color: whitesmoke;
 }
 
 .blank {
-    background-color: white;
+  background-color: white;
 }
-
-
