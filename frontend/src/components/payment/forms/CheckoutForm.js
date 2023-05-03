@@ -1,7 +1,7 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { useState } from "react";
-import Button from "react-bootstrap/esm/Button";
+import LoadingButton from "../../ui/LoadingButton";
 
 const CheckoutForm = (props) => {
   const stripe = useStripe();
@@ -33,12 +33,16 @@ const CheckoutForm = (props) => {
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement />
       <hr />
-      {message && <div id="payment-message">{message}</div>}
-      <Button className="float-end" variant="success" type="submit" disabled={isProcessing} id="submit">
-        <span id="button-text">
-          {isProcessing ? "Bitte warten..." : "Bezahlen"}
-        </span>
-      </Button>
+      {message && <div id="payment-message" className="text-danger mb-3">{message}</div>}
+      <LoadingButton
+        className="w-100"
+        isLoading={isProcessing}
+        variant="success"
+        type="submit"
+        id="submit"
+      >
+        Bezahlen
+      </LoadingButton>
     </form>
   );
 };
