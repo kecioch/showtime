@@ -25,6 +25,11 @@ const Home = (props) => {
               Vorführungen Verwaltung
             </Button>
           </Link>
+          <Link to="/seattypes">
+            <Button className="mb-4" variant="primary">
+              Sitzplatz Verwaltung
+            </Button>
+          </Link>
           <Link to="/validation">
             <Button className="mb-4" variant="primary">
               Ticket Scanner

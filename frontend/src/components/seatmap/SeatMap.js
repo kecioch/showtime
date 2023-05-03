@@ -19,7 +19,7 @@ const SeatMap = (props) => {
       )
     ),
   ].filter((type) => !!type);
-  console.log("TYPES!", types);
+
   const legend = !props.editMode && types.map((type, i) => <Badge key={i} style={{backgroundColor: type.colorHEX}}>{type.title}</Badge>);
 
   return (

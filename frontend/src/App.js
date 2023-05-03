@@ -24,6 +24,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Completion from "./pages/payment/Completion";
 import TicketValidation from "./pages/staff/TicketValidation";
 import Tickets from "./pages/user/Tickets";
+import SeatTypes from "./pages/admin/SeatTypes";
 
 function App() {
   const { isLoggedIn, logout, user, token } = useAuth();
@@ -65,6 +66,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/validation" element={<TicketValidation />} />
         <Route path="/user/tickets" element={<Tickets />} />
+        <Route path="/seattypes" element={<SeatTypes />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>
