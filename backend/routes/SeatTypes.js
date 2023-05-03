@@ -16,6 +16,16 @@ router.post("/", async (req, res) => {
   const body = req.body;
 
   try {
+    const foundType = await SeatType.findOne({
+      title: { $regex: new RegExp(body.title, "i") },
+    });
+
+    if (foundType)
+      return res.status(400).json({
+        status: 400,
+        message: "Es existiert bereits ein Sitzplatztyp mit dieser Bezeichnung",
+      });
+
     const seatType = new SeatType(body);
     console.log(seatType);
     const savedSeatType = await seatType.save();
@@ -23,6 +33,43 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json({ code: 400, message: err.message });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const body = req.body;
+  console.log(`PUT /seattypes/${id}`);
+  console.log(body);
+  try {
+    const foundType = await SeatType.findOne({
+      title: { $regex: new RegExp(body.title, "i") },
+    });
+
+    if (foundType && foundType.id !== id)
+      return res.status(400).json({
+        status: 400,
+        message: "Es existiert bereits ein Sitzplatztyp mit dieser Bezeichnung",
+      });
+
+    const updatedType = await SeatType.findByIdAndUpdate(id, body);
+    console.log("UPDATED", updatedType);
+    res.status(200).json(updatedType);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ code: 400, message: err.message });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(`DELETE /seattypes/${id}`);
+
+  try {
+    const type = await SeatType.findByIdAndDelete(id);
+    res.status(200).send(type);
+  } catch (err) {
+    res.status(404).send({ code: 404, message: err.message });
   }
 });
 

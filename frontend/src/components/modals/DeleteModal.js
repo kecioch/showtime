@@ -1,5 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
+import LoadingButton from "../ui/LoadingButton";
 
 const DeleteModal = (props) => {
   return (
@@ -13,9 +14,9 @@ const DeleteModal = (props) => {
         <Button className="flex-fill" variant="secondary" onClick={props.onClose}>
           Abbrechen
         </Button>
-        <Button className="flex-fill" variant="danger" onClick={props.onDelete}>
+        <LoadingButton className="flex-fill" variant="danger" onClick={props.onDelete} isLoading={props.isLoading}>
           Löschen
-        </Button>
+        </LoadingButton>
         </div>
       </Modal.Footer>
     </Modal>

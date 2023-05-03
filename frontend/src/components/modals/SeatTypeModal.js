@@ -2,6 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import { useEffect, useState } from "react";
+import LoadingButton from "../ui/LoadingButton";
 
 const SeatTypeModal = (props) => {
   const { selected, isNew } = props;
@@ -16,20 +17,26 @@ const SeatTypeModal = (props) => {
   };
 
   useEffect(() => {
-    if (isNew || !selected) return;
-    setTitle(selected.title);
-    setPrice(selected.price);
-    setColorHEX(selected.colorHEX);
+    if (isNew || !selected) {
+      setTitle("");
+      setPrice(0);
+      setColorHEX("#d4ded4");
+    } else {
+      setTitle(selected.title);
+      setPrice(selected.price);
+      setColorHEX(selected.colorHEX);
+    }
   }, [isNew, selected]);
 
   return (
     <Modal show={props.show} onHide={props.onClose}>
       <Modal.Header closeButton>
         <Modal.Title>
-          Sitzplatz {props.isNew ? "erstellen" : "bearbeiten"}
+          Sitzplatz-Typ {props.isNew ? "erstellen" : "bearbeiten"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {props.error && <p className="text-danger">{props.error}</p>}
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="title">
             <Form.Label>Bezeichnung</Form.Label>
@@ -69,9 +76,9 @@ const SeatTypeModal = (props) => {
             >
               Abbrechen
             </Button>
-            <Button type="sumit" className="flex-fill" variant="success">
+            <LoadingButton type="sumit" className="flex-fill" variant="success" isLoading={props.isLoading}>
               {props.isNew ? "Erstellen" : "Aktualisieren"}
-            </Button>
+            </LoadingButton>
           </div>
         </Form>
       </Modal.Body>

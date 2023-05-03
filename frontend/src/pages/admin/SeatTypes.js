@@ -13,6 +13,8 @@ const SeatTypes = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [isNew, setIsNew] = useState(true);
+  const [error, setError] = useState();
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/seattypes`)
@@ -24,6 +26,7 @@ const SeatTypes = (props) => {
   }, []);
 
   const addSeatType = () => {
+    setError(null);
     setIsNew(true);
     setShowSeatTypeModal(true);
   };
@@ -34,23 +37,76 @@ const SeatTypes = (props) => {
   };
 
   const editSeatType = (selected) => {
+    setError(null);
     setIsNew(false);
     setSelectedSeatType(selected);
     setShowSeatTypeModal(true);
   };
 
-  const submitHandler = (type) => {
+  const submitHandler = async (type) => {
+    setIsFetching(true);
     console.log("SUBMIT", type);
-    if(isNew) {
+    try {
+      if (isNew) {
         console.log("NEW");
-    } else {
+        const res = await fetch(`${BACKEND_URL}/seattypes`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(type),
+        });
+        const data = await res.json();
+        if (res.status !== 200) return setError(data.message);
+
+        setTypes((prevTypes) => [...prevTypes, data]);
+        setShowSeatTypeModal(false);
+      } else {
         console.log("UPDATE");
-        
+        const res = await fetch(`${BACKEND_URL}/seattypes/${type._id}`, {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(type),
+        });
+        const data = await res.json();
+        if (res.status !== 200) return setError(data.message);
+
+        setTypes((prevTypes) => [
+          ...prevTypes.filter((prevType) => prevType._id !== type._id),
+          type,
+        ]);
+        setShowSeatTypeModal(false);
+      }
+    } catch (err) {
+      console.log(err);
     }
+    setIsFetching(false);
   };
 
-  const deleteHandler = () => {
+  const deleteHandler = async () => {
     console.log("DELETE SEAT TYPE", selectedSeatType);
+    setIsFetching(true);
+    try {
+      const res = await fetch(
+        `${BACKEND_URL}/seattypes/${selectedSeatType._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await res.json();
+      setShowDeleteModal(false);
+      if (res.status !== 200) return;
+      setTypes((prevTypes) => [
+        ...prevTypes.filter((type) => type._id !== selectedSeatType._id),
+      ]);
+    } catch (err) {
+      console.log(err);
+    }
+    setIsFetching(false);
   };
 
   return (
@@ -75,6 +131,8 @@ const SeatTypes = (props) => {
         onClose={() => setShowSeatTypeModal(false)}
         onSubmit={submitHandler}
         selected={selectedSeatType}
+        error={error}
+        isLoading={isFetching}
       />
       <DeleteModal
         show={showDeleteModal}
@@ -82,6 +140,7 @@ const SeatTypes = (props) => {
         text="Wollen Sie wirklich den Sitzplatz-Typ löschen?"
         onClose={() => setShowDeleteModal(false)}
         onDelete={deleteHandler}
+        isLoading={isFetching}
       />
     </>
   );
