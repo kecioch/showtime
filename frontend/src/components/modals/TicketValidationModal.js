@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/esm/Button";
+import Button from "react-bootstrap/Button";
 import LoadingButton from "../ui/LoadingButton";
 import { useState } from "react";
 import { BACKEND_URL } from "../../constants";
@@ -23,7 +23,7 @@ const TicketValidationModal = (props) => {
         props.onClose();
       }
     } catch (err) {
-        setIsValidating(false);
+      setIsValidating(false);
     }
   };
 
@@ -65,19 +65,26 @@ const TicketValidationModal = (props) => {
           </>
         )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={props.onClose}>
-          Abbrechen
-        </Button>
-        {!ticket?.checked && (
-          <LoadingButton
-            isLoading={isValidating}
-            variant="success"
-            onClick={validateHandler}
+      <Modal.Footer className="d-flex justify-content-center">
+        <div className="d-flex gap-3 flex-fill">
+          <Button
+            className="flex-fill"
+            variant="secondary"
+            onClick={props.onClose}
           >
-            Abstempeln
-          </LoadingButton>
-        )}
+            Abbrechen
+          </Button>
+          {!ticket?.checked && (
+            <LoadingButton
+              className="flex-fill"
+              isLoading={isValidating}
+              variant="success"
+              onClick={validateHandler}
+            >
+              Abstempeln
+            </LoadingButton>
+          )}
+        </div>
       </Modal.Footer>
     </Modal>
   );
