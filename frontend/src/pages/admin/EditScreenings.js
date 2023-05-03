@@ -172,15 +172,22 @@ const EditScreenings = (props) => {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowNewScreeningModal(false)}
-          >
-            Abbrechen
-          </Button>
-          <Button variant="success" onClick={addScreeningHandler}>
-            Hinzufügen
-          </Button>
+          <div className="d-flex gap-3 flex-fill">
+            <Button
+              variant="secondary"
+              className="flex-fill"
+              onClick={() => setShowNewScreeningModal(false)}
+            >
+              Abbrechen
+            </Button>
+            <Button
+              variant="success"
+              className="flex-fill"
+              onClick={addScreeningHandler}
+            >
+              Hinzufügen
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
       <DeleteModal

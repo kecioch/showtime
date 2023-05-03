@@ -9,12 +9,14 @@ const DeleteModal = (props) => {
       </Modal.Header>
       <Modal.Body>{props.text}</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.onClose}>
+      <div className="d-flex gap-3 flex-fill">
+        <Button className="flex-fill" variant="secondary" onClick={props.onClose}>
           Abbrechen
         </Button>
-        <Button variant="danger" onClick={props.onDelete}>
+        <Button className="flex-fill" variant="danger" onClick={props.onDelete}>
           Löschen
         </Button>
+        </div>
       </Modal.Footer>
     </Modal>
   );
