@@ -1,13 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { BACKEND_URL } from "../constants";
-import jwtDecode from "jwt-decode";
 import { AuthContext } from "../contexts/AuthContext";
 
 const useAuth = () => {
-  const { token, setToken, user, setUser } = useContext(AuthContext);
+  const { token, user, setUser } = useContext(AuthContext);
   //   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const isLoggedIn = token ? true : false;
+  const isLoggedIn = user ? true : false;
 
   const login = async (username, password) => {
     return fetch(`${BACKEND_URL}/authentication/login`, {
@@ -17,27 +16,29 @@ const useAuth = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
+      credentials: "include",
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.status === 200) {
-          console.log("LOGIN SUCCESSFULL");
-          //   setIsLoggedIn(true);
-          saveToken(data.token);
-          return true;
-        }
-        return false;
+      .then(async (res) => {
+        if (res.status !== 200) return false;
+        console.log("LOGIN SUCCESSFULL");
+        const data = await res.json();
+        saveUser(data.user);
+        return true;
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         return false;
-    });
+      });
   };
 
   const logout = () => {
     console.log("LOGOUT");
-    removeToken();
+    fetch(`${BACKEND_URL}/authentication/logout`, {
+      method: "POST",
+      credentials: "include",
+    }).then((res) => {
+      if (res.status === 200) removeUser();
+    });
   };
 
   const register = async (user) => {
@@ -48,55 +49,41 @@ const useAuth = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
+      credentials: "include"
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("REGISTER TRY",data);
-        if (data.status === 200) {
+      .then(async (res) => {
+        const data = await res.json();
+        if (res.status === 200) {
           console.log("REGISTER SUCCESSFULL");
-          saveToken(data.token);
+          saveUser(data.user);
         }
-        console.log("BAD")
         return data;
       })
       .catch((err) => {
         console.log(err);
-        return {status: 500, message: err};
+        return { status: 500, message: err };
       });
   };
 
-  const saveToken = (token) => {
-    setToken(token);
-    localStorage.setItem("token", token);
+  const saveUser = (user) => {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
-  const removeToken = () => {
-    setToken(null);
-    localStorage.removeItem("token");
+  const removeUser = () => {
+    setUser(null);
+    localStorage.removeItem("user");
   };
 
   useEffect(() => {
-    const loadedToken = localStorage.getItem("token");
-    console.log("TOKEN LOADED", loadedToken);
-    if (loadedToken) setToken(loadedToken);
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        console.log("DECODED TOKEN", decodedToken);
-        setUser(decodedToken.user);
-        //   setIsLoggedIn(true);
-      } catch (error) {
-        console.log("REMOVING TOKEN");
-        removeToken();
-      }
-    } else {
-      setUser(null);
-      //   setIsLoggedIn(false);
+    try {
+      const loadedUser = JSON.parse(localStorage.getItem("user"));
+      console.log("USER LOADED", loadedUser);
+      if (loadedUser) setUser(loadedUser);
+    } catch (err) {
+      console.log(err);
     }
-  }, [token]);
+  }, []);
 
   return { login, logout, register, isLoggedIn, user, token };
 };

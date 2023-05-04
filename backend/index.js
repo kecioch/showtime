@@ -8,6 +8,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const mongoString = process.env.DATABASE_URL;
+const cookieParser = require("cookie-parser");
 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -23,12 +24,19 @@ database.once("connected", () => {
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    methods: ["POST", "PUT", "PATCH", "DELETE", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
+  })
+);
 // app.use(bodyParser.raw({type: "*/*"}));
 // app.use(bodyParser.json());
 // app.use(express.raw({type: 'application/json'}));
 // app.use(bodyParser.text({type: 'application/json'}));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // only use the raw bodyParser for webhooks
 app.use((req, res, next) => {

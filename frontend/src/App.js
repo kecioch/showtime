@@ -25,9 +25,10 @@ import Completion from "./pages/payment/Completion";
 import TicketValidation from "./pages/staff/TicketValidation";
 import Tickets from "./pages/user/Tickets";
 import SeatTypes from "./pages/admin/SeatTypes";
+import { ROLES } from "./constants";
 
 function App() {
-  const { isLoggedIn, logout, user, token } = useAuth();
+  const { isLoggedIn, logout, user } = useAuth();
   return (
     <React.Fragment>
       <Navbar bg="dark" variant="dark" sticky="top" className="navbar">
@@ -48,7 +49,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route element={<ProtectedRoute hasPermission={isLoggedIn} />}>
+        <Route element={<ProtectedRoute hasPermission={isLoggedIn && user.role === ROLES.ADMIN} />}>
           <Route path="/movies" element={<Movies />} />
         </Route>
         <Route path="/movies/new" element={<NewMovie />} />

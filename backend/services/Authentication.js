@@ -4,6 +4,7 @@ const saltRounds = 10;
 const privateKey = process.env.PRIVATE_KEY;
 
 const User = require("../models/User");
+const { ROLES } = require("../constants");
 
 exports.login = async (req, res) => {
   console.log("POST /authentication/login");
@@ -25,6 +26,7 @@ exports.login = async (req, res) => {
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
+              role: user.role,
             },
           },
           privateKey
@@ -33,12 +35,32 @@ exports.login = async (req, res) => {
       }
     }
 
-    if (token) return res.json({ status: 200, token });
+    if (token) {
+      return res
+        .cookie("auth_token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+        })
+        .status(200)
+        .json({
+          user: {
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+          },
+        });
+    }
     return res.status(401).json({ status: 401, message: "Unauthorized" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ status: 500, message: err });
   }
+};
+
+exports.logout = async (req, res) => {
+  return res.clearCookie("auth_token").sendStatus(200);
 };
 
 exports.register = async (req, res) => {
@@ -69,41 +91,58 @@ exports.register = async (req, res) => {
       firstName,
       lastName,
       email,
+      role: ROLES.USER,
     });
     const savedUser = await newUser.save();
+    const userInfo = {
+      username: savedUser.username,
+      firstName: savedUser.firstName,
+      lastName: savedUser.lastName,
+      email: savedUser.email,
+      role: savedUser.role,
+    };
 
     const token = jwt.sign(
       {
-        user: {
-          username: savedUser.username,
-          firstName: savedUser.firstName,
-          lastName: savedUser.lastName,
-          email: savedUser.email,
-        },
+        user: userInfo,
       },
       privateKey
     );
     console.log("TOKEN:", token);
 
-    return res.json({ status: 200, token });
+    return res
+      .cookie("auth_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .status(200)
+      .json({ status: 200, user: userInfo });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ status: 500, message: err._message });
   }
 };
 
-exports.verifyToken = (req, res, next) => {
-  req.user = { username: null, verified: false };
-  const bearerHeader = req.headers["authorization"];
-  if (bearerHeader) {
-    const bearerToken = bearerHeader.split(" ")[1];
-    jwt.verify(bearerToken, privateKey, (err, data) => {
-      if (!err && data) {
-        req.user = { ...data.user, verified: true };
-        next();
-      } else {
-        return res.sendStatus(403);
-      }
-    });
-  } else return res.sendStatus(403);
+exports.authorization = (role) => {
+  return (req, res, next) => {
+    try {
+      console.log("AUTH");
+      const token = req.cookies.auth_token;
+      console.log("REQ.COOKIE", req.cookies);
+
+      console.log("CHECK AUTHORIZATION TOKEN", token);
+      if (!token) return res.sendStatus(403);
+
+      const data = jwt.verify(token, privateKey);
+      req.user = data.user;
+      console.log("REQ.USER", req.user);
+
+      if (role && req.user.role !== role) return res.sendStatus(403);
+
+      return next();
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(403);
+    }
+  };
 };
