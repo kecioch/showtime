@@ -1,0 +1,26 @@
+.listItem {
+    background-color: #bfbfbf;
+    border-radius: 0.5em;
+    min-height: 5em;
+    /* font-size: 2em; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+}
+
+.listItem:hover {
+    transform: scale(1.05);
+}
+
+.listItem:hover h3 {
+    /* border-bottom: 3px solid #212529; */
+}
+
+.listItem > h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+    transition: color 0.3s;
+}

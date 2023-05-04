@@ -1,0 +1,72 @@
+import Container from "../../components/ui/Container";
+import Content from "../../components/ui/Content";
+import useAuth from "../../hooks/useAuth";
+import { ROLES } from "../../constants";
+import DashboardListItem from "../../components/dashboard/DashboardListItem";
+import {
+  BorderAll,
+  Film,
+  PeopleFill,
+  PersonVcardFill,
+  ProjectorFill,
+  QrCodeScan,
+  TagFill,
+  TicketFill,
+} from "react-bootstrap-icons";
+
+const Dashboard = (props) => {
+  const { user } = useAuth();
+
+  return (
+    <Container>
+      <Content>
+        <h1>Dashboard</h1>
+        {user && (
+          <>
+            <h4>
+              Willkommen, {user.firstName} {user.lastName}!
+            </h4>
+            <hr />
+
+            <div className="d-flex flex-column gap-2 mb-3 mt-4">
+              {user.role === ROLES.ADMIN && (
+                <>
+                  <DashboardListItem linkTo="/movies">
+                    <Film /> Film-Verwaltung
+                  </DashboardListItem>
+                  <DashboardListItem linkTo="/cinemas">
+                    <BorderAll /> Kinosaal-Verwaltung
+                  </DashboardListItem>
+                  <DashboardListItem linkTo="/seattypes">
+                    <TagFill /> Sitzplatz-Verwaltung
+                  </DashboardListItem>
+                  <DashboardListItem linkTo="/screenings/edit">
+                    <ProjectorFill /> Vorführung-Verwaltung
+                  </DashboardListItem>
+                  <DashboardListItem linkTo="">
+                    <PeopleFill /> Mitarbeiter-Verwaltung
+                  </DashboardListItem>
+                </>
+              )}
+
+              {(user.role === ROLES.ADMIN || user.role === ROLES.STAFF) && (
+                <DashboardListItem linkTo="/validation">
+                  <QrCodeScan /> Ticket Scanner
+                </DashboardListItem>
+              )}
+
+              <DashboardListItem linkTo="/user/tickets">
+                <TicketFill /> Meine Tickets
+              </DashboardListItem>
+              <DashboardListItem linkTo="">
+                <PersonVcardFill /> Account bearbeiten
+              </DashboardListItem>
+            </div>
+          </>
+        )}
+      </Content>
+    </Container>
+  );
+};
+
+export default Dashboard;

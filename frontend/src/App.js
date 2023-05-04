@@ -26,6 +26,7 @@ import TicketValidation from "./pages/staff/TicketValidation";
 import Tickets from "./pages/user/Tickets";
 import SeatTypes from "./pages/admin/SeatTypes";
 import { ROLES } from "./constants";
+import Dashboard from "./pages/user/Dashboard";
 
 function App() {
   const { isLoggedIn, logout, user } = useAuth();
@@ -34,8 +35,16 @@ function App() {
       <Navbar bg="dark" variant="dark" sticky="top" className="navbar">
         <Container>
           <Navbar.Brand>Showtime</Navbar.Brand>
-          <Nav className="me-auto">
+          <Nav className="me-auto d-flex gap-3">
             <Link to="/">Home</Link>
+            {isLoggedIn && <Link to="/dashboard">Dashboard</Link>}
+            {user && user.role === ROLES.USER && (
+              <Link to="/user/tickets">Meine Tickets</Link>
+            )}
+            {user &&
+              (user.role === ROLES.ADMIN || user.role === ROLES.STAFF) && (
+                <Link to="/validation">Ticket Scanner</Link>
+              )}
           </Nav>
           <Nav>
             {isLoggedIn ? (
@@ -49,7 +58,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route element={<ProtectedRoute hasPermission={isLoggedIn && user.role === ROLES.ADMIN} />}>
+        <Route
+          element={
+            <ProtectedRoute
+              hasPermission={isLoggedIn && user.role === ROLES.ADMIN}
+            />
+          }
+        >
           <Route path="/movies" element={<Movies />} />
         </Route>
         <Route path="/movies/new" element={<NewMovie />} />
@@ -68,6 +83,7 @@ function App() {
         <Route path="/validation" element={<TicketValidation />} />
         <Route path="/user/tickets" element={<Tickets />} />
         <Route path="/seattypes" element={<SeatTypes />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </React.Fragment>
