@@ -39,6 +39,7 @@ const Tickets = (props) => {
     <Container>
       <Content>
         <h1 className="mb-4">Meine Tickets</h1>
+        <hr />
         <TicketList tickets={tickets} />
       </Content>
     </Container>

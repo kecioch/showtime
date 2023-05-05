@@ -58,7 +58,7 @@ const Dashboard = (props) => {
               <DashboardListItem linkTo="/user/tickets">
                 <TicketFill /> Meine Tickets
               </DashboardListItem>
-              <DashboardListItem linkTo="">
+              <DashboardListItem linkTo="/user/account">
                 <PersonVcardFill /> Account bearbeiten
               </DashboardListItem>
             </div>

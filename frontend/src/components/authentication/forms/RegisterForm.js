@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LoadingButton from "../../ui/LoadingButton";
 
 const RegisterForm = (props) => {
   const [firstName, setFirstName] = useState("");
@@ -8,6 +9,16 @@ const RegisterForm = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const user = props.user;
+    if (!user) return;
+    console.log(user);
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+    setUsername(user.username);
+    setEmail(user.email);
+  }, [props.user]);
 
   const onSubmit = (ev) => {
     ev.preventDefault();
@@ -25,7 +36,9 @@ const RegisterForm = (props) => {
         <Form.Control
           type="text"
           placeholder="Vorname eingeben..."
+          value={firstName}
           onChange={(ev) => setFirstName(ev.target.value)}
+          required
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="lastName">
@@ -33,7 +46,9 @@ const RegisterForm = (props) => {
         <Form.Control
           type="text"
           placeholder="Nachname eingeben..."
+          value={lastName}
           onChange={(ev) => setLastName(ev.target.value)}
+          required
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="username">
@@ -41,15 +56,21 @@ const RegisterForm = (props) => {
         <Form.Control
           type="text"
           placeholder="Benutzername eingeben..."
+          value={username}
           onChange={(ev) => setUsername(ev.target.value)}
+          required
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="password">
-        <Form.Label>Passwort</Form.Label>
+        <Form.Label>
+          {props.isUpdate ? "Neues Passwort" : "Passwort"}
+        </Form.Label>
         <Form.Control
           type="password"
           placeholder="Passwort eingeben..."
+          value={password}
           onChange={(ev) => setPassword(ev.target.value)}
+          required={!props.isUpdate}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="eMail">
@@ -57,10 +78,15 @@ const RegisterForm = (props) => {
         <Form.Control
           type="email"
           placeholder="E-Mail eingeben..."
+          value={email}
           onChange={(ev) => setEmail(ev.target.value)}
+          pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+          required
         />
       </Form.Group>
-      <Button type="submit">Registrieren</Button>
+      <LoadingButton type="submit" isLoading={props.isLoading}>
+        {props.isUpdate ? "Änderungen speichern" : "Registrieren"}
+      </LoadingButton>
     </Form>
   );
 };

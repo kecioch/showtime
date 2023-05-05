@@ -56,6 +56,7 @@ const TicketValidation = (props) => {
       <Container>
         <Content>
           <h1>Ticket Validierung</h1>
+          <hr />
           <QrReader
             onResult={onScan.bind(showValidationModal)}
             constraints={{ facingMode: "environment" }}

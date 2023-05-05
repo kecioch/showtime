@@ -3,7 +3,7 @@ import { BACKEND_URL } from "../constants";
 import { AuthContext } from "../contexts/AuthContext";
 
 const useAuth = () => {
-  const { token, user, setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   //   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const isLoggedIn = user ? true : false;
@@ -85,7 +85,7 @@ const useAuth = () => {
     }
   }, []);
 
-  return { login, logout, register, isLoggedIn, user, token };
+  return { login, logout, register, isLoggedIn, user, saveUser };
 };
 
 export default useAuth;

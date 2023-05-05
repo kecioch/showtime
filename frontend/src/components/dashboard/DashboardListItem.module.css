@@ -11,6 +11,7 @@
 
 .listItem:hover {
     transform: scale(1.05);
+    cursor:default;
 }
 
 .listItem:hover h3 {

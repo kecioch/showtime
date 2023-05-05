@@ -6,6 +6,19 @@ const privateKey = process.env.PRIVATE_KEY;
 const User = require("../models/User");
 const { ROLES } = require("../constants");
 
+const findUser = async (user) => {
+  if (!user || (!user.username && !user.email)) return null;
+
+  let searchParams = {};
+  if (user.username)
+    searchParams.username = { $regex: new RegExp(`^${user.username}$`, "i") };
+  if (user.email)
+    searchParams.email = { $regex: new RegExp(`^${user.email}$`, "i") };
+
+  const foundUser = await User.findOne(searchParams);
+  return foundUser;
+};
+
 exports.login = async (req, res) => {
   console.log("POST /authentication/login");
   try {
@@ -67,22 +80,27 @@ exports.register = async (req, res) => {
   console.log("POST /authentication/register");
   try {
     const { username, password, firstName, lastName, email } = req.body;
-    let foundUser = await User.findOne({
-      username: { $regex: new RegExp(username, "i") },
-    });
+    // let foundUser = await User.findOne({
+    //   username: { $regex: new RegExp(username, "i") },
+    // });
+    console.log(username, email);
+    let foundUser = await findUser({ username });
+    console.log("found", foundUser);
 
     if (foundUser)
       return res
         .status(400)
-        .json({ status: 400, message: "Benutzername existiert bereits" });
+        .json({ status: 400, message: "Benutzername ist bereits vergeben" });
 
-    foundUser = await User.findOne({
-      email: { $regex: new RegExp(email, "i") },
-    });
+    // foundUser = await User.findOne({
+    //   email: { $regex: new RegExp(email, "i") },
+    // });
+    foundUser = await findUser({ email });
+
     if (foundUser)
       return res
         .status(400)
-        .json({ status: 400, message: "E-Mail existiert bereits" });
+        .json({ status: 400, message: "E-Mail ist bereits vergeben" });
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newUser = new User({
@@ -145,4 +163,71 @@ exports.authorization = (role) => {
       return res.sendStatus(403);
     }
   };
+};
+
+exports.update = async (req, res) => {
+  try {
+    const userCookie = req.user;
+    const update = req.body;
+    console.log("UPDATE USER", userCookie);
+    console.log("UPDATED USER", update);
+
+    const user = await findUser({ username: userCookie.username });
+    console.log("FOUND USER", user);
+    if (!user)
+      return res
+        .status(400)
+        .json({ status: 400, message: "Benutzer nicht gefunden" });
+
+    console.log("update.username", update.username);
+    const test = await findUser({ username: update.username });
+    console.log("test", test);
+    if (user.username !== update.username && test)
+      return res
+        .status(400)
+        .json({ status: 400, message: "Benutzername ist bereits vergeben" });
+
+    if (
+      user.email !== update.email &&
+      (await findUser({ email: update.email }))
+    )
+      return res
+        .status(400)
+        .json({ status: 400, message: "Email ist bereits vergeben" });
+
+    user.firstName = update.firstName;
+    user.lastName = update.lastName;
+    user.username = update.username;
+    user.email = update.email;
+
+    if (update.password && update.password.length > 0)
+      user.password = await bcrypt.hash(update.password, saltRounds);
+
+    const savedUser = await user.save();
+    const userInfo = {
+      username: savedUser.username,
+      firstName: savedUser.firstName,
+      lastName: savedUser.lastName,
+      email: savedUser.email,
+      role: savedUser.role,
+    };
+
+    const token = jwt.sign(
+      {
+        user: userInfo,
+      },
+      privateKey
+    );
+
+    return res
+      .cookie("auth_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .status(200)
+      .json({ status: 200, message: "OK", user: userInfo });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(403);
+  }
 };
