@@ -1,37 +1,48 @@
 const express = require("express");
 const router = express.Router();
 
+const { authorization } = require("../services/Authentication");
+const auth = authorization();
+
 const Ticket = require("../models/Ticket");
+const User = require("../models/User");
 
 // BASIC URL /tickets
 
-router.get("/", async (req, res) => {
-  console.log("GET /tickets");
+router.get("/", auth, async (req, res) => {
+  const user = req.user;
+  console.log(`GET /tickets`);
   try {
-    const tickets = await Ticket.find();
-    res.send(tickets);
-  } catch (err) {
-    res.sendStatus(400);
-  }
-});
-
-router.get("/:cust_mail", async (req, res) => {
-  const { cust_mail } = req.params;
-  console.log(`GET /tickets/${cust_mail}`);
-  try {
-    const tickets = await Ticket.find({ "customer.email": cust_mail })
-      .populate("screening")
-      .populate("seats.type")
-      .populate({ path: "screening", populate: { path: "scheduledScreening" } })
+    const userFound = await User.findOne({ email: user.email })
+      .populate("tickets")
+      .populate({ path: "tickets", populate: { path: "screening" } })
+      .populate({ path: "tickets", populate: { path: "seats.type" } })
       .populate({
-        path: "screening",
-        populate: { path: "scheduledScreening", populate: { path: "cinema" } },
+        path: "tickets",
+        populate: {
+          path: "screening",
+          populate: { path: "scheduledScreening" },
+        },
       })
       .populate({
-        path: "screening",
-        populate: { path: "scheduledScreening", populate: { path: "movie" } },
+        path: "tickets",
+        populate: {
+          path: "screening",
+          populate: {
+            path: "scheduledScreening",
+            populate: { path: "cinema" },
+          },
+        },
+      })
+      .populate({
+        path: "tickets",
+        populate: {
+          path: "screening",
+          populate: { path: "scheduledScreening", populate: { path: "movie" } },
+        },
       });
-    res.send(tickets);
+
+    res.send(userFound.tickets);
   } catch (err) {
     console.log(err);
     res.sendStatus(400);

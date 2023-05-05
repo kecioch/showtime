@@ -12,7 +12,9 @@ const Tickets = (props) => {
   useEffect(() => {
     if (!user) return;
     console.log(user);
-    fetch(`${BACKEND_URL}/tickets/${user.email}`).then(async (res) => {
+    fetch(`${BACKEND_URL}/tickets`, {
+      credentials: "include"
+    }).then(async (res) => {
       if (res.status !== 200) return;
       const data = await res.json();
       console.log("TICKETS", data);

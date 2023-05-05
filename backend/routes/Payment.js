@@ -14,6 +14,7 @@ const {
 const { createDatetime } = require("../services/Datetime");
 const { sendTicket } = require("../services/Tickets");
 const { createQRCodeSVG, createQRCodeFile } = require("../services/QRCode");
+const User = require("../models/User");
 
 // BASIC URL /payment
 
@@ -160,14 +161,28 @@ router.post(
             seats,
             screening,
           });
-          const savedTicket = await ticket.save();
+          let savedTicket = await ticket.save();
           const codeSVG = createQRCodeSVG(savedTicket.id);
           ticket.codeSVG = codeSVG;
-          await ticket.save();
+          savedTicket = await ticket.save();
 
           // Send ticket
           const codeFile = await createQRCodeFile(savedTicket.id);
-          sendTicket({ id: savedTicket.id, customer, datetime, seats, screening, code: codeFile });
+          sendTicket({
+            id: savedTicket.id,
+            customer,
+            datetime,
+            seats,
+            screening,
+            code: codeFile,
+          });
+
+          // Add ticket to user
+          const user = await User.findOne({ email: customer.email });
+          if (user) {
+            user.tickets.push(savedTicket);
+            await user.save();
+          }
 
           // Complete order
           order.completed = true;

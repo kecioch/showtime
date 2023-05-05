@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
     enum: Object.values(ROLES),
     required: true,
   },
+  tickets: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ticket",
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", userSchema);
