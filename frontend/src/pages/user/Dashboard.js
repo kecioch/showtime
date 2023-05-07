@@ -31,16 +31,16 @@ const Dashboard = (props) => {
             <div className="d-flex flex-column gap-2 mb-3 mt-4">
               {user.role === ROLES.ADMIN && (
                 <>
-                  <DashboardListItem linkTo="/movies">
+                  <DashboardListItem linkTo="/admin/movies">
                     <Film /> Film-Verwaltung
                   </DashboardListItem>
-                  <DashboardListItem linkTo="/cinemas">
+                  <DashboardListItem linkTo="/admin/cinemas">
                     <BorderAll /> Kinosaal-Verwaltung
                   </DashboardListItem>
-                  <DashboardListItem linkTo="/seattypes">
+                  <DashboardListItem linkTo="/admin/seattypes">
                     <TagFill /> Sitzplatz-Verwaltung
                   </DashboardListItem>
-                  <DashboardListItem linkTo="/screenings/edit">
+                  <DashboardListItem linkTo="/admin/screenings/edit">
                     <ProjectorFill /> Vorführung-Verwaltung
                   </DashboardListItem>
                   <DashboardListItem linkTo="/admin/staff">
@@ -50,7 +50,7 @@ const Dashboard = (props) => {
               )}
 
               {(user.role === ROLES.ADMIN || user.role === ROLES.STAFF) && (
-                <DashboardListItem linkTo="/validation">
+                <DashboardListItem linkTo="/tickets/validation">
                   <QrCodeScan /> Ticket Scanner
                 </DashboardListItem>
               )}

@@ -19,7 +19,7 @@ const Movies = (props) => {
         console.log(data);
         const movieItems = data.map((el) => ({
           title: el.title,
-          editPath: `/movies/${el.title}/edit`,
+          editPath: `/admin/movies/${el.title}/edit`,
         }));
         setMovies(
           movieItems.sort((movieA, movieB) =>
@@ -55,7 +55,7 @@ const Movies = (props) => {
         <Content>
           <h1>Filme Verwalten</h1>
           <hr />
-          <Link to="/movies/new">
+          <Link to="/admin/movies/new">
             <Button className="mb-4" variant="primary">
               Neu
             </Button>

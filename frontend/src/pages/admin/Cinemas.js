@@ -19,7 +19,7 @@ const Cinemas = (props) => {
         console.log(data);
         const cinemaItems = data.map((el) => ({
           title: el.title,
-          editPath: `/cinemas/${el.title}/edit`,
+          editPath: `/admin/cinemas/${el.title}/edit`,
         }));
         return cinemaItems;
       })
@@ -57,7 +57,7 @@ const Cinemas = (props) => {
         <Content>
           <h1>Kinosaal Verwaltung</h1>
           <hr />
-          <Link to="/cinemas/new">
+          <Link to="/admin/cinemas/new">
             <Button className="mb-4" variant="primary">
               Neu
             </Button>
