@@ -76,48 +76,81 @@ exports.logout = async (req, res) => {
   return res.clearCookie("auth_token").sendStatus(200);
 };
 
+exports.createUser = async (user) => {
+  const { username, password, firstName, lastName, email, role } = user;
+
+  let foundUser = await findUser({ username });
+  if (foundUser)
+    return { status: 400, message: "Benutzername ist bereits vergeben" };
+
+  foundUser = await findUser({ email });
+  if (foundUser) return { status: 400, message: "E-Mail ist bereits vergeben" };
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const newUser = new User({
+    username,
+    password: hashedPassword,
+    firstName,
+    lastName,
+    email,
+    role,
+  });
+  const savedUser = await newUser.save();
+
+  return { status: 200, user: savedUser };
+};
+
 exports.register = async (req, res) => {
   console.log("POST /authentication/register");
   try {
     const { username, password, firstName, lastName, email } = req.body;
-    // let foundUser = await User.findOne({
-    //   username: { $regex: new RegExp(username, "i") },
+
+    // let foundUser = await findUser({ username });
+    // console.log("found", foundUser);
+
+    // if (foundUser)
+    //   return res
+    //     .status(400)
+    //     .json({ status: 400, message: "Benutzername ist bereits vergeben" });
+
+    // foundUser = await findUser({ email });
+
+    // if (foundUser)
+    //   return res
+    //     .status(400)
+    //     .json({ status: 400, message: "E-Mail ist bereits vergeben" });
+
+    // const hashedPassword = await bcrypt.hash(password, saltRounds);
+    // const newUser = new User({
+    //   username,
+    //   password: hashedPassword,
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   role: ROLES.USER,
     // });
-    console.log(username, email);
-    let foundUser = await findUser({ username });
-    console.log("found", foundUser);
+    // const savedUser = await newUser.save();
 
-    if (foundUser)
-      return res
-        .status(400)
-        .json({ status: 400, message: "Benutzername ist bereits vergeben" });
-
-    // foundUser = await User.findOne({
-    //   email: { $regex: new RegExp(email, "i") },
-    // });
-    foundUser = await findUser({ email });
-
-    if (foundUser)
-      return res
-        .status(400)
-        .json({ status: 400, message: "E-Mail ist bereits vergeben" });
-
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const newUser = new User({
+    const newUserRes = await createUser({
       username,
-      password: hashedPassword,
+      password,
       firstName,
       lastName,
       email,
       role: ROLES.USER,
     });
-    const savedUser = await newUser.save();
+
+    if (newUserRes.status !== 200)
+      return res
+        .status(newUserRes.status)
+        .json({ status: newUserRes.status, message: newUserRes.message });
+
     const userInfo = {
-      username: savedUser.username,
-      firstName: savedUser.firstName,
-      lastName: savedUser.lastName,
-      email: savedUser.email,
-      role: savedUser.role,
+      username: newUserRes.user.username,
+      firstName: newUserRes.user.firstName,
+      lastName: newUserRes.user.lastName,
+      email: newUserRes.user.email,
+      role: newUserRes.user.role,
     };
 
     const token = jwt.sign(

@@ -53,6 +53,7 @@ app.use("/screenings", require("./routes/Screenings"));
 app.use("/authentication", require("./routes/Authentication"));
 app.use("/payment", require("./routes/Payment"));
 app.use("/tickets", require("./routes/Tickets"));
+app.use("/users", require("./routes/Users"));
 
 app.get("/", (req, res) => {
   console.log("GET /");

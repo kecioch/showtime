@@ -43,7 +43,7 @@ const Dashboard = (props) => {
                   <DashboardListItem linkTo="/screenings/edit">
                     <ProjectorFill /> Vorführung-Verwaltung
                   </DashboardListItem>
-                  <DashboardListItem linkTo="">
+                  <DashboardListItem linkTo="/admin/staff">
                     <PeopleFill /> Mitarbeiter-Verwaltung
                   </DashboardListItem>
                 </>

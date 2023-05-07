@@ -28,6 +28,7 @@ import SeatTypes from "./pages/admin/SeatTypes";
 import { ROLES } from "./constants";
 import Dashboard from "./pages/user/Dashboard";
 import Account from "./pages/user/Account";
+import Staff from "./pages/admin/Staff";
 
 function App() {
   const { isLoggedIn, logout, user } = useAuth();
@@ -86,6 +87,7 @@ function App() {
         <Route path="/seattypes" element={<SeatTypes />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/user/account" element={<Account />} />
+        <Route path="/admin/staff" element={<Staff />} />
 
         <Route path="*" element={<Home />} />
       </Routes>

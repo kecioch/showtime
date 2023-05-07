@@ -2,6 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import LoadingButton from "../../ui/LoadingButton";
+import styles from "./RegisterForm.module.css";
 
 const RegisterForm = (props) => {
   const [firstName, setFirstName] = useState("");
@@ -29,7 +30,7 @@ const RegisterForm = (props) => {
   const errorMsg = props.error && <p className="text-danger">{props.error}</p>;
 
   return (
-    <Form className="mt-3" onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       {errorMsg}
       <Form.Group className="mb-3" controlId="firstName">
         <Form.Label>Vorname</Form.Label>
@@ -84,7 +85,7 @@ const RegisterForm = (props) => {
           required
         />
       </Form.Group>
-      <LoadingButton type="submit" isLoading={props.isLoading}>
+      <LoadingButton type="submit" isLoading={props.isLoading} className={styles.submit}>
         {props.isUpdate ? "Änderungen speichern" : "Registrieren"}
       </LoadingButton>
     </Form>
