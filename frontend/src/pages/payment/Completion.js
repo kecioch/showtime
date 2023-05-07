@@ -34,6 +34,8 @@ const Completion = (props) => {
     <>
       <h1>Beim Bezahlvorgang ist ein Fehler aufgetreten</h1>
       <h2>ID: {payment_intent}</h2>
+      <h6 className="mt-5">Weiterleitung in 10 Sekunden...</h6>
+      <p>Sollten Sie nicht weitergeleitet werden, <Link to="/">klicke hier</Link></p>
     </>
   );
 
