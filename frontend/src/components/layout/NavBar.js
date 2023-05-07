@@ -17,7 +17,7 @@ const NavBar = () => {
             <Link to="/user/tickets">Meine Tickets</Link>
           )}
           {user && (user.role === ROLES.ADMIN || user.role === ROLES.STAFF) && (
-            <Link to="/validation">Ticket Scanner</Link>
+            <Link to="/tickets/validation">Ticket Scanner</Link>
           )}
         </Nav>
         <Nav>
