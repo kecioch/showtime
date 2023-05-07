@@ -29,34 +29,14 @@ import { ROLES } from "./constants";
 import Dashboard from "./pages/user/Dashboard";
 import Account from "./pages/user/Account";
 import Staff from "./pages/admin/Staff";
+import NavBar from "./components/layout/NavBar";
 
 function App() {
-  const { isLoggedIn, logout, user } = useAuth();
+  const { isLoggedIn, user } = useAuth();
+  
   return (
     <React.Fragment>
-      <Navbar bg="dark" variant="dark" sticky="top" className="navbar">
-        <Container>
-          <Navbar.Brand>Showtime</Navbar.Brand>
-          <Nav className="me-auto d-flex gap-3">
-            <Link to="/">Home</Link>
-            {isLoggedIn && <Link to="/dashboard">Dashboard</Link>}
-            {user && user.role === ROLES.USER && (
-              <Link to="/user/tickets">Meine Tickets</Link>
-            )}
-            {user &&
-              (user.role === ROLES.ADMIN || user.role === ROLES.STAFF) && (
-                <Link to="/validation">Ticket Scanner</Link>
-              )}
-          </Nav>
-          <Nav>
-            {isLoggedIn ? (
-              <Link onClick={() => logout()}>Ausloggen</Link>
-            ) : (
-              <Link to="/login">Einloggen</Link>
-            )}
-          </Nav>
-        </Container>
-      </Navbar>
+      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
