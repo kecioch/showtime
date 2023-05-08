@@ -6,41 +6,41 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
 import DeleteModal from "../../components/modals/DeleteModal";
+import useFetch from "../../hooks/useFetch";
 
 const Movies = (props) => {
   const [movies, setMovies] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteMovie, setDeleteMovie] = useState();
+  const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/movies`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        const movieItems = data.map((el) => ({
-          title: el.title,
-          editPath: `/admin/movies/${el.title}/edit`,
-        }));
-        setMovies(
-          movieItems.sort((movieA, movieB) =>
-            movieA.title.localeCompare(movieB.title)
-          )
-        );
-      })
-      .catch((err) => console.log(err));
+    fetch.get(`${BACKEND_URL}/movies`).then((res) => {
+      console.log(res);
+      if (res.status !== 200) return;
+      const movieItems = res.data.map((el) => ({
+        title: el.title,
+        editPath: `/admin/movies/${el.title}/edit`,
+      }));
+      setMovies(
+        movieItems.sort((movieA, movieB) =>
+          movieA.title.localeCompare(movieB.title)
+        )
+      );
+    });
   }, []);
 
   const onDeleteMovie = (movie) => {
     setDeleteMovie(movie);
+    clearErrorMsg();
     setShowDeleteModal(true);
   };
 
   const deleteMovieHandler = () => {
     console.log("DELETE", deleteMovie);
-    fetch(`${BACKEND_URL}/movies/${deleteMovie.title}`, {
-      method: "DELETE",
-    }).then((res) => {
+    fetch.delete(`${BACKEND_URL}/movies/${deleteMovie.title}`).then((res) => {
       console.log(res);
+      if (res.status !== 200) return;
       setShowDeleteModal(false);
       setMovies((prev) => {
         const movies = prev.filter((el) => el.title !== deleteMovie.title);
@@ -74,6 +74,8 @@ const Movies = (props) => {
         text="Wollen Sie wirklich den Film löschen?"
         onClose={() => setShowDeleteModal(false)}
         onDelete={deleteMovieHandler}
+        isLoading={isFetching}
+        error={errorMsg}
       />
     </>
   );

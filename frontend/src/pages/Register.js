@@ -10,14 +10,16 @@ const Register = (props) => {
   const {register} = useAuth();
   const navigate = useNavigate();
   const [error,setError] = useState();
+  const [isFetching,setIsFetching] = useState(false);
 
   const submitHandler = async (user) => {
     console.log("REGISTER", user);
-
+    setIsFetching(true);
     const res = await register(user);
     console.log("REGISTER RES", res);
     if (res.status === 200) navigate("/")
     else setError(res.message);
+    setIsFetching(false);
   };
 
   return (
@@ -26,7 +28,7 @@ const Register = (props) => {
       <div className="d-flex justify-content-center">
         <div className={styles.register}>
           <h1>Registrieren</h1>
-          <RegisterForm error={error} onSubmit={submitHandler} />
+          <RegisterForm error={error} onSubmit={submitHandler} isLoading={isFetching} />
         </div>
         </div>
       </Content>

@@ -1,24 +1,25 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import CinemaConfig from "../../components/cinemas/forms/CinemaConfig";
 import { BACKEND_URL } from "../../constants";
+import useFetch from "../../hooks/useFetch";
 
 const EditCinema = (props) => {
   const { id } = useParams();
   const [cinema, setCinema] = useState();
   const navigate = useNavigate();
+  const { fetch, isFetching, errorMsg } = useFetch();
 
   useEffect(() => {
     const fetchMovie = async () => {
       console.log(BACKEND_URL);
       try {
-        const res = await fetch(`${BACKEND_URL}/cinemas/${id}`);
-        const data = await res.json();
-        console.log(data);
-        if (data.code === 404) navigate("/cinemas");
-        else setCinema(data);
+        const res = await fetch.get(`${BACKEND_URL}/cinemas/${id}`);
+        console.log(res);
+        if (res.status !== 200) navigate("/cinemas");
+        else setCinema(res.data);
       } catch (err) {
         console.log("ERROR", err);
       }
@@ -28,21 +29,22 @@ const EditCinema = (props) => {
 
   const updateCinemaHandler = async (updatedCinema) => {
     console.log("PUT", updatedCinema);
-    fetch(`${BACKEND_URL}/cinemas/${cinema.title}`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedCinema),
-    }).then((res) => console.log(res));
+    fetch
+      .put(`${BACKEND_URL}/cinemas/${cinema.title}`, updatedCinema)
+      .then((res) => console.log(res));
   };
 
   return (
     <Container>
       <Content>
         <h1>Kinosaal bearbeiten</h1>
-        <CinemaConfig cinema={cinema} onSubmit={updateCinemaHandler} isNew={false} />
+        <CinemaConfig
+          cinema={cinema}
+          onSubmit={updateCinemaHandler}
+          isNew={false}
+          isLoading={isFetching}
+          error={errorMsg}
+        />
       </Content>
     </Container>
   );

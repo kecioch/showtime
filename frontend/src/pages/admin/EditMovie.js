@@ -4,38 +4,34 @@ import { BACKEND_URL } from "../../constants";
 import MovieConfig from "../../components/movies/forms/MovieConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import useFetch from "../../hooks/useFetch";
 
 const EditMovie = (props) => {
   const { id } = useParams();
   const [movie, setMovie] = useState();
   const navigate = useNavigate();
+  const { fetch, isFetching, errorMsg } = useFetch();
 
   useEffect(() => {
     const fetchMovie = async () => {
-      console.log(BACKEND_URL);
-      try {
-        const res = await fetch(`${BACKEND_URL}/movies/${id}`);
-        const data = await res.json();
-        console.log(data);
-        if (data.code === 404) navigate("/movies");
-        else setMovie(data);
-      } catch (err) {
-        console.log("ERROR", err);
-      }
+      const res = await fetch.get(`${BACKEND_URL}/movies/${id}`);
+      console.log(res);
+      if (res.status !== 200) navigate("/movies");
+      else setMovie(res.data);
     };
     fetchMovie();
   }, []);
 
   const updateMovieHandler = async (updatedMovie) => {
     console.log("PUT", updatedMovie);
-    fetch(`${BACKEND_URL}/movies/${movie.title}`, {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedMovie),
-    }).then((res) => console.log(res));
+    const res = await fetch.put(
+      `${BACKEND_URL}/movies/${movie._id}`,
+      updatedMovie
+    );
+    if (res.status === 200) {
+      setMovie(res.data);
+    }
+    return res;
   };
 
   return (
@@ -46,6 +42,8 @@ const EditMovie = (props) => {
           onSubmit={updateMovieHandler}
           default={movie}
           isNew={false}
+          isLoading={isFetching}
+          error={errorMsg}
         />
       </Content>
     </Container>

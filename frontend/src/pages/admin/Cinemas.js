@@ -6,26 +6,28 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
 import DeleteModal from "../../components/modals/DeleteModal";
+import useFetch from "../../hooks/useFetch";
 
 const Cinemas = (props) => {
   const [cinemas, setCinemas] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCinema, setDeleteCinema] = useState();
+  const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/cinemas`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        const cinemaItems = data.map((el) => ({
+    fetch
+      .get(`${BACKEND_URL}/cinemas`)
+      .then((res) => {
+        console.log(res);
+        const cinemaItems = res.data.map((el) => ({
           title: el.title,
           editPath: `/admin/cinemas/${el.title}/edit`,
         }));
         return cinemaItems;
       })
       .then((cinemaItems) => {
-        const cinemaItemsSorted = cinemaItems.sort(
-          (cinemaA, cinemaB) => cinemaA.title.localeCompare(cinemaB.title)
+        const cinemaItemsSorted = cinemaItems.sort((cinemaA, cinemaB) =>
+          cinemaA.title.localeCompare(cinemaB.title)
         );
         setCinemas(cinemaItemsSorted);
       })
@@ -34,10 +36,9 @@ const Cinemas = (props) => {
 
   const deleteCinemaHandler = () => {
     console.log("DELETE", deleteCinema);
-    fetch(`${BACKEND_URL}/cinemas/${deleteCinema.title}`, {
-      method: "DELETE",
-    }).then((res) => {
+    fetch.delete(`${BACKEND_URL}/cinemas/${deleteCinema.title}`).then((res) => {
       console.log(res);
+      if (res.status !== 200) return;
       setShowDeleteModal(false);
       setCinemas((prev) => {
         const cinemas = prev.filter((el) => el.title !== deleteCinema.title);
@@ -48,6 +49,7 @@ const Cinemas = (props) => {
 
   const onDeleteCinema = (cinema) => {
     setDeleteCinema(cinema);
+    clearErrorMsg();
     setShowDeleteModal(true);
   };
 
@@ -76,6 +78,8 @@ const Cinemas = (props) => {
         text="Wollen Sie wirklich den Kinosaal löschen?"
         onClose={() => setShowDeleteModal(false)}
         onDelete={deleteCinemaHandler}
+        isLoading={isFetching}
+        error={errorMsg}
       />
     </>
   );

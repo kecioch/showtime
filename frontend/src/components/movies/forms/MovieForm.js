@@ -6,6 +6,7 @@ import Card from "react-bootstrap/Card";
 import CastAvatar from "../CastAvatar";
 import HorizontalScrollContainer from "../../ui/HorizontalScrollContainer";
 import BadgeAction from "../../ui/BadgeAction";
+import LoadingButton from "../../ui/LoadingButton";
 
 const MovieForm = (props) => {
   const isNew = props.isNew !== undefined ? props.isNew : true;
@@ -77,7 +78,7 @@ const MovieForm = (props) => {
     };
     const res = await props.onSubmit(movie);
     console.log("FORM RES", res);
-    if (res?.code === 200) {
+    if (res?.status === 200) {
       setTitle("");
       setSubtitle("");
       setOriginalTitle("");
@@ -133,7 +134,11 @@ const MovieForm = (props) => {
   };
 
   const deleteCastHandler = (person) => {
-    setCast((cast) => cast.filter(el => el.name !== person.name && el.roleName !== person.roleName));
+    setCast((cast) =>
+      cast.filter(
+        (el) => el.name !== person.name && el.roleName !== person.roleName
+      )
+    );
   };
 
   const keywordsElements = keywords.map((el, i) => (
@@ -168,6 +173,8 @@ const MovieForm = (props) => {
       onDelete={deleteCastHandler}
     />
   ));
+
+  const errorMsg = props.error && <p className="text-danger">{props.error}</p>;
 
   return (
     <Card className="mt-4 mb-3 p-4">
@@ -327,9 +334,14 @@ const MovieForm = (props) => {
           </div>
           <HorizontalScrollContainer>{castElements}</HorizontalScrollContainer>
         </Form.Group>
-        <Button variant="primary" type="submit">
+        {errorMsg}
+        <LoadingButton
+          variant="primary"
+          type="submit"
+          isLoading={props.isLoading}
+        >
           {isNew ? "Erstellen" : "Aktualisieren"}
-        </Button>
+        </LoadingButton>
       </Form>
     </Card>
   );

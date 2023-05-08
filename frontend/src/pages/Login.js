@@ -6,18 +6,20 @@ import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Login.module.css";
 import useAuth from "../hooks/useAuth";
 import { useState } from "react";
-import Alert from "react-bootstrap/Alert";
 
 const Login = (props) => {
   const { login, isLoggedIn } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState();
 
   const submitHandler = async (user) => {
     console.log("LOGIN", user.username, user.password);
+    setIsFetching(true);
     await login(user.username, user.password).then((success) => {
+      setIsFetching(false);
       console.log("LOGIN SUCCESS ?", success);
       if (!success) {
         setError("Login fehlgeschlagen");
@@ -43,7 +45,11 @@ const Login = (props) => {
         <div className="d-flex justify-content-center">
           <div className={styles.login}>
             <h1>Login</h1>
-            <LoginForm error={error} onSubmit={submitHandler} />
+            <LoginForm
+              error={error}
+              onSubmit={submitHandler}
+              isLoading={isFetching}
+            />
             <hr />
             <Link to="/register">
               <Button variant="secondary">Registrieren</Button>

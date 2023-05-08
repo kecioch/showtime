@@ -20,8 +20,7 @@ router.get("/", async (req, res) => {
     // Find movie
     const movie = await Movie.findOne({ title });
 
-    if (!movie)
-      return res.status(400).json({ code: 400, message: "not found" });
+    if (!movie) return res.status(404).json({ message: "not found" });
 
     // Find schedule of movie
     const screeningsScheduled = await ScheduledScreening.find({ movie });
@@ -83,10 +82,10 @@ router.get("/", async (req, res) => {
       })
     );
 
-    res.status(200).json(screenings);
+    res.status(200).json({ data: screenings });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ code: 400, message: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -105,12 +104,11 @@ router.get("/ticketshop/:id", async (req, res) => {
         populate: { path: "movie" },
       });
 
-    if (!screening)
-      return res.status(400).json({ code: 400, message: "not found" });
-    res.send(screening);
+    if (!screening) return res.status(400).json({ message: "not found" });
+    res.status(200).json({ data: screening });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ code: 400, message: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -118,7 +116,7 @@ router.get("/schedule", async (req, res) => {
   const scheduledScreenings = await ScheduledScreening.find()
     .populate("movie")
     .populate("cinema");
-  res.send(scheduledScreenings);
+  res.status(200).json({ data: scheduledScreenings });
 });
 
 router.post("/schedule", async (req, res) => {
@@ -133,10 +131,10 @@ router.post("/schedule", async (req, res) => {
     let savedScreening = await screening.save();
     savedScreening = await savedScreening.populate("movie");
     savedScreening = await savedScreening.populate("cinema");
-    res.status(200).json(savedScreening);
+    res.status(200).json({ data: savedScreening });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ code: 400, message: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -146,9 +144,9 @@ router.delete("/schedule/:id", async (req, res) => {
 
   try {
     const deletedScreening = await ScheduledScreening.findByIdAndDelete(id);
-    res.status(200).send(deletedScreening);
+    res.status(200).json({ data: deletedScreening });
   } catch (err) {
-    res.status(404).send({ code: 404, message: "delete error" });
+    res.status(404).json({ message: "delete error" });
   }
 });
 

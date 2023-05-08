@@ -1,29 +1,22 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import LoadingButton from "../ui/LoadingButton";
-import { useState } from "react";
 import { BACKEND_URL } from "../../constants";
+import useFetch from "../../hooks/useFetch";
 
-const TicketValidationModal = (props) => {
-  const [isValidating, setIsValidating] = useState(false);
-  const ticket = props.ticket;
+const TicketValidationModal = ({ ticket, onClose, show }) => {
+  const { fetch, errorMsg, isFetching } = useFetch();
 
   const validateHandler = async () => {
     console.log("VALIDATE", ticket.id);
 
-    try {
-      setIsValidating(true);
-      const res = await fetch(`${BACKEND_URL}/tickets/validate/${ticket.id}`, {
-        method: "PATCH",
-      });
-      setIsValidating(false);
+    const res = await fetch.patch(
+      `${BACKEND_URL}/tickets/validate/${ticket.id}`
+    );
 
-      if (res.status === 200) {
-        console.log("SUCCESS VALIDATING");
-        props.onClose();
-      }
-    } catch (err) {
-      setIsValidating(false);
+    if (res.status === 200) {
+      console.log("SUCCESS VALIDATING");
+      onClose();
     }
   };
 
@@ -39,8 +32,10 @@ const TicketValidationModal = (props) => {
     <span className="text-success">Ticket ist valide</span>
   );
 
+  const errorInfo = errorMsg && <p className="text-danger">{errorMsg}</p>;
+
   return (
-    <Modal show={props.show} onHide={props.onClose}>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -65,19 +60,16 @@ const TicketValidationModal = (props) => {
           </>
         )}
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-center">
+      <Modal.Footer className="d-flex justify-content-center flex-column align-items-stretch">
+        {errorInfo}
         <div className="d-flex gap-3 flex-fill">
-          <Button
-            className="flex-fill"
-            variant="secondary"
-            onClick={props.onClose}
-          >
+          <Button className="flex-fill" variant="secondary" onClick={onClose}>
             Abbrechen
           </Button>
           {!ticket?.checked && (
             <LoadingButton
               className="flex-fill"
-              isLoading={isValidating}
+              isLoading={isFetching}
               variant="success"
               onClick={validateHandler}
             >

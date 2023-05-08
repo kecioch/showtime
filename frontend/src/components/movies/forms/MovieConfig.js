@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react";
 import MovieForm from "./MovieForm";
 import { BACKEND_URL } from "../../../constants";
+import useFetch from "../../../hooks/useFetch";
+import SearchInput from "../../ui/SearchInput";
 
 const MovieConfig = (props) => {
   const [searchInput, setSearchInput] = useState();
   const [defaultMovie, setDefaultMovie] = useState();
+  const { fetch, isFetching, errorMsg } = useFetch();
 
-  const searchMovieHandler = async (ev) => {
+  const onSearchInput = (ev) => {
     if (ev.key !== "Enter") return;
+    searchMovieHandler();
+  };
+
+  const searchMovieHandler = async () => {
+    if (isFetching) return;
 
     console.log(`${BACKEND_URL}/search/movie?name=${searchInput}`);
-    const res = await fetch(`${BACKEND_URL}/search/movie?name=${searchInput}`);
-    const data = await res.json();
+    const res = await fetch.get(
+      `${BACKEND_URL}/search/movie?name=${searchInput}`
+    );
 
-    if (res.status === 200) setDefaultMovie(data);
+    if (res.status === 200) setDefaultMovie(res.data);
   };
 
   const submitHandler = async (movie) => {
     const res = await props.onSubmit(movie);
     console.log("CONFIG RES", res);
-    if (res?.code === 200) {
+    if (res?.status === 200 && props.isNew) {
       setDefaultMovie();
     }
     return res;
@@ -30,30 +39,27 @@ const MovieConfig = (props) => {
     setDefaultMovie(props.default);
   }, [props.isNew, props.default]);
 
+  const errorInfo = errorMsg && <p className="text-danger">{errorMsg}</p>;
+
   return (
     <React.Fragment>
       <label htmlFor="searchMovie">Film in Datenbank suchen</label>
-      <input
-        className="form-control mr-sm-2 mt-2"
-        type="search"
+      <SearchInput
+        className="mt-2"
         placeholder="Suche"
         aria-label="Suche"
-        style={{ zIndex: "1" }}
-        id="searchMovie"
         onChange={(e) => setSearchInput(e.target.value)}
-        onKeyDown={searchMovieHandler}
+        onKeyDown={onSearchInput}
+        onClick={searchMovieHandler}
+        isLoading={isFetching}
       />
-      {/* <ListGroup className={styles.listGroup} variant="flush">
-      <ListGroup.Item>Cras justo odio</ListGroup.Item>
-      <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-      <ListGroup.Item>Morbi leo risus</ListGroup.Item>
-      <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
-      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-    </ListGroup> */}
+      {errorInfo}
       <MovieForm
         onSubmit={submitHandler}
         isNew={props.isNew}
         default={defaultMovie}
+        error={props.error}
+        isLoading={props.isLoading}
       />
     </React.Fragment>
   );

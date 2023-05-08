@@ -6,6 +6,7 @@ import { BACKEND_URL } from "../../constants";
 import SeatTypesList from "../../components/seattypes/SeatTypesList";
 import SeatTypeModal from "../../components/modals/SeatTypeModal";
 import DeleteModal from "../../components/modals/DeleteModal";
+import useFetch from "../../hooks/useFetch";
 
 const SeatTypes = (props) => {
   const [types, setTypes] = useState([]);
@@ -13,100 +14,85 @@ const SeatTypes = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [isNew, setIsNew] = useState(true);
-  const [error, setError] = useState();
-  const [isFetching, setIsFetching] = useState(false);
+  const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/seattypes`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setTypes(data);
-      });
+    fetch.get(`${BACKEND_URL}/seattypes`).then(async (res) => {
+      console.log(res);
+      if (res.status !== 200) return;
+      setTypes(res.data.sort((elA, elB) => elA.title.localeCompare(elB.title)));
+    });
   }, []);
 
   const addSeatType = () => {
-    setError(null);
+    clearErrorMsg();
+    setSelectedSeatType();
     setIsNew(true);
     setShowSeatTypeModal(true);
   };
 
   const deleteSeatType = (selected) => {
+    clearErrorMsg();
     setSelectedSeatType(selected);
     setShowDeleteModal(true);
   };
 
   const editSeatType = (selected) => {
-    setError(null);
+    clearErrorMsg();
     setIsNew(false);
     setSelectedSeatType(selected);
     setShowSeatTypeModal(true);
   };
 
   const submitHandler = async (type) => {
-    setIsFetching(true);
     console.log("SUBMIT", type);
     try {
       if (isNew) {
-        console.log("NEW");
-        const res = await fetch(`${BACKEND_URL}/seattypes`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(type),
-        });
-        const data = await res.json();
-        if (res.status !== 200) return setError(data.message);
+        console.log("NEW", type);
+        const res = await fetch.post(`${BACKEND_URL}/seattypes`, type);
+        if (res.status !== 200) return;
 
-        setTypes((prevTypes) => [...prevTypes, data]);
+        setTypes((prevTypes) =>
+          [...prevTypes, res.data].sort((elA, elB) =>
+            elA.title.localeCompare(elB.title)
+          )
+        );
         setShowSeatTypeModal(false);
       } else {
         console.log("UPDATE");
-        const res = await fetch(`${BACKEND_URL}/seattypes/${type._id}`, {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(type),
-        });
-        const data = await res.json();
-        if (res.status !== 200) return setError(data.message);
+        const res = await fetch.put(
+          `${BACKEND_URL}/seattypes/${type._id}`,
+          type
+        );
+        if (res.status !== 200) return;
 
-        setTypes((prevTypes) => [
-          ...prevTypes.filter((prevType) => prevType._id !== type._id),
-          type,
-        ]);
+        setTypes((prevTypes) =>
+          [
+            ...prevTypes.filter((prevType) => prevType._id !== type._id),
+            type,
+          ].sort((elA, elB) => elA.title.localeCompare(elB.title))
+        );
         setShowSeatTypeModal(false);
       }
     } catch (err) {
       console.log(err);
     }
-    setIsFetching(false);
   };
 
   const deleteHandler = async () => {
     console.log("DELETE SEAT TYPE", selectedSeatType);
-    setIsFetching(true);
     try {
-      const res = await fetch(
-        `${BACKEND_URL}/seattypes/${selectedSeatType._id}`,
-        {
-          method: "DELETE",
-        }
+      const res = await fetch.delete(
+        `${BACKEND_URL}/seattypes/${selectedSeatType._id}`
       );
-      const data = await res.json();
-      setShowDeleteModal(false);
       if (res.status !== 200) return;
+      setShowDeleteModal(false);
       setTypes((prevTypes) => [
         ...prevTypes.filter((type) => type._id !== selectedSeatType._id),
       ]);
     } catch (err) {
       console.log(err);
     }
-    setIsFetching(false);
   };
 
   return (
@@ -131,7 +117,7 @@ const SeatTypes = (props) => {
         onClose={() => setShowSeatTypeModal(false)}
         onSubmit={submitHandler}
         selected={selectedSeatType}
-        error={error}
+        error={errorMsg}
         isLoading={isFetching}
       />
       <DeleteModal
@@ -141,6 +127,7 @@ const SeatTypes = (props) => {
         onClose={() => setShowDeleteModal(false)}
         onDelete={deleteHandler}
         isLoading={isFetching}
+        error={errorMsg}
       />
     </>
   );

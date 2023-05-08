@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/esm/Button";
-import styles from "./ListItem.module.css";
+import styles from "./EditListItem.module.css";
 import { Link } from "react-router-dom";
 
 const EditListItem = (props) => {

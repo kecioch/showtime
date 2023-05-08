@@ -1,20 +1,20 @@
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { useState } from "react";
+import LoadingButton from "../../ui/LoadingButton";
 
-const LoginForm = (props) => {
+const LoginForm = ({onSubmit, error, isLoading}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmit = (ev) => {
+  const submitHandler = (ev) => {
     ev.preventDefault();
-    props.onSubmit({ username, password });
+    onSubmit({ username, password });
   };
 
-  const errorMsg = props.error && <p className="text-danger">{props.error}</p>;
+  const errorMsg = error && <p className="text-danger">{error}</p>;
 
   return (
-    <Form className="mt-3" onSubmit={onSubmit}>
+    <Form className="mt-3" onSubmit={submitHandler}>
       {errorMsg}
       <Form.Group className="mb-3" controlId="id">
         <Form.Label>Benutzername</Form.Label>
@@ -32,9 +32,9 @@ const LoginForm = (props) => {
           onChange={(ev) => setPassword(ev.target.value)}
         />
       </Form.Group>
-      <Button variant="primary" type="submit" className="mt-2">
+      <LoadingButton variant="primary" type="submit" className="mt-2" isLoading={isLoading}>
         Einloggen
-      </Button>
+      </LoadingButton>
     </Form>
   );
 };

@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import { QrReader } from "react-qr-reader";
 import styles from "./TicketValidation.module.css";
 import TicketValidationModal from "../../components/modals/TicketValidationModal";
 import { BACKEND_URL } from "../../constants";
+import useFetch from "../../hooks/useFetch";
 
 const TicketValidation = (props) => {
   const [ticket, setTicket] = useState();
   const [code, setCode] = useState();
   const [showValidationModal, setShowValidationModal] = useState(false);
+  const { fetch } = useFetch();
 
   useEffect(() => {
     console.log("CODE CHANGED");
@@ -21,17 +23,16 @@ const TicketValidation = (props) => {
     if (!code || showValidationModal) return;
     console.log("FETCH TICKET");
 
-    fetch(`${BACKEND_URL}/tickets/validate/${code}`).then(async (res) => {
+    fetch.get(`${BACKEND_URL}/tickets/validate/${code}`).then((res) => {
       if (res.status !== 200) return;
-      const data = await res.json();
       const ticket = {
-        id: data._id,
-        customer: data.customer,
-        seats: data.seats,
-        checked: data.checked,
-        datetime: data.datetime,
-        movie: data.screening.scheduledScreening.movie.title,
-        cinema: data.screening.scheduledScreening.cinema.title,
+        id: res.data._id,
+        customer: res.data.customer,
+        seats: res.data.seats,
+        checked: res.data.checked,
+        datetime: res.data.datetime,
+        movie: res.data.screening.scheduledScreening.movie.title,
+        cinema: res.data.screening.scheduledScreening.cinema.title,
       };
       setTicket(ticket);
       setShowValidationModal(true);

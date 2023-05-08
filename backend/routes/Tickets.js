@@ -42,7 +42,7 @@ router.get("/", auth, async (req, res) => {
         },
       });
 
-    res.send(userFound.tickets);
+    res.status(200).json({ data: userFound.tickets });
   } catch (err) {
     console.log(err);
     res.sendStatus(400);
@@ -81,7 +81,7 @@ router.get("/validate/:id", async (req, res) => {
     console.log("Ticket", ticket);
     if (!ticket) return res.sendStatus(400);
 
-    res.send(ticket);
+    res.status(200).json({ data: ticket });
   } catch (err) {
     res.sendStatus(400);
   }
@@ -98,7 +98,7 @@ router.patch("/validate/:id", async (req, res) => {
     ticket.checked = true;
     const savedTicket = await ticket.save();
 
-    res.send(savedTicket);
+    res.status(200).json({ data: savedTicket });
   } catch (err) {
     res.sendStatus(400);
   }

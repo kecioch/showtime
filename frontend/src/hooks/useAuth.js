@@ -1,68 +1,45 @@
 import { useContext, useEffect } from "react";
 import { BACKEND_URL } from "../constants";
 import { AuthContext } from "../contexts/AuthContext";
+import useFetch from "./useFetch";
 
 const useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
-  //   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { fetch } = useFetch();
 
   const isLoggedIn = user ? true : false;
 
   const login = async (username, password) => {
-    return fetch(`${BACKEND_URL}/authentication/login`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-      credentials: "include",
-    })
+    return fetch
+      .post(`${BACKEND_URL}/authentication/login`, { username, password })
       .then(async (res) => {
+        console.log("RES LOGIN", res);
         if (res.status !== 200) return false;
         console.log("LOGIN SUCCESSFULL");
-        const data = await res.json();
-        saveUser(data.user);
+        saveUser(res.user);
         return true;
-      })
-      .catch((err) => {
-        console.log(err);
-        return false;
       });
   };
 
   const logout = () => {
     console.log("LOGOUT");
-    fetch(`${BACKEND_URL}/authentication/logout`, {
-      method: "POST",
-      credentials: "include",
-    }).then((res) => {
+    fetch.post(`${BACKEND_URL}/authentication/logout`).then((res) => {
       if (res.status === 200) removeUser();
     });
   };
 
   const register = async (user) => {
-    return fetch(`${BACKEND_URL}/authentication/register`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-      credentials: "include"
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        if (res.status === 200) {
-          console.log("REGISTER SUCCESSFULL");
-          saveUser(data.user);
-        }
-        return data;
-      })
-      .catch((err) => {
-        console.log(err);
-        return { status: 500, message: err };
-      });
+    const res = await fetch.post(
+      `${BACKEND_URL}/authentication/register`,
+      user
+    );
+
+    if (res.status === 200) {
+      console.log("REGISTER SUCCESSFULL");
+      saveUser(res.user);
+    }
+
+    return res;
   };
 
   const saveUser = (user) => {
@@ -83,7 +60,7 @@ const useAuth = () => {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [setUser]);
 
   return { login, logout, register, isLoggedIn, user, saveUser };
 };

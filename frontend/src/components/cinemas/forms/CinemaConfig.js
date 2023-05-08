@@ -1,8 +1,9 @@
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/esm/Button";
 import SeatMap from "../../seatmap/SeatMap";
 import { useState, useEffect } from "react";
 import { BACKEND_URL } from "../../../constants";
+import LoadingButton from "../../ui/LoadingButton";
+import useFetch from "../../../hooks/useFetch";
 
 const CinemaConfig = (props) => {
   const [title, setTitle] = useState("");
@@ -12,17 +13,13 @@ const CinemaConfig = (props) => {
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [seatTypes, setSeatTypes] = useState();
   const [isInit, setIsInit] = useState(false);
+  const { fetch } = useFetch();
 
   const seatClickHandler = (seat) => {
     console.log("SEATCLICKHANDLER", seat);
 
     if (seat.type?.title === selectedSeatType.title) seat.type = null;
     else seat.type = selectedSeatType;
-
-    // if (seat.status === "empty") seat.status = "unselected";
-    // else if (seat.status === "unselected") seat.status = "selected";
-    // else if (seat.status === "selected") seat.status = "booked";
-    // else return;
 
     setSeatMap((prev) => {
       const updatedMap = {
@@ -49,47 +46,13 @@ const CinemaConfig = (props) => {
 
   useEffect(() => {
     // Fetch SeatTypes
-    fetch(`${BACKEND_URL}/seattypes`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("SEATTYPES", data);
-        setSeatTypes(data);
-        setSelectedSeatType(data[0]);
-      });
+    fetch.get(`${BACKEND_URL}/seattypes`).then((res) => {
+      console.log("SEATTYPES", res);
+      if (res.status !== 200) return;
+      setSeatTypes(res.data);
+      setSelectedSeatType(res.data[0]);
+    });
   }, []);
-
-  // useEffect(() => {
-  //   // Create SeatMap
-  //   const DATA = {
-  //     map: {
-  //       rows: [],
-  //     },
-  //   };
-  //   for (let r = 0; r < rowCnt; r++) {
-  //     const row = [];
-  //     for (let c = 0; c < colCnt; c++) {
-  //       row.push({
-  //         row: r,
-  //         col: c,
-  //         status: "unselected",
-  //       });
-  //     }
-  //     DATA.map.rows.push(row);
-  //   }
-  //   setSeatMap(DATA);
-  //   console.log(seatMap);
-  // }, [rowCnt, colCnt]);
-
-  // useEffect(() => {
-  //   if (!props.cinema) return;
-
-  //   console.log("CINEMA CONFIG", props.cinema);
-  //   setTitle(props.cinema.title);
-  //   setRowCnt(props?.cinema?.map?.rows?.length);
-  //   setColCnt(props?.cinema?.map?.rows[0]?.length);
-  //   setSeatMap({ map: props.cinema.map });
-  //   console.log(seatMap);
-  // }, [props.cinema]);
 
   useEffect(() => {
     if (props.cinema) {
@@ -167,6 +130,8 @@ const CinemaConfig = (props) => {
     console.log(type);
   };
 
+  const errorMsg = props.error && <p className="text-danger">{props.error}</p>;
+
   return (
     <>
       <Form>
@@ -178,14 +143,16 @@ const CinemaConfig = (props) => {
             onChange={(ev) => setTitle(ev.target.value)}
             value={title}
           />
-          <Button
+          <LoadingButton
             variant="primary"
             type="submit"
             className="mt-2"
             onClick={onSubmit}
-          >
+            isLoading={props.isLoading}
+            >
             {props.isNew ? "Erstellen" : "Aktualisieren"}
-          </Button>
+          </LoadingButton>
+            {errorMsg}
         </Form.Group>
       </Form>
       <hr />

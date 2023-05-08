@@ -9,6 +9,7 @@ import styles from "./Ticketshop.module.css";
 import { getTimeString } from "../services/FormatDate";
 import SeatMap from "../components/seatmap/SeatMap";
 import Button from "react-bootstrap/esm/Button";
+import useFetch from "../hooks/useFetch";
 
 const Ticketshop = (props) => {
   const { id } = useParams();
@@ -17,72 +18,72 @@ const Ticketshop = (props) => {
   const [seatMap, setSeatMap] = useState();
   const [selectedTickets, setSelectedTickets] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const { fetch } = useFetch();
 
   useEffect(() => {
     console.log("REQ ID", id);
     // Fetching screening data
-    fetch(`${BACKEND_URL}/screenings/ticketshop/${id}`)
+    fetch
+      .get(`${BACKEND_URL}/screenings/ticketshop/${id}`)
       .then((res) => {
+        console.log("TICKETSHPPÜ", res);
         if (res.status !== 200) navigate("/");
-        return res.json();
+        return res.data;
       })
       .then((data) => {
         // Fetching seattypes
-        fetch(`${BACKEND_URL}/seattypes`)
-          .then((res) => res.json())
-          .then((types) => {
-            console.log("TYPES", types);
-            console.log("DATA", data);
+        fetch.get(`${BACKEND_URL}/seattypes`).then((res) => {
+          if (res.status !== 200) navigate("/");
 
-            // Replace seattypes in data with actual seattype objects
-            for (
-              let i = 0;
-              i < data.scheduledScreening.cinema.map.rows.length;
-              i++
-            ) {
-              const row = data.scheduledScreening.cinema.map.rows[i];
+          // Replace seattypes in data with actual seattype objects
+          for (
+            let i = 0;
+            i < data.scheduledScreening.cinema.map.rows.length;
+            i++
+          ) {
+            const row = data.scheduledScreening.cinema.map.rows[i];
 
-              // loop through each seat in the row
-              for (let j = 0; j < row.length; j++) {
-                const seat = row[j];
+            // loop through each seat in the row
+            for (let j = 0; j < row.length; j++) {
+              const seat = row[j];
 
-                // find the SeatType object with the matching id
-                const matchingSeatType = types.find(
-                  (seatType) => seatType._id === seat.type
-                );
+              // find the SeatType object with the matching id
+              const matchingSeatType = res.data.find(
+                (seatType) => seatType._id === seat.type
+              );
 
-                // replace the string with the SeatType object
-                if (matchingSeatType) {
-                  seat.type = matchingSeatType;
+              // replace the string with the SeatType object
+              if (matchingSeatType) {
+                seat.type = matchingSeatType;
+              }
+            }
+          }
+
+          // Set booked seats
+          console.log("BOOKED", data.bookedSeats);
+          for (
+            let i = 0;
+            i < data.scheduledScreening.cinema.map.rows.length;
+            i++
+          ) {
+            const row = data.scheduledScreening.cinema.map.rows[i];
+            for (let j = 0; j < row.length; j++) {
+              const mapSeat = row[j];
+              for (var k = 0; k < data.bookedSeats.length; k++) {
+                var bookedSeat = data.bookedSeats[k];
+                if (
+                  mapSeat.col === bookedSeat.col &&
+                  mapSeat.row === bookedSeat.row
+                ) {
+                  mapSeat.status = "booked";
                 }
               }
             }
+          }
 
-            // Set booked seats
-            console.log("BOOKED", data.bookedSeats);
-            for (
-              let i = 0;
-              i < data.scheduledScreening.cinema.map.rows.length;
-              i++
-            ) {
-              const row = data.scheduledScreening.cinema.map.rows[i];
-              for (let j = 0; j < row.length; j++) {
-                const mapSeat = row[j];
-                for (var k = 0; k < data.bookedSeats.length; k++) {
-                  var bookedSeat = data.bookedSeats[k];
-                  if (
-                    mapSeat.col === bookedSeat.col &&
-                    mapSeat.row === bookedSeat.row
-                  ) {
-                    mapSeat.status = "booked";
-                  }
-                }
-              }
-            }
-
-            setScreening(data);
-            setSeatMap(data.scheduledScreening.cinema);
-          });
+          setScreening(data);
+          setSeatMap(data.scheduledScreening.cinema);
+        });
       })
       .catch((err) => navigate("/"));
   }, [id, navigate]);

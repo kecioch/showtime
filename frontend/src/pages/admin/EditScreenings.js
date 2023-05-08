@@ -3,108 +3,86 @@ import Content from "../../components/ui/Content";
 import Button from "react-bootstrap/esm/Button";
 import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL } from "../../constants";
-import Modal from "react-bootstrap/Modal";
-import FormSelect from "react-bootstrap/FormSelect";
-import Form from "react-bootstrap/Form";
 import Screeningplan from "../../components/screeningplan/Screeningplan";
 import DeleteModal from "../../components/modals/DeleteModal";
+import useFetch from "../../hooks/useFetch";
+import ScreeningModal from "../../components/modals/ScreeningModal";
 
 const EditScreenings = (props) => {
   const [cinemas, setCinemas] = useState([]);
   const [movies, setMovies] = useState([]);
   const [screenings, setScreenings] = useState([]);
   const [showNewScreeningModal, setShowNewScreeningModal] = useState(false);
-  const [selectedTime, setSelectedTime] = useState();
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteScreening, setDeleteScreening] = useState();
-  const selectedCinema = useRef();
-  const selectedMovie = useRef();
-  const selectedWeekday = useRef();
 
-  const addScreeningHandler = () => {
-    const movie = movies.find((m) => m.title === selectedMovie.current.value);
-    const cinema = cinemas.find(
-      (c) => c.title === selectedCinema.current.value
-    );
+  const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
+
+  const addScreeningHandler = (newScreening) => {
+    const movie = movies.find((m) => m.title === newScreening.movie);
+    const cinema = cinemas.find((c) => c.title === newScreening.cinema);
 
     const screening = {
-      weekday: selectedWeekday.current.value,
-      time: selectedTime,
+      ...newScreening,
       movie,
       cinema,
     };
     console.log("ADDSCREENING", screening);
 
-    fetch(`${BACKEND_URL}/screenings/schedule`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(screening),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("POST RESULT DATA", data);
-        if (data.code !== 400)
-          setScreenings((screenings) => [...screenings, data]);
-      });
+    fetch.post(`${BACKEND_URL}/screenings/schedule`, screening).then((res) => {
+      console.log("POST RESULT DATA", res);
+      if (res.status !== 200) return;
+      setScreenings((screenings) => [...screenings, res.data]);
+    });
   };
 
   const deleteScreeningHandler = () => {
     console.log("DELETE SCREENING", deleteScreening);
-    fetch(`${BACKEND_URL}/screenings/schedule/${deleteScreening}`, {
-      method: "DELETE",
-    }).then((res) => {
-      console.log(res);
-      if (res.status !== 200) return;
-      setShowDeleteModal(false);
-      setScreenings((prev) => {
-        const screenings = prev.filter((el) => el._id !== deleteScreening);
-        return screenings;
+    fetch
+      .delete(`${BACKEND_URL}/screenings/schedule/${deleteScreening}`)
+      .then((res) => {
+        console.log(res);
+        if (res.status !== 200) return;
+        setShowDeleteModal(false);
+        setScreenings((prev) => {
+          const screenings = prev.filter((el) => el._id !== deleteScreening);
+          return screenings;
+        });
       });
-    });
   };
 
   const onDeleteScreening = (screeningID) => {
     setDeleteScreening(screeningID);
     console.log("SCREENINGID", screeningID);
+    clearErrorMsg();
     setShowDeleteModal(true);
   };
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/screenings/schedule`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("FETCH SCREENINGS", data);
-        setScreenings(data);
-      })
-      .catch((err) => console.log(err));
+    fetch.get(`${BACKEND_URL}/screenings/schedule`).then((res) => {
+      if (res.status !== 200) return;
+      console.log("FETCH SCREENINGS", res);
+      setScreenings(res.data);
+    });
 
-    fetch(`${BACKEND_URL}/movies`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("FETCH MOVIES", data);
-        setMovies(data);
-      })
-      .catch((err) => console.log(err));
+    fetch.get(`${BACKEND_URL}/movies`).then((res) => {
+      if (res.status !== 200) return;
+      console.log("FETCH MOVIES", res.data);
+      setMovies(res.data);
+    });
 
-    fetch(`${BACKEND_URL}/cinemas`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("FETCH CINEMAS", data);
-        setCinemas(data);
-      })
-      .catch((err) => console.log(err));
+    fetch.get(`${BACKEND_URL}/cinemas`).then((res) => {
+      if (res.status !== 200) return;
+      console.log("FETCH CINEMAS", res.data);
+      setCinemas(res.data);
+    });
   }, []);
 
-  const movieOptions = movies?.map((m, i) => (
-    <option key={i}>{m.title}</option>
-  ));
-
-  const cinemaOptions = cinemas?.map((c, i) => (
-    <option key={i}>{c.title}</option>
-  ));
+  const openNewScreening = () => {
+    clearErrorMsg();
+    setShowNewScreeningModal(true);
+  };
 
   return (
     <>
@@ -114,7 +92,7 @@ const EditScreenings = (props) => {
           <hr />
           <Button
             className="mb-3"
-            onClick={() => setShowNewScreeningModal(true)}
+            onClick={openNewScreening}
           >
             Hinzufügen
           </Button>
@@ -130,72 +108,22 @@ const EditScreenings = (props) => {
           )}
         </Content>
       </Container>
-      <Modal
+      <ScreeningModal
         show={showNewScreeningModal}
-        onHide={() => setShowNewScreeningModal(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Neue Filmvorführung</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form.Group className="mb-3" controlId="movie">
-            <Form.Label>Film</Form.Label>
-            <FormSelect ref={selectedMovie} required={true}>
-              {movieOptions}
-            </FormSelect>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="cinema">
-            <Form.Label>Kinosaal</Form.Label>
-            <FormSelect ref={selectedCinema} required={true}>
-              {cinemaOptions}
-            </FormSelect>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="time">
-            <Form.Label>Zeit</Form.Label>
-            <Form.Control
-              type="time"
-              onChange={(ev) => setSelectedTime(ev.target.value)}
-              required={true}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="weekday">
-            <Form.Label>Wochentag</Form.Label>
-            <FormSelect ref={selectedWeekday} required={true}>
-              <option value="Monday">Montag</option>
-              <option value="Tuesday">Dienstag</option>
-              <option value="Wednesday">Mittwoch</option>
-              <option value="Thursday">Donnerstag</option>
-              <option value="Friday">Freitag</option>
-              <option value="Saturday">Samstag</option>
-              <option value="Sunday">Sonntag</option>
-            </FormSelect>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="d-flex gap-3 flex-fill">
-            <Button
-              variant="secondary"
-              className="flex-fill"
-              onClick={() => setShowNewScreeningModal(false)}
-            >
-              Abbrechen
-            </Button>
-            <Button
-              variant="success"
-              className="flex-fill"
-              onClick={addScreeningHandler}
-            >
-              Hinzufügen
-            </Button>
-          </div>
-        </Modal.Footer>
-      </Modal>
+        options={{ movies, cinemas }}
+        onClose={() => setShowNewScreeningModal(false)}
+        isLoading={isFetching}
+        error={errorMsg}
+        onSubmit={addScreeningHandler}
+      />
       <DeleteModal
         show={showDeleteModal}
         title="Filmvorführung"
         text="Wollen Sie wirklich die Filmvorführung löschen?"
         onClose={() => setShowDeleteModal(false)}
         onDelete={deleteScreeningHandler}
+        isLoading={isFetching}
+        error={errorMsg}
       />
     </>
   );

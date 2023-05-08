@@ -7,7 +7,7 @@ const SeatType = require("../models/SeatType");
 // BASE URL /cinemas
 router.get("/", async (req, res) => {
   const cinemas = await Cinema.find();
-  res.send(cinemas);
+  res.status(200).json({ data: cinemas });
 });
 
 router.post("/", async (req, res) => {
@@ -19,10 +19,10 @@ router.post("/", async (req, res) => {
     const cinema = new Cinema(body);
     console.log(cinema);
     const savedCinema = await cinema.save();
-    res.status(200).json(savedCinema);
+    res.status(200).json({ data: savedCinema });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ code: 400, message: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -31,10 +31,11 @@ router.get("/:title", async (req, res) => {
   let foundCinema;
   console.log(`GET /cinemas/${title}`);
 
-  if (title) foundCinema = await Cinema.findOne({ title }).populate("map.rows.type");
+  if (title)
+    foundCinema = await Cinema.findOne({ title }).populate("map.rows.type");
 
-  if (foundCinema) res.status(200).send(foundCinema);
-  else res.status(404).send({ code: 404, message: "cinema not found" });
+  if (foundCinema) res.status(200).json({ data: foundCinema });
+  else res.status(404).send({ message: "cinema not found" });
 });
 
 router.put("/:title", async (req, res) => {
@@ -45,10 +46,10 @@ router.put("/:title", async (req, res) => {
   try {
     const updatedCinema = await Cinema.findOneAndUpdate({ title }, body);
     console.log("UPDATED", updatedCinema);
-    res.status(200).json(updatedCinema);
+    res.status(200).json({ data: updatedCinema });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ code: 400, message: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -58,9 +59,9 @@ router.delete("/:title", async (req, res) => {
 
   try {
     const cinema = await Cinema.findOneAndDelete({ title });
-    res.status(200).send(cinema);
+    res.status(200).json({ data: cinema });
   } catch (err) {
-    res.status(404).send({ code: 404, message: "delete error" });
+    res.status(404).json({ message: "delete error" });
   }
 });
 

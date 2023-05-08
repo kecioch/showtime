@@ -6,79 +6,54 @@ import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../../constants";
 import StaffModal from "../../components/modals/StaffModal";
 import DeleteModal from "../../components/modals/DeleteModal";
-import { Eyeglasses } from "react-bootstrap-icons";
+import useFetch from "../../hooks/useFetch";
 
 const Staff = (props) => {
   const [staff, setStaff] = useState([]);
   const [showStaffModal, setShowStaffModal] = useState(false);
-  const [showDeleteModal, setDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteStaff, setDeleteStaff] = useState();
-  const [isFetching, setIsFetching] = useState(false);
-  const [error, setError] = useState();
+  const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/users/staff`, {
-      credentials: "include",
-    }).then(async (res) => {
+    fetch.get(`${BACKEND_URL}/users/staff`).then((res) => {
       if (res.status !== 200) return;
-      const data = await res.json();
-      setStaff(data);
-      console.log("STAFF DATA", data);
+      setStaff(res.data);
+      console.log("STAFF DATA", res.data);
     });
   }, []);
 
   const onDelete = (staff) => {
     console.log("DELETE STAFF", staff);
     setDeleteStaff(staff);
-    setDeleteModal(true);
+    clearErrorMsg();
+    setShowDeleteModal(true);
   };
 
-  const deleteHandler = async () => {
+  const onAdd = () => {
+    clearErrorMsg();
+    setShowStaffModal(true);
+  };
+
+  const deleteHandler = () => {
     console.log("DELETE HANDLER", deleteStaff);
-    setIsFetching(true);
-    try {
-      fetch(`${BACKEND_URL}/users/staff/${deleteStaff.id}`, {
-        method: "DELETE",
-        credentials: "include",
-      }).then((res) => {
-        if (res.status === 200) {
-          setStaff((prevStaff) => [
-            ...prevStaff.filter((staff) => staff.id !== deleteStaff.id),
-          ]);
-          setDeleteModal(false);
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    setIsFetching(false);
+    fetch.delete(`${BACKEND_URL}/users/staff/${deleteStaff.id}`).then((res) => {
+      console.log("DELETE RES",res);
+      if (res.status !== 200) return;
+      setStaff((prevStaff) => [
+        ...prevStaff.filter((staff) => staff.id !== deleteStaff.id),
+      ]);
+      setShowDeleteModal(false);
+    });
   };
 
   const createStaffHandler = (staff) => {
     console.log("CREATE STAFF HANDLER", staff);
-    setIsFetching(true);
-    try {
-      fetch(`${BACKEND_URL}/users/staff`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(staff),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }).then(async (res) => {
-        const data = await res.json();
-        if (res.status !== 200) {
-          setError(data.message);
-        } else {
-          setStaff((prevStaff) => [...prevStaff, data]);
-          setShowStaffModal(false);
-        }
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    setIsFetching(false);
+    fetch.post(`${BACKEND_URL}/users/staff`, staff).then((res) => {
+      if (res.status !== 200) return;
+      setStaff((prevStaff) => [...prevStaff, res.data]);
+      setShowStaffModal(false);
+    });
   };
 
   return (
@@ -87,7 +62,7 @@ const Staff = (props) => {
         <Content>
           <h1>Mitarbeiter verwalten</h1>
           <hr />
-          <Button onClick={() => setShowStaffModal(true)}>Hinzufügen</Button>
+          <Button onClick={onAdd}>Hinzufügen</Button>
           <StaffList data={staff} onDelete={onDelete} />
         </Content>
       </Container>
@@ -97,14 +72,15 @@ const Staff = (props) => {
         onClose={() => setShowStaffModal(false)}
         onSubmit={createStaffHandler}
         isLoading={isFetching}
-        error={error}
+        error={errorMsg}
       />
       <DeleteModal
         show={showDeleteModal}
         title="Mitarbeiter löschen"
         text="Wollen Sie wirklich den Mitarbeiter löschen?"
-        onClose={() => setDeleteModal(false)}
+        onClose={() => setShowDeleteModal(false)}
         onDelete={deleteHandler}
+        error={errorMsg}
         isLoading={isFetching}
       />
     </>

@@ -76,7 +76,12 @@ const SeatTypeModal = (props) => {
             >
               Abbrechen
             </Button>
-            <LoadingButton type="sumit" className="flex-fill" variant="success" isLoading={props.isLoading}>
+            <LoadingButton
+              type="sumit"
+              className="flex-fill"
+              variant="success"
+              isLoading={props.isLoading}
+            >
               {props.isNew ? "Erstellen" : "Aktualisieren"}
             </LoadingButton>
           </div>

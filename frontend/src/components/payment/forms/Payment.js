@@ -3,31 +3,28 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../../constants";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
+import useFetch from "../../../hooks/useFetch";
 
 const Payment = (props) => {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
+  const { fetch } = useFetch();
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/payment/config`).then(async (res) => {
-      const { publicKey } = await res.json();
+    fetch.get(`${BACKEND_URL}/payment/config`).then((res) => {
+      const { publicKey } = res.data;
       setStripePromise(loadStripe(publicKey));
     });
   }, []);
 
   useEffect(() => {
     console.log("CART PAYMENT", props.cart);
-    fetch(`${BACKEND_URL}/payment/create-payment-intent`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(props.cart),
-    }).then(async (res) => {
-      const { clientSecret } = await res.json();
-      setClientSecret(clientSecret);
-    });
+    fetch
+      .post(`${BACKEND_URL}/payment/create-payment-intent`, props.cart)
+      .then(async (res) => {
+        const { clientSecret } = res.data;
+        setClientSecret(clientSecret);
+      });
   }, []);
 
   return (

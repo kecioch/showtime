@@ -19,7 +19,7 @@ const User = require("../models/User");
 // BASIC URL /payment
 
 router.get("/config", (req, res) => {
-  res.send({ publicKey: process.env.STRIPE_PUBLIC_KEY });
+  res.status(200).json({ data: { publicKey: process.env.STRIPE_PUBLIC_KEY } });
 });
 
 router.post("/create-payment-intent", async (req, res) => {
@@ -86,8 +86,10 @@ router.post("/create-payment-intent", async (req, res) => {
     });
 
     // Send publishable key and PaymentIntent details to client
-    res.send({
-      clientSecret: paymentIntent.client_secret,
+    res.status(200).json({
+      data: {
+        clientSecret: paymentIntent.client_secret,
+      },
     });
   } catch (e) {
     console.log(e);
@@ -203,7 +205,7 @@ router.post(
       }
 
       // Return a 200 respond to acknowledge receipt of the event
-      res.send();
+      res.sendStatus(200);
     } catch (err) {
       console.log("WEBHOOK ERROR", err);
       res.status(400).send(`Webhook Error: ${err.message}`);

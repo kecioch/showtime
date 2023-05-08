@@ -19,6 +19,32 @@ const findUser = async (user) => {
   return foundUser;
 };
 
+const createUser = async (user) => {
+  const { username, password, firstName, lastName, email, role } = user;
+
+  let foundUser = await findUser({ username });
+  if (foundUser)
+    return { status: 400, message: "Benutzername ist bereits vergeben" };
+
+  foundUser = await findUser({ email });
+  if (foundUser) return { status: 400, message: "E-Mail ist bereits vergeben" };
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const newUser = new User({
+    username,
+    password: hashedPassword,
+    firstName,
+    lastName,
+    email,
+    role,
+  });
+  const savedUser = await newUser.save();
+
+  return { status: 200, user: savedUser };
+};
+
+exports.createUser = createUser;
+
 exports.login = async (req, res) => {
   console.log("POST /authentication/login");
   try {
@@ -65,10 +91,10 @@ exports.login = async (req, res) => {
           },
         });
     }
-    return res.status(401).json({ status: 401, message: "Unauthorized" });
+    return res.sendStatus(401);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: 500, message: err });
+    res.status(500).json({ message: err });
   }
 };
 
@@ -76,60 +102,10 @@ exports.logout = async (req, res) => {
   return res.clearCookie("auth_token").sendStatus(200);
 };
 
-exports.createUser = async (user) => {
-  const { username, password, firstName, lastName, email, role } = user;
-
-  let foundUser = await findUser({ username });
-  if (foundUser)
-    return { status: 400, message: "Benutzername ist bereits vergeben" };
-
-  foundUser = await findUser({ email });
-  if (foundUser) return { status: 400, message: "E-Mail ist bereits vergeben" };
-
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
-  const newUser = new User({
-    username,
-    password: hashedPassword,
-    firstName,
-    lastName,
-    email,
-    role,
-  });
-  const savedUser = await newUser.save();
-
-  return { status: 200, user: savedUser };
-};
-
 exports.register = async (req, res) => {
   console.log("POST /authentication/register");
   try {
     const { username, password, firstName, lastName, email } = req.body;
-
-    // let foundUser = await findUser({ username });
-    // console.log("found", foundUser);
-
-    // if (foundUser)
-    //   return res
-    //     .status(400)
-    //     .json({ status: 400, message: "Benutzername ist bereits vergeben" });
-
-    // foundUser = await findUser({ email });
-
-    // if (foundUser)
-    //   return res
-    //     .status(400)
-    //     .json({ status: 400, message: "E-Mail ist bereits vergeben" });
-
-    // const hashedPassword = await bcrypt.hash(password, saltRounds);
-    // const newUser = new User({
-    //   username,
-    //   password: hashedPassword,
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   role: ROLES.USER,
-    // });
-    // const savedUser = await newUser.save();
 
     const newUserRes = await createUser({
       username,
@@ -143,7 +119,7 @@ exports.register = async (req, res) => {
     if (newUserRes.status !== 200)
       return res
         .status(newUserRes.status)
-        .json({ status: newUserRes.status, message: newUserRes.message });
+        .json({ message: newUserRes.message });
 
     const userInfo = {
       username: newUserRes.user.username,
@@ -167,10 +143,10 @@ exports.register = async (req, res) => {
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ status: 200, user: userInfo });
+      .json({ user: userInfo });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ status: 500, message: err._message });
+    return res.status(500).json({ message: err._message });
   }
 };
 
@@ -208,9 +184,7 @@ exports.update = async (req, res) => {
     const user = await findUser({ username: userCookie.username });
     console.log("FOUND USER", user);
     if (!user)
-      return res
-        .status(400)
-        .json({ status: 400, message: "Benutzer nicht gefunden" });
+      return res.status(400).json({ message: "Benutzer nicht gefunden" });
 
     console.log("update.username", update.username);
     const test = await findUser({ username: update.username });
@@ -218,15 +192,13 @@ exports.update = async (req, res) => {
     if (user.username !== update.username && test)
       return res
         .status(400)
-        .json({ status: 400, message: "Benutzername ist bereits vergeben" });
+        .json({ message: "Benutzername ist bereits vergeben" });
 
     if (
       user.email !== update.email &&
       (await findUser({ email: update.email }))
     )
-      return res
-        .status(400)
-        .json({ status: 400, message: "Email ist bereits vergeben" });
+      return res.status(400).json({ message: "Email ist bereits vergeben" });
 
     user.firstName = update.firstName;
     user.lastName = update.lastName;
@@ -258,7 +230,7 @@ exports.update = async (req, res) => {
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ status: 200, message: "OK", user: userInfo });
+      .json({ user: userInfo });
   } catch (err) {
     console.log(err);
     return res.sendStatus(403);

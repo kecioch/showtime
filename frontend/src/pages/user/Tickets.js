@@ -4,35 +4,36 @@ import Content from "../../components/ui/Content";
 import { BACKEND_URL } from "../../constants";
 import TicketList from "../../components/tickets/TicketList";
 import useAuth from "../../hooks/useAuth";
+import useFetch from "../../hooks/useFetch";
 
 const Tickets = (props) => {
   const [tickets, setTickets] = useState([]);
   const { user } = useAuth();
+  const { fetch } = useFetch();
 
   useEffect(() => {
     if (!user) return;
     console.log(user);
-    fetch(`${BACKEND_URL}/tickets`, {
-      credentials: "include"
-    }).then(async (res) => {
+    fetch.get(`${BACKEND_URL}/tickets`).then(async (res) => {
       if (res.status !== 200) return;
-      const data = await res.json();
-      console.log("TICKETS", data);
+      console.log("TICKETS", res.data);
       setTickets(
-        data.map((ticket, i) => ({
-          id: ticket._id,
-          datetime: ticket.datetime,
-          codeSVG: ticket.codeSVG,
-          customer: ticket.customer,
-          seats: ticket.seats,
-          cinema: ticket.screening.scheduledScreening.cinema.title,
-          movie: {
-            title: ticket.screening.scheduledScreening.movie.title,
-            poster:
-              ticket.screening.scheduledScreening.movie.media.images.poster,
-          },
-          checked: ticket.checked,
-        }))
+        res.data
+          .map((ticket, i) => ({
+            id: ticket._id,
+            datetime: ticket.datetime,
+            codeSVG: ticket.codeSVG,
+            customer: ticket.customer,
+            seats: ticket.seats,
+            cinema: ticket.screening.scheduledScreening.cinema.title,
+            movie: {
+              title: ticket.screening.scheduledScreening.movie.title,
+              poster:
+                ticket.screening.scheduledScreening.movie.media.images.poster,
+            },
+            checked: ticket.checked,
+          }))
+          .sort((elA, elB) => new Date(elB.datetime) - new Date(elA.datetime))
       );
     });
   }, [user]);

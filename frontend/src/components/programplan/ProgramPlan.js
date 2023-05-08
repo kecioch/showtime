@@ -3,9 +3,11 @@ import MovieListItem from "./MovieListItem";
 import React from "react";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
+import useFetch from "../../hooks/useFetch";
 
 const ProgramPlan = (props) => {
   const [movies, setMovies] = useState();
+  const {fetch} = useFetch();
 
   let movieList = [];
   if (movies) {
@@ -20,11 +22,10 @@ const ProgramPlan = (props) => {
     content = <div className={styles.programPlan}>{movieList}</div>;
 
   useEffect(() => {
-    fetch(`${BACKEND_URL}/movies`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data);
-        setMovies(data);
+    fetch.get(`${BACKEND_URL}/movies`)
+      .then((res) => {
+        console.log(res);
+        setMovies(res.data);
       });
   }, []);
 

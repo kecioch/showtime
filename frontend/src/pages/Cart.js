@@ -21,6 +21,8 @@ const Cart = (props) => {
   const [guestMail, setGuestMail] = useState("");
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const { login, isLoggedIn, user } = useAuth();
+  const [isFetching, setIsFetching] = useState(false);
+  const [error, setError] = useState();
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart"));
@@ -41,9 +43,15 @@ const Cart = (props) => {
         !isEmailValid(guestMail)));
 
   const loginSubmitHandler = async (user) => {
+    setError();
+    setIsFetching(true);
     await login(user.username, user.password).then((success) => {
+      setIsFetching(false);
       console.log("LOGIN SUCCESS ?", success);
-      if (!success) return;
+      if (!success) {
+        setError("Login fehlgeschlagen");
+        return;
+      }
     });
   };
 
@@ -57,7 +65,7 @@ const Cart = (props) => {
     setShowPaymentModal(true);
   };
 
-  const loginForm = <LoginForm onSubmit={loginSubmitHandler} />;
+  const loginForm = <LoginForm isLoading={isFetching} error={error} onSubmit={loginSubmitHandler} />;
 
   const guestForm = (
     <Form className="mt-3">

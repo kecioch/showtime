@@ -1,41 +1,23 @@
-import { useState } from "react";
 import RegisterForm from "../../components/authentication/forms/RegisterForm";
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import useAuth from "../../hooks/useAuth";
 import { BACKEND_URL } from "../../constants";
+import useFetch from "../../hooks/useFetch";
 
 const Account = (props) => {
   const { user, saveUser } = useAuth();
-  const [isFetching, setIsFetching] = useState(false);
-  const [errorMsg, setErrorMsg] = useState();
+  const { fetch, isFetching, errorMsg } = useFetch();
 
-  const updateHandler = async (updatedUser) => {
+  const updateHandler = (updatedUser) => {
     console.log("UPDATE USER", updatedUser);
-    setIsFetching(true);
-    try {
-      const res = await fetch(`${BACKEND_URL}/authentication/update`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedUser),
-        credentials: "include",
+
+    fetch
+      .put(`${BACKEND_URL}/authentication/update`, updatedUser)
+      .then((res) => {
+        if (res.status !== 200) return;
+        saveUser(res.user);
       });
-      const data = await res.json();
-      if (res.status === 200) {
-        console.log(data);
-        setErrorMsg(null);
-        saveUser(data.user);
-      } else {
-        setErrorMsg(data.message);
-        console.log("ERRORMSG",data.message)
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    setIsFetching(false);
   };
 
   return (
