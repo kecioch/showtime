@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const { authorization } = require("../services/Authentication");
+const { ROLES } = require("../constants");
+const authAdmin = authorization(ROLES.ADMIN);
+
 const Movie = require("../models/Movie");
 
 // BASIC URL /movies
@@ -15,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authAdmin, async (req, res) => {
   console.log("POST /movies");
   console.log(req.body);
   const body = req.body;
@@ -40,13 +44,13 @@ router.get("/:title", async (req, res) => {
   else res.status(404).send({ message: "movie not found" });
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authAdmin, async (req, res) => {
   console.log("PUT /movies");
   const { id } = req.params;
   const body = req.body;
   console.log(body);
   try {
-    const updatedMovie = await Movie.findByIdAndUpdate(id, body, {new: true});
+    const updatedMovie = await Movie.findByIdAndUpdate(id, body, { new: true });
     console.log("UPDATED", updatedMovie);
     res.status(200).json({ data: updatedMovie });
   } catch (err) {
@@ -55,7 +59,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:title", async (req, res) => {
+router.delete("/:title", authAdmin, async (req, res) => {
   const title = req.params.title;
   console.log(`DELETE /cinemas/${title}`);
 

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const { authorization } = require("../services/Authentication");
+const {ROLES} = require("../constants");
+const authStaffAdmin = authorization([ROLES.ADMIN, ROLES.STAFF]);
 const auth = authorization();
 
 const Ticket = require("../models/Ticket");
@@ -49,7 +51,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.get("/validate/:id", async (req, res) => {
+router.get("/validate/:id", authStaffAdmin, async (req, res) => {
   const { id } = req.params;
   console.log(`GET /tickets/${id}`);
   try {
@@ -87,7 +89,7 @@ router.get("/validate/:id", async (req, res) => {
   }
 });
 
-router.patch("/validate/:id", async (req, res) => {
+router.patch("/validate/:id", authStaffAdmin, async (req, res) => {
   const { id } = req.params;
   console.log(`POST /tickets/${id}`);
   try {

@@ -150,7 +150,7 @@ exports.register = async (req, res) => {
   }
 };
 
-exports.authorization = (role) => {
+exports.authorization = (roles) => {
   return (req, res, next) => {
     try {
       console.log("AUTH");
@@ -164,9 +164,17 @@ exports.authorization = (role) => {
       req.user = data.user;
       console.log("REQ.USER", req.user);
 
-      if (role && req.user.role !== role) return res.sendStatus(403);
+      if (!Array.isArray(roles)) {
+        if (roles && req.user.role === roles) return next();
+      } else {
+        let foundRole = false;
+        roles.forEach((role) => {
+          if (role === req.user.role) return foundRole = true;
+        });
+        if (foundRole) return next();
+      }
 
-      return next();
+      return res.sendStatus(403);
     } catch (err) {
       console.log(err);
       return res.sendStatus(403);

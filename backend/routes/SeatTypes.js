@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const { authorization } = require("../services/Authentication");
+const {ROLES} = require("../constants");
+const authAdmin = authorization(ROLES.ADMIN);
+
 const SeatType = require("../models/SeatType");
 
 // BASE URL /seattypes
@@ -10,7 +14,7 @@ router.get("/", async (req, res) => {
   res.status(200).json({ data: seatTypes });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authAdmin, async (req, res) => {
   console.log("POST /seattypes");
   console.log(req.body);
   const body = req.body;
@@ -35,7 +39,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", authAdmin, async (req, res) => {
   const { id } = req.params;
   const body = req.body;
   console.log(`PUT /seattypes/${id}`);
@@ -59,7 +63,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authAdmin, async (req, res) => {
   const { id } = req.params;
   console.log(`DELETE /seattypes/${id}`);
 

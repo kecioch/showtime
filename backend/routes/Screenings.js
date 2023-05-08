@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const { authorization } = require("../services/Authentication");
+const {ROLES} = require("../constants");
+const authAdmin = authorization(ROLES.ADMIN);
+
 const ScheduledScreening = require("../models/ScheduledScreening");
 const Screening = require("../models/Screening");
 const Movie = require("../models/Movie");
@@ -119,7 +123,7 @@ router.get("/schedule", async (req, res) => {
   res.status(200).json({ data: scheduledScreenings });
 });
 
-router.post("/schedule", async (req, res) => {
+router.post("/schedule", authAdmin, async (req, res) => {
   console.log("POST /screenings/schedule");
   console.log(req.body);
   const body = req.body;
@@ -138,7 +142,7 @@ router.post("/schedule", async (req, res) => {
   }
 });
 
-router.delete("/schedule/:id", async (req, res) => {
+router.delete("/schedule/:id", authAdmin, async (req, res) => {
   const id = req.params.id;
   console.log(`DELETE /screenings/schedule/${id}`);
 

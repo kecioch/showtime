@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const { authorization } = require("../services/Authentication");
+const {ROLES} = require("../constants");
+const authAdmin = authorization(ROLES.ADMIN);
+
 const Cinema = require("../models/Cinema");
 const SeatType = require("../models/SeatType");
 
@@ -10,7 +14,7 @@ router.get("/", async (req, res) => {
   res.status(200).json({ data: cinemas });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authAdmin, async (req, res) => {
   console.log("POST /cinemas");
   console.log(req.body);
   const body = req.body;
@@ -38,7 +42,7 @@ router.get("/:title", async (req, res) => {
   else res.status(404).send({ message: "cinema not found" });
 });
 
-router.put("/:title", async (req, res) => {
+router.put("/:title", authAdmin, async (req, res) => {
   console.log("PUT /cinemas");
   const title = req.params.title;
   const body = req.body;
@@ -53,7 +57,7 @@ router.put("/:title", async (req, res) => {
   }
 });
 
-router.delete("/:title", async (req, res) => {
+router.delete("/:title", authAdmin, async (req, res) => {
   const title = req.params.title;
   console.log(`DELETE /cinemas/${title}`);
 

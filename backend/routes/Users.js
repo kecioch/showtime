@@ -4,6 +4,7 @@ const router = express.Router();
 const { authorization, createUser } = require("../services/Authentication");
 const { ROLES } = require("../constants");
 const authAdmin = authorization(ROLES.ADMIN);
+
 const User = require("../models/User");
 
 // BASIC URL /users
