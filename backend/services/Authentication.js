@@ -165,7 +165,7 @@ exports.authorization = (roles) => {
       console.log("REQ.USER", req.user);
 
       if (!Array.isArray(roles)) {
-        if (roles && req.user.role === roles) return next();
+        if ((roles && req.user.role === roles) || (!roles && req.user)) return next();
       } else {
         let foundRole = false;
         roles.forEach((role) => {
