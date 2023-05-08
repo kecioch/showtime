@@ -1,7 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import SVG from "react-inlinesvg";
-import { ListGroup,ListGroupItem } from "react-bootstrap";
-import styles from "./TicketModal.module.css";
+import { ListGroupItem } from "react-bootstrap";
+import ListGroupStyled from "../lists/ListGroupStyled";
 
 const TicketModal = (props) => {
   const { ticket } = props;
@@ -25,9 +25,7 @@ const TicketModal = (props) => {
             <h3>{ticket.cinema}</h3>
             <h3>{new Date(ticket.datetime).toLocaleString()}</h3>
             <h3 className="mt-4 mb-3">Sitzplätze</h3>
-            <ListGroup className={styles.listGroup}>
-              {seats}
-            </ListGroup>
+            <ListGroupStyled>{seats}</ListGroupStyled>
           </div>
         )}
       </Modal.Footer>

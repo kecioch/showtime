@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import LoadingButton from "../ui/LoadingButton";
 import { BACKEND_URL } from "../../constants";
 import useFetch from "../../hooks/useFetch";
+import ListGroupStyled from "../lists/ListGroupStyled";
+import { ListGroupItem } from "react-bootstrap";
 
 const TicketValidationModal = ({ ticket, onClose, show }) => {
   const { fetch, errorMsg, isFetching } = useFetch();
@@ -21,9 +23,9 @@ const TicketValidationModal = ({ ticket, onClose, show }) => {
   };
 
   const seats = ticket?.seats.map((seat, i) => (
-    <li className="list-group-item" key={i}>
+    <ListGroupItem key={i}>
       Reihe: {seat.row} / Platz: {seat.col} [{seat.type.title}]
-    </li>
+    </ListGroupItem>
   ));
 
   const title = ticket?.checked ? (
@@ -56,7 +58,7 @@ const TicketValidationModal = ({ ticket, onClose, show }) => {
               {ticket.customer.name} {`<${ticket.customer.email}>`}
             </p>
             <h4>Sitzplätze:</h4>
-            <ul className="list-group">{seats}</ul>
+            <ListGroupStyled>{seats}</ListGroupStyled>
           </>
         )}
       </Modal.Body>
