@@ -38,7 +38,6 @@ const Staff = (props) => {
   const deleteHandler = () => {
     console.log("DELETE HANDLER", deleteStaff);
     fetch.delete(`${BACKEND_URL}/users/staff/${deleteStaff.id}`).then((res) => {
-      console.log("DELETE RES",res);
       if (res.status !== 200) return;
       setStaff((prevStaff) => [
         ...prevStaff.filter((staff) => staff.id !== deleteStaff.id),
