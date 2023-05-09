@@ -5,16 +5,18 @@ import MovieConfig from "../../components/movies/forms/MovieConfig";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const EditMovie = (props) => {
   const { id } = useParams();
   const [movie, setMovie] = useState();
   const navigate = useNavigate();
   const { fetch, isFetching, errorMsg } = useFetch();
+  const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
 
   useEffect(() => {
     const fetchMovie = async () => {
-      const res = await fetch.get(`${BACKEND_URL}/movies/${id}`);
+      const res = await fetchPage.get(`${BACKEND_URL}/movies/${id}`);
       console.log(res);
       if (res.status !== 200) navigate("/movies");
       else setMovie(res.data);
@@ -38,13 +40,14 @@ const EditMovie = (props) => {
     <Container>
       <Content styles={{ maxWidth: "50em" }}>
         <h2>Film Bearbeiten</h2>
-        <MovieConfig
+        {isFetchingPage && <LoadingSpinner />}
+        {!isFetchingPage && <MovieConfig
           onSubmit={updateMovieHandler}
           default={movie}
           isNew={false}
           isLoading={isFetching}
           error={errorMsg}
-        />
+        />}
       </Content>
     </Container>
   );

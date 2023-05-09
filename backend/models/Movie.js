@@ -78,7 +78,6 @@ const movieSchema = new mongoose.Schema({
           type: String,
         },
         roleName: {
-          required: true,
           type: String,
         },
         img: {

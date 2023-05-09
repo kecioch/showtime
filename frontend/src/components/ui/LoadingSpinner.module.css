@@ -1,0 +1,12 @@
+.spinner {
+    width: 5em;
+    height: 5em;
+}
+
+.background {
+    /* background-color: beige; */
+    /* height: 25vh; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

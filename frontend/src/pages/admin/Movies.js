@@ -7,15 +7,17 @@ import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const Movies = (props) => {
   const [movies, setMovies] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteMovie, setDeleteMovie] = useState();
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
+  const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
 
   useEffect(() => {
-    fetch.get(`${BACKEND_URL}/movies`).then((res) => {
+    fetchPage.get(`${BACKEND_URL}/movies`).then((res) => {
       console.log(res);
       if (res.status !== 200) return;
       const movieItems = res.data.map((el) => ({
@@ -60,11 +62,18 @@ const Movies = (props) => {
               Neu
             </Button>
           </Link>
-          {movies.length > 0 && (
-            <EditList data={movies} onDelete={onDeleteMovie} />
-          )}
-          {movies.length <= 0 && (
-            <h2 className="text-muted text-center">Keine Filme vorhanden</h2>
+          {isFetchingPage && <LoadingSpinner />}
+          {!isFetchingPage && (
+            <>
+              {movies.length > 0 && (
+                <EditList data={movies} onDelete={onDeleteMovie} />
+              )}
+              {movies.length <= 0 && (
+                <h2 className="text-muted text-center">
+                  Keine Filme vorhanden
+                </h2>
+              )}
+            </>
           )}
         </Content>
       </Container>

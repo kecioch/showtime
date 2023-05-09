@@ -10,13 +10,14 @@ import CastAvatar from "../components/movies/CastAvatar";
 import Badge from "react-bootstrap/Badge";
 import Screeningplan from "../components/screeningplan/Screeningplan";
 import useFetch from "../hooks/useFetch";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 const Movie = (props) => {
   const { id } = useParams();
   const [movie, setMovie] = useState();
   const [screenings, setScreenings] = useState([]);
   const navigate = useNavigate();
-  const { fetch } = useFetch();
+  const { fetch, isFetching } = useFetch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,72 +57,85 @@ const Movie = (props) => {
 
   return (
     <Container>
-      {movie && (
-        <Content>
-          <section>
-            <div className={styles.headerInfo}>
-              <Image
-                src={movie.media.images.poster}
-                className={styles.poster}
-              />
+      <Content>
+        {isFetching && <LoadingSpinner />}
+        {!isFetching && movie && (
+          <>
+            <section>
+              <div className={styles.headerInfo}>
+                <Image
+                  src={movie.media.images.poster}
+                  className={styles.poster}
+                />
 
-              <div>
-                <h1>{movie.title}</h1>
-                <p>
-                  <Badge>{movie.release.ageRestriction}</Badge> •{" "}
-                  {movie.release.productionYear} (
-                  {movie.release.productionCountry}) • {movie.genres.join(", ")}{" "}
-                  • {movie.runtime}min
-                </p>
-                {movie.subtitle && (
-                  <h3 className="text-muted">{movie.subtitle}</h3>
-                )}
-                <p className={styles.description}>{movie.description}</p>
-                <div className="d-flex gap-5">
-                  <div>
-                    <h4 className="mb-1">Regie</h4>
-                    <p>{movie.credits.crew.director.name}</p>
-                  </div>
-                  <div>
-                    <h4 className="mb-1">Drehbuch</h4>
-                    <p>{movie.credits.crew.screenwriter.name}</p>
+                <div>
+                  <h1>{movie.title}</h1>
+                  <p>
+                    <Badge>{movie.release.ageRestriction}</Badge> •{" "}
+                    {movie.release.productionYear} (
+                    {movie.release.productionCountry}) •{" "}
+                    {movie.genres.join(", ")} • {movie.runtime}min
+                  </p>
+                  {movie.subtitle && (
+                    <h3 className="text-muted">{movie.subtitle}</h3>
+                  )}
+                  <p className={styles.description}>{movie.description}</p>
+                  <div className="d-flex gap-5">
+                    <div>
+                      <h4 className="mb-1">Regie</h4>
+                      <p>{movie.credits.crew.director.name}</p>
+                    </div>
+                    <div>
+                      <h4 className="mb-1">Drehbuch</h4>
+                      <p>{movie.credits.crew.screenwriter.name}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-          <section className={styles.details}>
-            <div className={styles.cast}>
-              <h4>Cast</h4>
-              <HorizontalScrollContainer>
-                {castElements}
-              </HorizontalScrollContainer>
-              <h4 className="mt-3">Tickets</h4>
-              {screenings?.length > 0 ? (
-                <Screeningplan screenings={screenings} />
-              ) : (
-                <h3 className="text-muted text-center mt-4">
-                  Keine Vorführungen im Programmplan vorhanden
-                </h3>
-              )}
-            </div>
-            <div className={styles.sideInformation}>
-              <h4>Informationen</h4>
-              <p>
-                <b>Originaltitel:</b> {movie.originalTitle}
-              </p>
-              {movie.keywords?.length > 0 && (
-                <section>
-                  <h4>Schlüsselwörter</h4>
-                  <div className="d-flex gap-1 flex-wrap">
-                    {keywordElements}
-                  </div>
-                </section>
-              )}
-            </div>
-          </section>
-        </Content>
-      )}
+            </section>
+            <section className={styles.details}>
+              <div className={styles.cast}>
+                <h4>Cast</h4>
+                <HorizontalScrollContainer>
+                  {castElements}
+                </HorizontalScrollContainer>
+
+                <h4>Trailer</h4>
+                <iframe
+                  src="https://www.youtube.com/embed/eWYrJGe5r88"
+                  title="Trailer"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+
+                <h4 className="mt-3">Tickets</h4>
+                {screenings?.length > 0 ? (
+                  <Screeningplan screenings={screenings} />
+                ) : (
+                  <h3 className="text-muted text-center mt-4">
+                    Keine Vorführungen im Programmplan vorhanden
+                  </h3>
+                )}
+              </div>
+              <div className={styles.sideInformation}>
+                <h4>Informationen</h4>
+                <p>
+                  <b>Originaltitel:</b> {movie.originalTitle}
+                </p>
+                {movie.keywords?.length > 0 && (
+                  <section>
+                    <h4>Schlüsselwörter</h4>
+                    <div className="d-flex gap-1 flex-wrap">
+                      {keywordElements}
+                    </div>
+                  </section>
+                )}
+              </div>
+            </section>
+          </>
+        )}
+      </Content>
     </Container>
   );
 };

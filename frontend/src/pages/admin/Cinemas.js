@@ -7,15 +7,17 @@ import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const Cinemas = (props) => {
   const [cinemas, setCinemas] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCinema, setDeleteCinema] = useState();
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
+  const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
 
   useEffect(() => {
-    fetch
+    fetchPage
       .get(`${BACKEND_URL}/cinemas`)
       .then((res) => {
         console.log(res);
@@ -64,11 +66,18 @@ const Cinemas = (props) => {
               Neu
             </Button>
           </Link>
-          {cinemas.length > 0 && (
-            <EditList data={cinemas} onDelete={onDeleteCinema} />
-          )}
-          {cinemas.length <= 0 && (
-            <h2 className="text-muted text-center">Keine Kinosäle vorhanden</h2>
+          {isFetchingPage && <LoadingSpinner />}
+          {!isFetchingPage && (
+            <>
+              {cinemas.length > 0 && (
+                <EditList data={cinemas} onDelete={onDeleteCinema} />
+              )}
+              {cinemas.length <= 0 && (
+                <h2 className="text-muted text-center">
+                  Keine Kinosäle vorhanden
+                </h2>
+              )}
+            </>
           )}
         </Content>
       </Container>

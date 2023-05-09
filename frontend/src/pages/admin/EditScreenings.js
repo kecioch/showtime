@@ -7,6 +7,7 @@ import Screeningplan from "../../components/screeningplan/Screeningplan";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import ScreeningModal from "../../components/modals/ScreeningModal";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const EditScreenings = (props) => {
   const [cinemas, setCinemas] = useState([]);
@@ -18,6 +19,7 @@ const EditScreenings = (props) => {
   const [deleteScreening, setDeleteScreening] = useState();
 
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   const addScreeningHandler = (newScreening) => {
     const movie = movies.find((m) => m.title === newScreening.movie);
@@ -60,23 +62,28 @@ const EditScreenings = (props) => {
   };
 
   useEffect(() => {
-    fetch.get(`${BACKEND_URL}/screenings/schedule`).then((res) => {
-      if (res.status !== 200) return;
-      console.log("FETCH SCREENINGS", res);
-      setScreenings(res.data);
-    });
+    const fetchPage = async () => {
+      setIsPageLoading(true);
+      await fetch.get(`${BACKEND_URL}/screenings/schedule`).then((res) => {
+        if (res.status !== 200) return;
+        console.log("FETCH SCREENINGS", res);
+        setScreenings(res.data);
+      });
 
-    fetch.get(`${BACKEND_URL}/movies`).then((res) => {
-      if (res.status !== 200) return;
-      console.log("FETCH MOVIES", res.data);
-      setMovies(res.data);
-    });
+      await fetch.get(`${BACKEND_URL}/movies`).then((res) => {
+        if (res.status !== 200) return;
+        console.log("FETCH MOVIES", res.data);
+        setMovies(res.data);
+      });
 
-    fetch.get(`${BACKEND_URL}/cinemas`).then((res) => {
-      if (res.status !== 200) return;
-      console.log("FETCH CINEMAS", res.data);
-      setCinemas(res.data);
-    });
+      await fetch.get(`${BACKEND_URL}/cinemas`).then((res) => {
+        if (res.status !== 200) return;
+        console.log("FETCH CINEMAS", res.data);
+        setCinemas(res.data);
+      });
+      setIsPageLoading(false);
+    };
+    fetchPage();
   }, []);
 
   const openNewScreening = () => {
@@ -90,21 +97,25 @@ const EditScreenings = (props) => {
         <Content>
           <h1>Filmvorführungen</h1>
           <hr />
-          <Button
-            className="mb-3"
-            onClick={openNewScreening}
-          >
+          <Button className="mb-3" onClick={openNewScreening}>
             Hinzufügen
           </Button>
-          {screenings?.length > 0 ? (
-            <Screeningplan
-              cinemas={cinemas}
-              screenings={screenings}
-              onDelete={onDeleteScreening}
-              editMode={true}
-            />
-          ) : (
-            <h3>Keine Filmvorführungen</h3>
+          {isPageLoading && <LoadingSpinner />}
+          {!isPageLoading && (
+            <>
+              {screenings?.length > 0 ? (
+                <Screeningplan
+                  cinemas={cinemas}
+                  screenings={screenings}
+                  onDelete={onDeleteScreening}
+                  editMode={true}
+                />
+              ) : (
+                <h2 className="text-muted text-center">
+                  Keine Filmvorführungen vorhanden
+                </h2>
+              )}
+            </>
           )}
         </Content>
       </Container>

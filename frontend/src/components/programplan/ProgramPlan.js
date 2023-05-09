@@ -4,10 +4,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const ProgramPlan = (props) => {
   const [movies, setMovies] = useState();
-  const {fetch} = useFetch();
+  const { fetch, isFetching } = useFetch();
 
   let movieList = [];
   if (movies) {
@@ -17,19 +18,25 @@ const ProgramPlan = (props) => {
     ));
   }
 
-  let content = <h2 className="text-muted text-center">Keine Filme vorhanden</h2>;
+  let content = (
+    <h2 className="text-muted text-center">Keine Filme vorhanden</h2>
+  );
   if (movieList.length > 0)
     content = <div className={styles.programPlan}>{movieList}</div>;
 
   useEffect(() => {
-    fetch.get(`${BACKEND_URL}/movies`)
-      .then((res) => {
-        console.log(res);
-        setMovies(res.data);
-      });
+    fetch.get(`${BACKEND_URL}/movies`).then((res) => {
+      console.log(res);
+      setMovies(res.data);
+    });
   }, []);
 
-  return <>{content}</>;
+  return (
+    <>
+      {isFetching && <LoadingSpinner />}
+      {!isFetching && content}
+    </>
+  );
 };
 
 export default ProgramPlan;

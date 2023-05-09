@@ -5,11 +5,12 @@ import { BACKEND_URL } from "../../constants";
 import TicketList from "../../components/tickets/TicketList";
 import useAuth from "../../hooks/useAuth";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const Tickets = (props) => {
   const [tickets, setTickets] = useState([]);
   const { user } = useAuth();
-  const { fetch } = useFetch();
+  const { fetch, isFetching } = useFetch();
 
   useEffect(() => {
     if (!user) return;
@@ -43,7 +44,8 @@ const Tickets = (props) => {
       <Content>
         <h1 className="mb-4">Meine Tickets</h1>
         <hr />
-        <TicketList tickets={tickets} />
+        {isFetching && <LoadingSpinner />}
+        {!isFetching && <TicketList tickets={tickets} />}
       </Content>
     </Container>
   );

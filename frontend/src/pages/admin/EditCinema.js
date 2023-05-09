@@ -5,18 +5,20 @@ import Content from "../../components/ui/Content";
 import CinemaConfig from "../../components/cinemas/forms/CinemaConfig";
 import { BACKEND_URL } from "../../constants";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const EditCinema = (props) => {
   const { id } = useParams();
   const [cinema, setCinema] = useState();
   const navigate = useNavigate();
   const { fetch, isFetching, errorMsg } = useFetch();
+  const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
 
   useEffect(() => {
     const fetchMovie = async () => {
       console.log(BACKEND_URL);
       try {
-        const res = await fetch.get(`${BACKEND_URL}/cinemas/${id}`);
+        const res = await fetchPage.get(`${BACKEND_URL}/cinemas/${id}`);
         console.log(res);
         if (res.status !== 200) navigate("/cinemas");
         else setCinema(res.data);
@@ -38,13 +40,16 @@ const EditCinema = (props) => {
     <Container>
       <Content>
         <h1>Kinosaal bearbeiten</h1>
-        <CinemaConfig
-          cinema={cinema}
-          onSubmit={updateCinemaHandler}
-          isNew={false}
-          isLoading={isFetching}
-          error={errorMsg}
-        />
+        {isFetchingPage && <LoadingSpinner />}
+        {!isFetchingPage && (
+          <CinemaConfig
+            cinema={cinema}
+            onSubmit={updateCinemaHandler}
+            isNew={false}
+            isLoading={isFetching}
+            error={errorMsg}
+          />
+        )}
       </Content>
     </Container>
   );

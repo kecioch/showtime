@@ -10,6 +10,8 @@ import { getTimeString } from "../services/FormatDate";
 import SeatMap from "../components/seatmap/SeatMap";
 import Button from "react-bootstrap/esm/Button";
 import useFetch from "../hooks/useFetch";
+import LoadingButton from "../components/ui/LoadingButton";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 const Ticketshop = (props) => {
   const { id } = useParams();
@@ -18,7 +20,7 @@ const Ticketshop = (props) => {
   const [seatMap, setSeatMap] = useState();
   const [selectedTickets, setSelectedTickets] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const { fetch } = useFetch();
+  const { fetch, isFetching } = useFetch();
 
   useEffect(() => {
     console.log("REQ ID", id);
@@ -149,84 +151,96 @@ const Ticketshop = (props) => {
   return (
     <>
       {" "}
-      <Container className={styles.containerHeader}>
-        <Content>
-          {screening && (
-            <section>
-              <div className={styles.headerInfo}>
-                <Image
-                  src={screening.scheduledScreening.movie.media.images.poster}
-                  className={styles.poster}
-                />
+      {!isFetching && (
+        <Container className={styles.containerHeader}>
+          <Content>
+            {screening && (
+              <section>
+                <div className={styles.headerInfo}>
+                  <Image
+                    src={screening.scheduledScreening.movie.media.images.poster}
+                    className={styles.poster}
+                  />
 
-                <div>
-                  <h1 className="mt-4">
-                    {screening.scheduledScreening.movie.title}
-                  </h1>
-                  <p>
-                    <Badge>
+                  <div>
+                    <h1 className="mt-4">
+                      {screening.scheduledScreening.movie.title}
+                    </h1>
+                    <p>
+                      <Badge>
+                        {
+                          screening.scheduledScreening.movie.release
+                            .ageRestriction
+                        }
+                      </Badge>{" "}
+                      •{" "}
                       {
                         screening.scheduledScreening.movie.release
-                          .ageRestriction
+                          .productionYear
+                      }{" "}
+                      (
+                      {
+                        screening.scheduledScreening.movie.release
+                          .productionCountry
                       }
-                    </Badge>{" "}
-                    •{" "}
-                    {screening.scheduledScreening.movie.release.productionYear}{" "}
-                    (
-                    {
-                      screening.scheduledScreening.movie.release
-                        .productionCountry
-                    }
-                    ) • {screening.scheduledScreening.movie.genres.join(", ")} •{" "}
-                    {screening.scheduledScreening.movie.runtime}min
-                  </p>
-                  <h2 className="mt-5">
-                    {screening.scheduledScreening.cinema.title}
-                  </h2>
-                  <h4 className="mt-3">
-                    {new Date(screening.date).toLocaleString("de-de", {
-                      weekday: "long",
-                    })}
-                  </h4>
-                  <h4>
-                    {new Date(screening.date).toLocaleDateString()},{" "}
-                    {getTimeString(new Date(screening.scheduledScreening.time))}{" "}
-                    Uhr
-                  </h4>
+                      ) • {screening.scheduledScreening.movie.genres.join(", ")}{" "}
+                      • {screening.scheduledScreening.movie.runtime}min
+                    </p>
+                    <h2 className="mt-5">
+                      {screening.scheduledScreening.cinema.title}
+                    </h2>
+                    <h4 className="mt-3">
+                      {new Date(screening.date).toLocaleString("de-de", {
+                        weekday: "long",
+                      })}
+                    </h4>
+                    <h4>
+                      {new Date(screening.date).toLocaleDateString()},{" "}
+                      {getTimeString(
+                        new Date(screening.scheduledScreening.time)
+                      )}{" "}
+                      Uhr
+                    </h4>
+                  </div>
                 </div>
-              </div>
-            </section>
-          )}
-        </Content>
-      </Container>
+              </section>
+            )}
+          </Content>
+        </Container>
+      )}
       <Container>
         <Content>
-          <h2>Ticket Auswahl</h2>
-          <div className="d-flex">
-            <SeatMap
-              data={seatMap}
-              onSeatClick={onSeatClickHandler}
-              editMode={false}
-            />
-            <section>
-              <div className={styles.cart}>
-                <h3>Ausgewählte Tickets</h3>
-                <h5 className="mt-3">Gesamtpreis: {totalPrice} € </h5>
-                <Button
-                  disabled={selectedTickets?.length <= 0}
-                  onClick={goToCartHandler}
-                  className="mb-3"
-                >
-                  Zur Kasse gehen
-                </Button>
-                {selectedTickets?.length > 0 ? (
-                  selectedTicketsElements
-                ) : (
-                  <h6 className="text-muted">Keine Tickets ausgewählt</h6>
-                )}
+          {isFetching && <LoadingSpinner />}
+          {!isFetching && (
+            <>
+              <h2>Ticket Auswahl</h2>
+              <div className="d-flex">
+                <SeatMap
+                  data={seatMap}
+                  onSeatClick={onSeatClickHandler}
+                  editMode={false}
+                />
+                <section>
+                  <div className={styles.cart}>
+                    <h3>Ausgewählte Tickets</h3>
+                    <h5 className="mt-3">Gesamtpreis: {totalPrice} € </h5>
+                    <Button
+                      disabled={selectedTickets?.length <= 0}
+                      onClick={goToCartHandler}
+                      className="mb-3"
+                    >
+                      Zur Kasse gehen
+                    </Button>
+                    {selectedTickets?.length > 0 ? (
+                      selectedTicketsElements
+                    ) : (
+                      <h6 className="text-muted">Keine Tickets ausgewählt</h6>
+                    )}
+                  </div>
+                </section>
               </div>
-            </section>
-          </div>
+            </>
+          )}
         </Content>
       </Container>
     </>

@@ -7,6 +7,7 @@ import SeatTypesList from "../../components/seattypes/SeatTypesList";
 import SeatTypeModal from "../../components/modals/SeatTypeModal";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const SeatTypes = (props) => {
   const [types, setTypes] = useState([]);
@@ -15,9 +16,10 @@ const SeatTypes = (props) => {
   const [selectedSeatType, setSelectedSeatType] = useState();
   const [isNew, setIsNew] = useState(true);
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
+  const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
 
   useEffect(() => {
-    fetch.get(`${BACKEND_URL}/seattypes`).then(async (res) => {
+    fetchPage.get(`${BACKEND_URL}/seattypes`).then(async (res) => {
       console.log(res);
       if (res.status !== 200) return;
       setTypes(res.data.sort((elA, elB) => elA.title.localeCompare(elB.title)));
@@ -104,11 +106,23 @@ const SeatTypes = (props) => {
           <Button className="mb-4" variant="primary" onClick={addSeatType}>
             Neu
           </Button>
-          <SeatTypesList
-            data={types}
-            onDelete={deleteSeatType}
-            onEdit={editSeatType}
-          />
+          {isFetchingPage && <LoadingSpinner />}
+          {!isFetchingPage && (
+            <>
+              {types.length > 0 && (
+                <SeatTypesList
+                  data={types}
+                  onDelete={deleteSeatType}
+                  onEdit={editSeatType}
+                />
+              )}
+              {types.length <= 0 && (
+                <h2 className="text-muted text-center">
+                  Keine Sitzplatz-Typen vorhanden
+                </h2>
+              )}
+            </>
+          )}
         </Content>
       </Container>
       <SeatTypeModal

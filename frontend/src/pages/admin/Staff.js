@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../../constants";
 import StaffModal from "../../components/modals/StaffModal";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 const Staff = (props) => {
   const [staff, setStaff] = useState([]);
@@ -14,9 +15,10 @@ const Staff = (props) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteStaff, setDeleteStaff] = useState();
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
+  const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
 
   useEffect(() => {
-    fetch.get(`${BACKEND_URL}/users/staff`).then((res) => {
+    fetchPage.get(`${BACKEND_URL}/users/staff`).then((res) => {
       if (res.status !== 200) return;
       setStaff(res.data);
       console.log("STAFF DATA", res.data);
@@ -62,7 +64,8 @@ const Staff = (props) => {
           <h1>Mitarbeiter verwalten</h1>
           <hr />
           <Button onClick={onAdd}>Hinzufügen</Button>
-          <StaffList data={staff} onDelete={onDelete} />
+          {isFetchingPage && <LoadingSpinner />}
+          {!isFetchingPage && <StaffList data={staff} onDelete={onDelete} />}
         </Content>
       </Container>
       <StaffModal
