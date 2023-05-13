@@ -1,31 +1,159 @@
+.headerInfo h1 {
+  padding-top: 1.5rem;
+}
+
 .headerInfo {
-    display: flex;
-    flex-direction: row;
+  margin-bottom: 2em;
+}
+
+.headerInfo h1,
+.headerInfo h3,
+.headerInfo h4,
+.headerInfo p {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.fadeLine {
+  clear: both;
+  margin-top: 10em;
 }
 
 .poster {
-    width: 300;
-    height: 450px;
-    margin-right: 2em;
+  float: left;
+  width: 30%;
+  max-width: 20em;
+  min-width: 9em;
+  margin-right: 1em;
+  border-radius: 1.2em;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
+    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
+    rgba(0, 0, 0, 0.07) 0px 16px 16px;
 }
 
 .description {
-    text-align: justify;
+  text-align: justify;
+}
+
+.badge {
+  white-space: normal !important;
+  display: inline-block;
+  max-width: 100%;
 }
 
 .details {
-    display: flex;
-    flex-direction: row;
-    gap: 1em;
-    margin-top: 1em;
-    margin-bottom: 2em;
-    width: 100%;
+  display: grid;
+  display: flex;
+  flex-wrap: no-wrap;
+  flex-direction: row;
+  margin-top: 2em;
+}
+
+.mainInformation h3 {
+  padding-left: 1.5rem;
 }
 
 .sideInformation {
-    width: 20%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  width: 25%;
 }
 
-.cast {
-    width: 80%;
+.trailer {
+  background-color: var(--background-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+
+.trailer iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mainInformation {
+  width: 75%;
+}
+
+.content {
+  padding: 0;
+  padding-bottom: 1.5rem;
+}
+
+.tickets {
+  margin-left: 1.5rem;
+}
+
+@media (max-width: 1350px) {
+  .details {
+    flex-wrap: wrap;
+  }
+
+  .mainInformation {
+    width: 100%;
+  }
+
+  .sideInformation {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .tickets {
+    margin: 0;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  .trailer {
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .tickets {
+    margin: 0;
+  }
+
+  .poster {
+    margin-top: 1.5rem;
+    margin-left: 1.5rem;
+  }
+
+  .headerInfo {
+    margin-bottom: 0;
+  }
+  
+}
+
+@media (max-width: 750px) {
+  .sideInformation {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .mainInformation h3 {
+    padding-left: 1rem;
+  }
+
+  .poster {
+    margin-left: 1em;
+  }
+
+  .headerInfo h1 {
+    padding-top: 1rem;
+  }
+  .headerInfo h1,
+  .headerInfo h3,
+  .headerInfo h4,
+  .headerInfo p {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

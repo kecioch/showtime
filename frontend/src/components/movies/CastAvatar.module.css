@@ -1,15 +1,15 @@
 .card {
     text-align: center;
     width: 7em;
-    /* height: 12em; */
     font-size: 1em;
     padding: 0;
-    /* flex: 0 0 auto; */
+    border: none !important;
 }
 
 .name {
     padding: 0.2em 0.4em 0.2em 0.4em !important;
     font-weight: bold;
+    background-color: var(--background-secondary) !important;
 }
 
 .roleName {
@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: var(--background-tertiary) !important;
 }
 
 .deleteIcon {

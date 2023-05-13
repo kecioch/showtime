@@ -1,10 +1,12 @@
-import { useEffect } from "react";
-import Card from "react-bootstrap/Card";
 import styles from "./Content.module.css";
-import classNames from "classnames";
 
-const Content = (props) => {
-  return <div className={styles.content} style={props.styles}>{props.children}</div>;
+const Content = ({ children, style, className }) => {
+  const classes = `${styles.content} ${className}`;
+  return (
+    <div className={classes} style={style}>
+      {children}
+    </div>
+  );
 };
 
 export default Content;

@@ -1,0 +1,26 @@
+.link {
+    text-decoration: none;
+    position:relative;
+    display:inline-block;
+    transition: all 0.3s ease-out;
+}
+
+.slider {
+    position: absolute;
+    display:block;
+    left: 0;
+    top:90%;
+    margin:0 auto;
+    height: 1px;
+    background-color: var(--text-highlighted);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+.link:hover * {
+    color: var(--text-highlighted);
+}
+
+.link:hover .slider {
+    width: 100%;
+}

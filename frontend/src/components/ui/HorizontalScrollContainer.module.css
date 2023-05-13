@@ -1,8 +1,8 @@
 .scrollContainer {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap:nowrap;
   overflow-x: auto;
-  gap: 0.5em;
+  gap: 0.2em;
 }
 
 .scrollContainer * {

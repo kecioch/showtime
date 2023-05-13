@@ -14,7 +14,11 @@ const ProgramPlan = (props) => {
   if (movies) {
     console.log("MOVIES:", movies);
     movieList = movies.map((movie, i) => (
-      <MovieListItem key={i} movie={movie} />
+      <MovieListItem
+        key={i}
+        movie={movie}
+        className={i > 0 ? styles.border : styles.noneBorder}
+      />
     ));
   }
 

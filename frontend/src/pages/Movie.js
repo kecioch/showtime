@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
 import Image from "react-bootstrap/Image";
@@ -11,6 +11,8 @@ import Badge from "react-bootstrap/Badge";
 import Screeningplan from "../components/screeningplan/Screeningplan";
 import useFetch from "../hooks/useFetch";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import AgeBadge from "../components/movies/AgeBadge";
+import FadeLine from "../components/ui/FadeLine";
 
 const Movie = (props) => {
   const { id } = useParams();
@@ -50,82 +52,84 @@ const Movie = (props) => {
   ));
 
   const keywordElements = movie?.keywords?.map((el, i) => (
-    <Badge key={i} bg="secondary">
+    <Badge key={i} bg="secondary" className={styles.badge}>
       {el}
     </Badge>
   ));
 
   return (
     <Container>
-      <Content>
+      <Content className={styles.content}>
         {isFetching && <LoadingSpinner />}
         {!isFetching && movie && (
           <>
-            <section>
-              <div className={styles.headerInfo}>
-                <Image
-                  src={movie.media.images.poster}
-                  className={styles.poster}
-                />
-
+            <section className={styles.headerInfo}>
+              <Image
+                src={movie.media.images.poster}
+                className={styles.poster}
+              />
+              <h1>{movie.title}</h1>
+              <p className={styles.metaInfo}>
+                <AgeBadge>{movie.release.ageRestriction}</AgeBadge> •{" "}
+                {movie.release.productionYear} (
+                {movie.release.productionCountry}) • {movie.genres.join(", ")} •{" "}
+                {movie.runtime}min
+              </p>
+              {movie.subtitle && (
+                <h3 className="text-muted">{movie.subtitle}</h3>
+              )}
+              <p className={styles.description}>{movie.description}</p>
+              <div className="mt-5 d-flex gap-5">
                 <div>
-                  <h1>{movie.title}</h1>
-                  <p>
-                    <Badge>{movie.release.ageRestriction}</Badge> •{" "}
-                    {movie.release.productionYear} (
-                    {movie.release.productionCountry}) •{" "}
-                    {movie.genres.join(", ")} • {movie.runtime}min
-                  </p>
-                  {movie.subtitle && (
-                    <h3 className="text-muted">{movie.subtitle}</h3>
-                  )}
-                  <p className={styles.description}>{movie.description}</p>
-                  <div className="d-flex gap-5">
-                    <div>
-                      <h4 className="mb-1">Regie</h4>
-                      <p>{movie.credits.crew.director.name}</p>
-                    </div>
-                    <div>
-                      <h4 className="mb-1">Drehbuch</h4>
-                      <p>{movie.credits.crew.screenwriter.name}</p>
-                    </div>
-                  </div>
+                  <h4 className="mb-1">Regie</h4>
+                  <p>{movie.credits.crew.director.name}</p>
+                </div>
+                <div>
+                  <h4 className="mb-1">Drehbuch</h4>
+                  <p>{movie.credits.crew.screenwriter.name}</p>
                 </div>
               </div>
+              <hr style={{ clear: "both", border: "none" }} />
             </section>
+            <FadeLine className="mt-3" />
             <section className={styles.details}>
-              <div className={styles.cast}>
-                <h4>Cast</h4>
-                <HorizontalScrollContainer>
-                  {castElements}
-                </HorizontalScrollContainer>
-
-                <h4>Trailer</h4>
-                <iframe
-                  src="https://www.youtube.com/embed/eWYrJGe5r88"
-                  title="Trailer"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                ></iframe>
-
-                <h4 className="mt-3">Tickets</h4>
+              <div className={styles.mainInformation}>
+                <h3 className="mb-3">Tickets</h3>
                 {screenings?.length > 0 ? (
-                  <Screeningplan screenings={screenings} />
+                  <div className={styles.tickets}>
+                    <Screeningplan screenings={screenings} />
+                  </div>
                 ) : (
                   <h3 className="text-muted text-center mt-4">
                     Keine Vorführungen im Programmplan vorhanden
                   </h3>
                 )}
+
+                <h3 className="mt-4 mb-3">Trailer</h3>
+                <div className={styles.trailer}>
+                  <iframe
+                    src="https://www.youtube.com/embed/eWYrJGe5r88"
+                    title="Trailer"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+
+                <h3 className="mt-4 mb-3">Cast</h3>
+
+                <HorizontalScrollContainer>
+                  {castElements}
+                </HorizontalScrollContainer>
               </div>
               <div className={styles.sideInformation}>
-                <h4>Informationen</h4>
+                <h3>Informationen</h3>
                 <p>
                   <b>Originaltitel:</b> {movie.originalTitle}
                 </p>
                 {movie.keywords?.length > 0 && (
                   <section>
-                    <h4>Schlüsselwörter</h4>
+                    <h3>Schlüsselwörter</h3>
                     <div className="d-flex gap-1 flex-wrap">
                       {keywordElements}
                     </div>

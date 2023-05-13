@@ -1,0 +1,44 @@
+.fadeLine {
+  height: 2px;
+  background-color: transparent;
+  width: 100%;
+  margin: 0 auto;
+  background-image: linear-gradient(
+    left,
+    transparent 2%,
+    rgba(var(--background-navbar), 0.7) 50%,
+    transparent 98%
+  );
+  background-image: -o-linear-gradient(
+    left,
+    transparent 2%,
+    rgba(var(--background-navbar), 0.7) 50%,
+    transparent 98%
+  );
+  background-image: -moz-linear-gradient(
+    left,
+    transparent 2%,
+    rgba(var(--background-navbar), 0.7) 50%,
+    transparent 98%
+  );
+  background-image: -webkit-linear-gradient(
+    left,
+    transparent 2%,
+    rgba(var(--background-navbar), 0.7) 50%,
+    transparent 98%
+  );
+  background-image: -ms-linear-gradient(
+    left,
+    transparent 2%,
+    rgba(var(--background-navbar), 0.7) 50%,
+    transparent 98%
+  );
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    right bottom,
+    color-stop(0.02, transparent),
+    color-stop(0.5, rgba(var(--background-navbar), 0.7)),
+    color-stop(0.98, transparent)
+  );
+}

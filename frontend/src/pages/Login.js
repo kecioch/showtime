@@ -41,22 +41,20 @@ const Login = (props) => {
 
   return (
     <Container>
-      <Content>
-        <div className="d-flex justify-content-center">
-          <div className={styles.login}>
-            <h1>Login</h1>
-            <LoginForm
-              error={error}
-              onSubmit={submitHandler}
-              isLoading={isFetching}
-            />
-            <hr />
-            <Link to="/register">
-              <Button variant="secondary">Registrieren</Button>
-            </Link>
-          </div>
+      <div className="d-flex justify-content-center">
+        <div className={styles.login}>
+          <h1>Login</h1>
+          <LoginForm
+            error={error}
+            onSubmit={submitHandler}
+            isLoading={isFetching}
+          />
+          <hr />
+          <Link to="/register">
+            <Button variant="secondary">Registrieren</Button>
+          </Link>
         </div>
-      </Content>
+      </div>
     </Container>
   );
 };

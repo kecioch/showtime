@@ -1,6 +1,13 @@
 .programPlan {
   width: 100%;
-  /* height: 100vh; */
-  /* background-color: gainsboro; */
   border-radius: 1em;
+}
+
+.border {
+  border: none !important;
+  border-top: 1.5px solid var(--background-secondary) !important;
+}
+
+.noneBorder {
+  border: none !important;
 }

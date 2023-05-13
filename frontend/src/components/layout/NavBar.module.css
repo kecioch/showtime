@@ -1,0 +1,31 @@
+.navBar {
+  box-shadow: rgba(27, 27, 27, 0.5) 0px 7px 29px 0px;
+  background-color: rgba(var(--background-navbar), 0.95) !important;
+}
+
+.navBar * {
+  color: var(--text-primary);
+}
+
+.brand:hover {
+  color: var(--text-primary);
+}
+
+.navLinks {
+  display: flex;
+  gap: 0.8em;
+}
+
+@media (max-width: 767px) {
+  .navBar {
+    text-align: center;
+  }
+
+  .navAccount {
+    margin-top: 0.8em;
+  }
+
+  .navBar {
+    background-color: rgba(var(--background-navbar), 1) !important;
+  }
+}

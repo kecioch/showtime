@@ -1,48 +1,88 @@
-.App {
-  text-align: center;
+:root {
+  --background-primary: #222f36;
+  --background-secondary: #212529;
+  --background-tertiary: #3d4145;
+  --background-navbar: 9, 17, 21;
+  --text-primary: #d5d5d5;
+  --text-secondary: #2b5263;
+  --text-highlighted: #4c91af;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background-color: transparent !important;
+  color: var(--text-primary) !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+html {
+  height: 100%;
+  background-attachment: fixed !important;
+  background: #0f2027; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to bottom,
+    #0f2027,
+    #203a43,
+    #2c5364
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #0f2027,
+    #203a43,
+    #2c5364
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #5a5a5a var(--background-secondary);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* a {
+  user-select: none;
+  -webkit-user-drag: none;
+} */
+
+::-webkit-scrollbar {
+  max-width: 10px;
+  max-height: 12px;
+}
+
+/* Set the style for the scrollbar track */
+::-webkit-scrollbar-track-piece {
+  background-color: var(--background-secondary);
+}
+
+::-moz-scrollbar-track {
+  background-color: var(--background-secondary);
+}
+
+/* Set the style for the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #5a5a5a;
+  border-radius: 10px;
+}
+
+::-moz-scrollbar-thumb {
+  background-color: #5a5a5a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #909090;
+}
+
+*::-moz-scrollbar-thumb:hover {
+  background-color: #909090;
+}
+
+::-moz-selection {
+  /* Code for Firefox */
   color: white;
+  background: var(--text-highlighted);
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-.navbar a {
-  text-decoration: none;
-  color: #f2f2f2;
-}
-
-html,body {
-  /* background-color: #3f474f; */
+::selection {
+  color: white;
+  background: var(--text-highlighted);
 }

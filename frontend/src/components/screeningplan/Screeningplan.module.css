@@ -1,33 +1,47 @@
 .screeningPlan {
-    width: 100%;
+  width: 100%;
 }
 
 .screeningPlan td {
-    /* width: 10em; */
-    min-width: 8em;
-    max-width: 8em;
-    vertical-align: top;
-    background-color: #ffffff;
+  /* width: 10em; */
+  min-width: 8em;
+  max-width: 8em;
+  vertical-align: top;
+  background-color: rgba(37, 37, 37, 0.2);
+}
+
+.screeningPlan thead tr:first-child th:first-child {
+  border-top-left-radius: 10px;
+}
+.screeningPlan thead tr:first-child th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.screeningPlan tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.screeningPlan tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
 }
 
 .items {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    padding: 0.5em 0.2em;
-    /* background-color: aqua; */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 0.5em 0.2em;
+  /* background-color: aqua; */
 }
 
 .screeningPlan tr td:not(:last-child) {
-    border-right: 1px solid black;
+  border-right: 1px solid black;
 }
 
 .weekdays {
-    background-color: #212529;
-    color: white;
+  background-color: #212529;
+  color: white;
 }
 
 .weekdays th {
-    padding-left: 0.5em;
-    height: 2em;
+  padding-left: 0.5em;
+  height: 2em;
 }

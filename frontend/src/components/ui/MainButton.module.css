@@ -1,0 +1,20 @@
+.button {
+  background-color: rgba(54, 104, 124, 0.5) !important;
+  border-color: #4d93af !important;
+}
+
+.children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.button:hover {
+  background-color: #4d93af !important;
+  border-color: #36687c !important;
+}
+
+.button:active {
+  background-color: var(--background-secondary) !important;
+}

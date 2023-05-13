@@ -1,0 +1,22 @@
+.badge {
+    border-radius: 0.375em;
+    padding: 0.20em 0.65em;
+    font-weight: 750;
+    font-size: 0.75em;
+}
+
+.adult {
+  background-color: red !important;
+}
+
+.teen {
+  background-color: rgb(18, 80, 194) !important;
+}
+
+.child {
+  background-color: green !important;
+}
+
+.free {
+  background-color: silver !important;
+}
