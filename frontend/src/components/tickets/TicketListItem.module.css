@@ -1,15 +1,87 @@
 .listItem {
-    border: 1px solid #212529;
-    border-radius: 0.5em;
-    background-color: #f2f2f2;
-    display: flex;
-    flex-direction: row;
-    gap: 1em;
-    overflow: hidden;
-    margin-bottom: 0.5em;
+  border: 1px solid #212529;
+  border-radius: 0.5em;
+  background-color: var(--background-secondary);
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  overflow: hidden;
+  margin-bottom: 0.5em;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .poster {
-    height: 220px;
-    object-fit: cover;
+  width: 30%;
+  max-width: 10em;
+  min-width: 6em;
+  object-fit: cover;
+}
+
+.info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.date {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 0.3em dashed var(--background-primary);
+  min-width: 15em;
+  text-align: center;
+}
+
+.date h3 {
+  font-weight: bold;
+}
+
+.date h4 {
+  font-size: 1.3em;
+}
+
+.button {
+  margin-top: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 1.2em;
+}
+
+@media (max-width: 750px) {
+  .date h4 {
+    font-size: 1.3em;
+  }
+
+  .button {
+    font-size: 0.7em;
+  }
+
+  .details h2 {
+    font-size: 1.1em;
+  }
+
+  .details h3 {
+    font-size: 0.9em;
+  }
+
+  .date {
+    min-width: 6em;
+    width: 6em;
+    max-width: 6rem;
+  }
+
+  .date h4 {
+    font-size: 0.9em;
+  }
+
+  .date h3 {
+    font-size: 1em;
+  }
 }

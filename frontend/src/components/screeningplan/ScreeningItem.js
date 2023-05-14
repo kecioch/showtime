@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./ScreeningItem.module.css";
-import { TrashFill } from "react-bootstrap-icons";
+import { TrashFill,TicketPerforated } from "react-bootstrap-icons";
 
 const ScreeningItem = (props) => {
   const editMode = props.editMode;
@@ -16,7 +16,7 @@ const ScreeningItem = (props) => {
         {editMode ? (
           props.time
         ) : (
-          <Link to={`/ticketshop/${props.id}`}>{props.time}</Link>
+          <Link to={`/ticketshop/${props.id}`}><TicketPerforated /> {props.time}</Link>
         )}
       </p>
       {editMode && (

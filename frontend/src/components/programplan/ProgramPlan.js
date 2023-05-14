@@ -23,7 +23,7 @@ const ProgramPlan = (props) => {
   }
 
   let content = (
-    <h2 className="text-muted text-center">Keine Filme vorhanden</h2>
+    <h2 className="text-muted text-center mt-4 mb-3">Keine Filme vorhanden</h2>
   );
   if (movieList.length > 0)
     content = <div className={styles.programPlan}>{movieList}</div>;

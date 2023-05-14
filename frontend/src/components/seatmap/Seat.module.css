@@ -1,17 +1,19 @@
 .seat {
   width: 3em;
-  height: 3em;
+  /* padding-top: 3em; */
   /* background-color: lightgray; */
-  border-radius: 0.5em;
+  border-radius: 4px;
   overflow: hidden;
+  border: 3px solid transparent;
 }
 
-.unselected {
-  /* background-color: lightgray; */
+.seat::after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
 }
 
 .selected {
-  /* background-color: green; */
   border: 3px solid green;
   position: relative;
 }
@@ -73,7 +75,7 @@
 }
 
 .empty {
-  background-color: whitesmoke;
+  background-color: rgba(245, 245, 245, 0.222);
 }
 
 .blank {

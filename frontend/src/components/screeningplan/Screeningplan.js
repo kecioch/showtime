@@ -16,7 +16,6 @@ const Screeningplan = (props) => {
     const tableContent = [];
 
     if (!editMode) {
-      // cinemas = [...new Set(screenings.map(screening => screening.cinema))]
       cinemas = Array.from(
         new Set(screenings.map((screening) => screening.cinema.title))
       ).map(

@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/esm/Button";
 import styles from "./EditListItem.module.css";
 import { Link } from "react-router-dom";
+import { PencilSquare, Trash3Fill } from "react-bootstrap-icons";
 
 const EditListItem = (props) => {
   const item = props.data;
@@ -10,10 +11,12 @@ const EditListItem = (props) => {
       <h3>{item.title}</h3>
       <div className="d-flex flex-row gap-2">
         <Link to={item.editPath}>
-          <Button variant="primary" style={{height: "100%"}}>Bearbeiten</Button>
+          <Button variant="secondary" style={{ height: "100%" }}>
+            <PencilSquare />
+          </Button>
         </Link>
         <Button variant="danger" onClick={() => props.onDelete(item)}>
-          Löschen
+          <Trash3Fill />
         </Button>
       </div>
     </div>

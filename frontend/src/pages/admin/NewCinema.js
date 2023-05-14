@@ -18,7 +18,7 @@ const NewCinema = () => {
   return (
     <Container>
       <Content>
-        <h1>Neuer Kinosaal</h1>
+        <h1 className="mb-4">Neuer Kinosaal</h1>
         <CinemaConfig
           onSubmit={createCinemaHandler}
           isLoading={isFetching}

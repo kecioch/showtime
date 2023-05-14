@@ -3,15 +3,15 @@ import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
 import { BACKEND_URL } from "../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import Badge from "react-bootstrap/esm/Badge";
 import Image from "react-bootstrap/esm/Image";
 import styles from "./Ticketshop.module.css";
 import { getTimeString } from "../services/FormatDate";
 import SeatMap from "../components/seatmap/SeatMap";
-import Button from "react-bootstrap/esm/Button";
 import useFetch from "../hooks/useFetch";
-import LoadingButton from "../components/ui/LoadingButton";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import MainButton from "../components/ui/MainButton";
+import AgeBadge from "../components/movies/AgeBadge";
+import {Cart4} from "react-bootstrap-icons";
 
 const Ticketshop = (props) => {
   const { id } = useParams();
@@ -152,7 +152,7 @@ const Ticketshop = (props) => {
     <>
       {" "}
       {!isFetching && (
-        <Container className={styles.containerHeader}>
+        <Container>
           <Content>
             {screening && (
               <section>
@@ -163,16 +163,16 @@ const Ticketshop = (props) => {
                   />
 
                   <div>
-                    <h1 className="mt-4">
+                    <h1>
                       {screening.scheduledScreening.movie.title}
                     </h1>
                     <p>
-                      <Badge>
+                      <AgeBadge>
                         {
                           screening.scheduledScreening.movie.release
                             .ageRestriction
                         }
-                      </Badge>{" "}
+                      </AgeBadge>{" "}
                       •{" "}
                       {
                         screening.scheduledScreening.movie.release
@@ -186,7 +186,7 @@ const Ticketshop = (props) => {
                       ) • {screening.scheduledScreening.movie.genres.join(", ")}{" "}
                       • {screening.scheduledScreening.movie.runtime}min
                     </p>
-                    <h2 className="mt-5">
+                    <h2 className={styles.cinemaTitle}>
                       {screening.scheduledScreening.cinema.title}
                     </h2>
                     <h4 className="mt-3">
@@ -214,30 +214,33 @@ const Ticketshop = (props) => {
           {!isFetching && (
             <>
               <h2>Ticket Auswahl</h2>
-              <div className="d-flex">
+              <div
+                className={styles.ticketSelection}
+              >
                 <SeatMap
                   data={seatMap}
                   onSeatClick={onSeatClickHandler}
                   editMode={false}
+                  className={styles.seatMap}
                 />
-                <section>
-                  <div className={styles.cart}>
-                    <h3>Ausgewählte Tickets</h3>
-                    <h5 className="mt-3">Gesamtpreis: {totalPrice} € </h5>
-                    <Button
-                      disabled={selectedTickets?.length <= 0}
-                      onClick={goToCartHandler}
-                      className="mb-3"
-                    >
-                      Zur Kasse gehen
-                    </Button>
-                    {selectedTickets?.length > 0 ? (
-                      selectedTicketsElements
-                    ) : (
-                      <h6 className="text-muted">Keine Tickets ausgewählt</h6>
-                    )}
-                  </div>
-                </section>
+
+                <div className={styles.cart}>
+                  <h3>Ausgewählte Tickets</h3>
+                  <h5 className="mt-3">Gesamtpreis: {totalPrice} € </h5>
+                  <MainButton
+                    disabled={selectedTickets?.length <= 0}
+                    onClick={goToCartHandler}
+                    className="mb-3"
+                  >
+                    <Cart4 />
+                    Zur Kasse gehen
+                  </MainButton>
+                  {selectedTickets?.length > 0 ? (
+                    selectedTicketsElements
+                  ) : (
+                    <h6 className="text-muted">Keine Tickets ausgewählt</h6>
+                  )}
+                </div>
               </div>
             </>
           )}

@@ -1,5 +1,6 @@
 .headerInfo h1 {
-  padding-top: 1.5rem;
+  padding-top: 2rem;
+  margin-top: 0;
 }
 
 .headerInfo {
@@ -67,7 +68,7 @@
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%;
+  padding-bottom: 45.25%;
 }
 
 .trailer iframe {

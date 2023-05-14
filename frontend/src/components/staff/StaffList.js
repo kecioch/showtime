@@ -1,5 +1,6 @@
 import Table from "react-bootstrap/Table";
 import { Trash3Fill } from "react-bootstrap-icons";
+import styles from "./StaffList.module.css";
 
 const StaffList = ({ data, onDelete }) => {
   const tableItems = data?.map((el, i) => (
@@ -16,7 +17,7 @@ const StaffList = ({ data, onDelete }) => {
   ));
 
   return (
-    <Table className="mt-3" striped bordered hover responsive>
+    <Table className={styles.table} striped bordered hover responsive>
       <thead>
         <tr>
           <th scope="col">#</th>

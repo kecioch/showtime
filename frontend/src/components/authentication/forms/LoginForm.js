@@ -14,7 +14,7 @@ const LoginForm = ({onSubmit, error, isLoading}) => {
   const errorMsg = error && <p className="text-danger">{error}</p>;
 
   return (
-    <Form className="mt-3" onSubmit={submitHandler}>
+    <Form className="pt-3" onSubmit={submitHandler}>
       {errorMsg}
       <Form.Group className="mb-3" controlId="id">
         <Form.Label>Benutzername</Form.Label>

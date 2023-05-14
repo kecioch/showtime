@@ -1,9 +1,10 @@
-import { Placeholder, Spinner } from "react-bootstrap";
+import {  Spinner } from "react-bootstrap";
 import styles from "./LoadingSpinner.module.css";
 
-const LoadingSpinner = () => {
+const LoadingSpinner = ({className}) => {
+  const classes = `${styles.background} ${className}`;
   return (
-    <div className={styles.background}>
+    <div className={classes}>
       <Spinner className={styles.spinner} />
     </div>
   );

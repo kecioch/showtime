@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import StaffList from "../../components/staff/StaffList";
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
-import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../../constants";
 import StaffModal from "../../components/modals/StaffModal";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import MainButton from "../../components/ui/MainButton";
+import styles from "./Staff.module.css";
 
 const Staff = (props) => {
   const [staff, setStaff] = useState([]);
@@ -60,10 +61,12 @@ const Staff = (props) => {
   return (
     <>
       <Container>
-        <Content>
-          <h1>Mitarbeiter verwalten</h1>
-          <hr />
-          <Button onClick={onAdd}>Hinzufügen</Button>
+        <Content className={styles.content}>
+          <div className={styles.header}>
+            <h1>Mitarbeiter verwalten</h1>
+            <hr />
+            <MainButton onClick={onAdd}>Neuen Mitarbeiter erstellen</MainButton>
+          </div>
           {isFetchingPage && <LoadingSpinner />}
           {!isFetchingPage && <StaffList data={staff} onDelete={onDelete} />}
         </Content>

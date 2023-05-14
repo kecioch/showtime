@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { BACKEND_URL } from "../../../constants";
 import LoadingButton from "../../ui/LoadingButton";
 import useFetch from "../../../hooks/useFetch";
+import styles from "./CinemaConfig.module.css";
 
 const CinemaConfig = (props) => {
   const [title, setTitle] = useState("");
@@ -137,22 +138,23 @@ const CinemaConfig = (props) => {
       <Form>
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Titel</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Titel eingeben..."
-            onChange={(ev) => setTitle(ev.target.value)}
-            value={title}
-          />
-          <LoadingButton
-            variant="primary"
-            type="submit"
-            className="mt-2"
-            onClick={onSubmit}
-            isLoading={props.isLoading}
+          <div className="d-flex justify-content-center align-items-start gap-3">
+            <Form.Control
+              type="text"
+              placeholder="Titel eingeben..."
+              onChange={(ev) => setTitle(ev.target.value)}
+              value={title}
+            />
+            <LoadingButton
+              variant="primary"
+              type="submit"
+              onClick={onSubmit}
+              isLoading={props.isLoading}
             >
-            {props.isNew ? "Erstellen" : "Aktualisieren"}
-          </LoadingButton>
-            {errorMsg}
+              {props.isNew ? "Erstellen" : "Aktualisieren"}
+            </LoadingButton>
+          </div>
+          {errorMsg}
         </Form.Group>
       </Form>
       <hr />
@@ -177,12 +179,17 @@ const CinemaConfig = (props) => {
         </Form.Group>
       </div>
       <hr />
-      <Form.Group className="mb-5" controlId="colCnt">
-        <Form.Label>Sitzplatz Typ</Form.Label>
-        <Form.Select aria-label="Sitzplatztyp" onChange={changeSeatTypeHandler}>
-          {seatTypeOptions}
-        </Form.Select>
-      </Form.Group>
+      <div className="d-flex w-100 justify-content-center">
+        <Form.Group className={styles.typeSelector} controlId="colCnt">
+          <Form.Label>Sitzplatz Typ</Form.Label>
+          <Form.Select
+            aria-label="Sitzplatztyp"
+            onChange={changeSeatTypeHandler}
+          >
+            {seatTypeOptions}
+          </Form.Select>
+        </Form.Group>
+      </div>
       <SeatMap data={seatMap} editMode={true} onSeatClick={seatClickHandler} />
     </>
   );

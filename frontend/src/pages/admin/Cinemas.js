@@ -8,6 +8,8 @@ import EditList from "../../components/lists/EditList";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import styles from "./Cinemas.module.css";
+import MainButton from "../../components/ui/MainButton";
 
 const Cinemas = (props) => {
   const [cinemas, setCinemas] = useState([]);
@@ -58,14 +60,16 @@ const Cinemas = (props) => {
   return (
     <>
       <Container>
-        <Content>
-          <h1>Kinosaal Verwaltung</h1>
-          <hr />
-          <Link to="/admin/cinemas/new">
-            <Button className="mb-4" variant="primary">
-              Neu
-            </Button>
-          </Link>
+        <Content className={styles.content}>
+          <div className={styles.header}>
+            <h1>Kinosaal Verwaltung</h1>
+            <hr />
+            <Link to="/admin/cinemas/new">
+              <MainButton className="mb-4">
+                Neuen Kinosaal hinzufügen
+              </MainButton>
+            </Link>
+          </div>
           {isFetchingPage && <LoadingSpinner />}
           {!isFetchingPage && (
             <>

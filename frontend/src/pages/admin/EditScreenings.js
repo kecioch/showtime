@@ -1,13 +1,15 @@
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import Button from "react-bootstrap/esm/Button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import Screeningplan from "../../components/screeningplan/Screeningplan";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import ScreeningModal from "../../components/modals/ScreeningModal";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import styles from "./EditScreenings.module.css";
+import MainButton from "../../components/ui/MainButton";
 
 const EditScreenings = (props) => {
   const [cinemas, setCinemas] = useState([]);
@@ -94,12 +96,14 @@ const EditScreenings = (props) => {
   return (
     <>
       <Container>
-        <Content>
-          <h1>Filmvorführungen</h1>
-          <hr />
-          <Button className="mb-3" onClick={openNewScreening}>
-            Hinzufügen
-          </Button>
+        <Content className={styles.content}>
+          <div className={styles.header}>
+            <h1>Filmvorführungen</h1>
+            <hr />
+            <MainButton className="mb-3" onClick={openNewScreening}>
+              Hinzufügen
+            </MainButton>
+          </div>
           {isPageLoading && <LoadingSpinner />}
           {!isPageLoading && (
             <>

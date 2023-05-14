@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import styles from "./EditMovie.module.css";
 
 const EditMovie = (props) => {
   const { id } = useParams();
@@ -38,7 +39,7 @@ const EditMovie = (props) => {
 
   return (
     <Container>
-      <Content styles={{ maxWidth: "50em" }}>
+      <Content className={styles.content}>
         <h2>Film Bearbeiten</h2>
         {isFetchingPage && <LoadingSpinner />}
         {!isFetchingPage && <MovieConfig

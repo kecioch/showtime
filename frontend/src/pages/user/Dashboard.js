@@ -3,6 +3,7 @@ import Content from "../../components/ui/Content";
 import useAuth from "../../hooks/useAuth";
 import { ROLES } from "../../constants";
 import DashboardListItem from "../../components/dashboard/DashboardListItem";
+import styles from "./Dashboard.module.css";
 import {
   BorderAll,
   Film,
@@ -19,7 +20,7 @@ const Dashboard = (props) => {
 
   return (
     <Container>
-      <Content>
+      <Content className={styles.content}>
         <h1>Dashboard</h1>
         {user && (
           <>

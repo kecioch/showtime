@@ -38,6 +38,12 @@ html {
   -webkit-user-drag: none;
 }
 
+.modal-body,
+.modal-footer,
+.modal-header {
+  color: var(--background-secondary);
+}
+
 /* a {
   user-select: none;
   -webkit-user-drag: none;

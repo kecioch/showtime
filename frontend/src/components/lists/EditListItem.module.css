@@ -1,9 +1,9 @@
 .listItem {
-    background-color: whitesmoke;
-    border: 1px solid grey;
+    background-color: var(--background-secondary);
     border-radius: 0.2em;
     padding: 1em;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }

@@ -1,13 +1,14 @@
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/esm/Button";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import EditList from "../../components/lists/EditList";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import MainButton from "../../components/ui/MainButton";
+import styles from "./Movies.module.css";
 
 const Movies = (props) => {
   const [movies, setMovies] = useState([]);
@@ -54,14 +55,14 @@ const Movies = (props) => {
   return (
     <>
       <Container>
-        <Content>
-          <h1>Filme Verwalten</h1>
-          <hr />
-          <Link to="/admin/movies/new">
-            <Button className="mb-4" variant="primary">
-              Neu
-            </Button>
-          </Link>
+        <Content className={styles.content}>
+          <div className={styles.header}>
+            <h1>Filme Verwalten</h1>
+            <hr />
+            <Link to="/admin/movies/new">
+              <MainButton className="mb-4">Neu Film hinzufügen</MainButton>
+            </Link>
+          </div>
           {isFetchingPage && <LoadingSpinner />}
           {!isFetchingPage && (
             <>

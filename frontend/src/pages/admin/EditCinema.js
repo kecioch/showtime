@@ -39,7 +39,7 @@ const EditCinema = (props) => {
   return (
     <Container>
       <Content>
-        <h1>Kinosaal bearbeiten</h1>
+        <h1 className="mb-4">Kinosaal bearbeiten</h1>
         {isFetchingPage && <LoadingSpinner />}
         {!isFetchingPage && (
           <CinemaConfig

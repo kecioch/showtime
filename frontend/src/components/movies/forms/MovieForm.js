@@ -10,6 +10,7 @@ import LoadingButton from "../../ui/LoadingButton";
 
 const MovieForm = (props) => {
   const isNew = props.isNew !== undefined ? props.isNew : true;
+  const classes = `${styles.card} ${props.className}`;
 
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
@@ -177,7 +178,7 @@ const MovieForm = (props) => {
   const errorMsg = props.error && <p className="text-danger">{props.error}</p>;
 
   return (
-    <Card className="mt-4 mb-3 p-4">
+    <Card className={classes}>
       <Form onSubmit={submitHandler}>
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Titel</Form.Label>
@@ -309,7 +310,7 @@ const MovieForm = (props) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="cast">
           <Form.Label>Cast</Form.Label>
-          <div className="d-flex">
+          <div className="d-flex gap-2 mb-2">
             <Form.Control
               type="text"
               placeholder="Schauspieler eingeben..."

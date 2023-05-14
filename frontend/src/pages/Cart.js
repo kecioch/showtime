@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
 import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
 import { getTimeString } from "../services/FormatDate";
@@ -12,6 +11,8 @@ import { isEmailValid } from "../services/EmailValidation";
 import useAuth from "../hooks/useAuth";
 import PaymentModal from "../components/modals/PaymentModal";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import MainButton from "../components/ui/MainButton";
+import { CashCoin } from "react-bootstrap-icons";
 
 const Cart = (props) => {
   const [cart, setCart] = useState();
@@ -78,7 +79,7 @@ const Cart = (props) => {
   );
 
   const guestForm = (
-    <Form className="mt-3">
+    <Form className="pt-3">
       <Form.Group className="mb-3" controlId="guestFirstName">
         <Form.Label>Vorname</Form.Label>
         <Form.Control
@@ -113,11 +114,11 @@ const Cart = (props) => {
     <>
       {" "}
       <Container>
-        <Content>
+        <Content className={styles.container}>
           {loadingPage && <LoadingSpinner />}
           {!loadingPage && (
             <>
-              <h1>Warenkorb</h1>
+              <h1 className={styles.title}>Warenkorb</h1>
               {cart ? (
                 <>
                   <section className={styles.header}>
@@ -128,14 +129,12 @@ const Cart = (props) => {
                       }
                       className={styles.poster}
                     />
-                    <div>
-                      <h2 className="mt-4">
-                        {cart.screening.scheduledScreening.movie.title}
-                      </h2>
-                      <h3 className="mt-4">
+                    <div className={styles.headerInfo}>
+                      <h2>{cart.screening.scheduledScreening.movie.title}</h2>
+                      <h3 className="mt-3">
                         {cart.screening.scheduledScreening.cinema.title}
                       </h3>
-                      <h4 className="mt-3">
+                      <h4 className="mt-1">
                         {new Date(cart.screening.date).toLocaleString("de-de", {
                           weekday: "long",
                         })}
@@ -147,45 +146,67 @@ const Cart = (props) => {
                         )}{" "}
                         Uhr
                       </h4>
-                      <h4 className="mt-3">
+                      <h4 className="mt-1">
                         Ticketanzahl:{" "}
                         {cart.tickets.reduce((acc, ticket) => acc + 1, 0)}
                       </h4>
                     </div>
                   </section>
 
-                  <section className="mt-4">
+                  <section className="mt-4 d-flex flex-column align-items-center">
                     {!isLoggedIn && (
-                      <div>
+                      <div className={styles.customer}>
                         <Nav
+                          className={styles.navTabs}
                           variant="tabs"
                           defaultActiveKey="login"
                           onSelect={(key) => setTab(key)}
                         >
                           <Nav.Item>
-                            <Nav.Link eventKey="login">Login</Nav.Link>
+                            <Nav.Link
+                              eventKey="login"
+                              className={`${styles.link} ${
+                                tab === "login" && styles.activeLink
+                              }`}
+                            >
+                              Login
+                            </Nav.Link>
                           </Nav.Item>
                           <Nav.Item>
-                            <Nav.Link eventKey="guest">Gast</Nav.Link>
+                            <Nav.Link
+                              eventKey="guest"
+                              className={`${styles.link} ${
+                                tab === "guest" && styles.activeLink
+                              }`}
+                            >
+                              Gast
+                            </Nav.Link>
                           </Nav.Item>
                         </Nav>
-                        {tab === "login" && loginForm}
-                        {tab === "guest" && guestForm}
+                        <div className={styles.content}>
+                          {tab === "login" && loginForm}
+                          {tab === "guest" && guestForm}
+                        </div>
                       </div>
                     )}
-                    <hr />
-                    <h3 className="mt-3 mb-3">Gesamtpreis: {totalPrice}€</h3>
-                    <Button
-                      className={styles.payBtn}
-                      disabled={isPaymentDisabled}
-                      onClick={paymentHandler}
-                    >
-                      Bezahlen
-                    </Button>
+                    <hr className="w-100" />
+                    <section className={styles.footer}>
+                      <h3 className="mt-3 mb-3 w-100">
+                        Gesamtpreis: {totalPrice}€
+                      </h3>
+                      <MainButton
+                        className={styles.payBtn}
+                        disabled={isPaymentDisabled}
+                        onClick={paymentHandler}
+                      >
+                        <CashCoin />
+                        Bezahlen
+                      </MainButton>
+                    </section>
                   </section>
                 </>
               ) : (
-                <h3 className="text-muted text-center">Warenkorb ist leer</h3>
+                <h3 className="text-muted text-center mt-3 mb-3">Warenkorb ist leer</h3>
               )}
             </>
           )}

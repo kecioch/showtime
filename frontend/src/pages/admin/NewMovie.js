@@ -1,9 +1,9 @@
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
-import styles from "./NewMovie.module.css";
 import { BACKEND_URL } from "../../constants";
 import MovieConfig from "../../components/movies/forms/MovieConfig";
 import useFetch from "../../hooks/useFetch";
+import styles from "./NewMovie.module.css";
 
 const NewMovie = (props) => {
   const { fetch, isFetching, errorMsg } = useFetch();
@@ -16,7 +16,7 @@ const NewMovie = (props) => {
 
   return (
     <Container>
-      <Content styles={{ maxWidth: "50em" }}>
+      <Content className={styles.content}>
         <h2>Neuen Film hinzufügen</h2>
         <MovieConfig
           onSubmit={addMovieHandler}

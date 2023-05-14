@@ -1,22 +1,44 @@
 .item {
-    background-color: #cccccc;
-    border-radius: 0.5em;
-    padding: 0.2em;
-    position: relative;
+  background-color: #cccccc;
+  border-radius: 0.5em;
+  /* padding: 0.2em; */
+  position: relative;
+  border: 0;
+}
+
+.item * {
+  text-decoration: none;
+  color: black;
+  transition: color 0.2s;
+}
+
+.item a {
+  border-radius: 0.5em;
+  padding: 0.2em;
+  color: black;
+  display: block;
+}
+
+.item svg {
+  margin-bottom: 3px;
+}
+
+.item a:hover *,
+.item a:hover {
+  color: var(--text-highlighted);
 }
 
 .item p {
-    margin: 0;
-    text-align: center;
-    word-wrap: break-word;
+  margin: 0;
+  text-align: center;
+  word-wrap: break-word;
 }
 
 .title {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .time {
-
 }
 
 .delete {

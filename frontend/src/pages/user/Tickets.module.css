@@ -1,0 +1,11 @@
+@media (max-width: 750px) {
+    .content {
+      padding: 0;
+      padding-bottom: 1rem;
+    }
+  
+    .header {
+      padding: 1rem;
+    }
+  }
+  

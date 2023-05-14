@@ -1,0 +1,38 @@
+.table {
+  margin-top: 1.5em;
+}
+
+.table * {
+  border: none !important;
+  color: var(--text-primary) !important;
+}
+
+.table td {
+  background-color: var(--background-tertiary);
+}
+
+.table tbody tr:nth-child(2n) td {
+  background-color: var(--background-secondary);
+}
+
+.table tr td:not(:last-child) {
+  border-right: 1px solid black !important;
+}
+
+.table thead th {
+  background-color: #212529 !important;
+}
+
+.table thead tr:first-child th:first-child {
+  border-top-left-radius: 10px;
+}
+.table thead tr:first-child th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}

@@ -6,6 +6,7 @@ import TicketList from "../../components/tickets/TicketList";
 import useAuth from "../../hooks/useAuth";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import styles from "./Tickets.module.css";
 
 const Tickets = (props) => {
   const [tickets, setTickets] = useState([]);
@@ -41,9 +42,11 @@ const Tickets = (props) => {
 
   return (
     <Container>
-      <Content>
-        <h1 className="mb-4">Meine Tickets</h1>
-        <hr />
+      <Content className={styles.content}>
+        <div className={styles.header}>
+          <h1 className="mb-4">Meine Tickets</h1>
+          <hr />
+        </div>
         {isFetching && <LoadingSpinner />}
         {!isFetching && <TicketList tickets={tickets} />}
       </Content>

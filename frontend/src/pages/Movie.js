@@ -60,7 +60,7 @@ const Movie = (props) => {
   return (
     <Container>
       <Content className={styles.content}>
-        {isFetching && <LoadingSpinner />}
+        {isFetching && <LoadingSpinner className="mt-4" />}
         {!isFetching && movie && (
           <>
             <section className={styles.headerInfo}>

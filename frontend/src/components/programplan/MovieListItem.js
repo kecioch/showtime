@@ -22,7 +22,7 @@ const MovieListItem = (props) => {
           {movie.genres.join(", ")} • {movie.runtime}min
         </p>
         {movie.subtitle && (
-          <Card.Subtitle className="mb-2 text-muted">
+          <Card.Subtitle className={`mb-2 text-muted  ${styles.subtitle}`}>
             {movie.subtitle}
           </Card.Subtitle>
         )}

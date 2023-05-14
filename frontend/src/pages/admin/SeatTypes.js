@@ -8,6 +8,7 @@ import SeatTypeModal from "../../components/modals/SeatTypeModal";
 import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import MainButton from "../../components/ui/MainButton";
 
 const SeatTypes = (props) => {
   const [types, setTypes] = useState([]);
@@ -103,9 +104,9 @@ const SeatTypes = (props) => {
         <Content>
           <h1>Sitzplatz-Typen</h1>
           <hr />
-          <Button className="mb-4" variant="primary" onClick={addSeatType}>
-            Neu
-          </Button>
+          <MainButton className="mb-4" onClick={addSeatType}>
+            Neuen Sitzplatztyp hinzufügen
+          </MainButton>
           {isFetchingPage && <LoadingSpinner />}
           {!isFetchingPage && (
             <>

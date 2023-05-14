@@ -1,21 +1,17 @@
 .listItem {
-    background-color: #bfbfbf;
+    background-color: var(--background-secondary);
     border-radius: 0.5em;
     min-height: 5em;
-    /* font-size: 2em; */
     display: flex;
     justify-content: center;
     align-items: center;
     transition: transform 0.3s;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .listItem:hover {
     transform: scale(1.05);
-    cursor:default;
-}
-
-.listItem:hover h3 {
-    /* border-bottom: 3px solid #212529; */
+    cursor:pointer;
 }
 
 .listItem > h3 {

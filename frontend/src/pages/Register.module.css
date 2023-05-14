@@ -3,9 +3,9 @@
     border-radius: 1em;
     width: 30em;
     padding: 1.5em 2em 2em 2em;
-    background-color: #f2f2f2;
+    background-color: var(--background-primary);
     margin-top: 2em;
-    box-shadow: #212529 0px 8px 24px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 .register button {
@@ -16,4 +16,12 @@
 .register h1 {
     text-transform: uppercase;
     text-align: center;
+}
+
+@media (max-width: 500px) {
+    .register {
+        width: 100%;
+        max-width: none;
+        padding: 1.5em 1rem 1.5rem 1rem;
+    }
 }

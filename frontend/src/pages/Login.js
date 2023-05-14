@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/esm/Button";
 import LoginForm from "../components/authentication/forms/LoginForm";
 import Container from "../components/ui/Container";
-import Content from "../components/ui/Content";
+import FadeLine from "../components/ui/FadeLine";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Login.module.css";
 import useAuth from "../hooks/useAuth";
@@ -41,19 +41,17 @@ const Login = (props) => {
 
   return (
     <Container>
-      <div className="d-flex justify-content-center">
-        <div className={styles.login}>
-          <h1>Login</h1>
-          <LoginForm
-            error={error}
-            onSubmit={submitHandler}
-            isLoading={isFetching}
-          />
-          <hr />
-          <Link to="/register">
-            <Button variant="secondary">Registrieren</Button>
-          </Link>
-        </div>
+      <div className={styles.login}>
+        <h1>Login</h1>
+        <LoginForm
+          error={error}
+          onSubmit={submitHandler}
+          isLoading={isFetching}
+        />
+        <hr />
+        <Link to="/register">
+          <Button variant="secondary">Registrieren</Button>
+        </Link>
       </div>
     </Container>
   );

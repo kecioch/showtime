@@ -2,14 +2,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 5px;
+    row-gap: 0.3em;
+    min-width: 20em;
+    /* background-color: red; */
 }
 
 .screen {
-    width: 35em;
-    height: 10em;
-    background-color: gray;
-    margin-bottom: 3em;
+    /* width: 35em; */
+    width: 100%;
+    max-width: 30em;
+    height: 3em;
+    /* background-color: gray; */
+    margin-bottom: 1em;
+    border-radius: 1.5em;
+    border-top: 5px solid grey;   
+}
+
+.screenText {
+    width: 100%;
+    max-width: 30em;
+    text-align: right;
+    margin: 0;
+    margin-bottom: 0.2em;
+    width: 100%;
+    padding-right: 1em;
+    font-style: italic;
 }
 
 .legend {
@@ -20,4 +37,5 @@
     display: flex;
     flex-direction: row;
     gap: 0.3em;
+    color: black
 }

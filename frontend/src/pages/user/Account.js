@@ -4,6 +4,7 @@ import Content from "../../components/ui/Content";
 import useAuth from "../../hooks/useAuth";
 import { BACKEND_URL } from "../../constants";
 import useFetch from "../../hooks/useFetch";
+import styles from "./Account.module.css";
 
 const Account = (props) => {
   const { user, saveUser } = useAuth();
@@ -22,7 +23,7 @@ const Account = (props) => {
 
   return (
     <Container>
-      <Content>
+      <Content className={styles.content}>
         <h1>Account bearbeiten</h1>
         <hr />
         <RegisterForm
