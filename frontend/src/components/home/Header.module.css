@@ -1,0 +1,17 @@
+.header {
+  height: 25em;
+  width: 100%;
+  background-image: url("/public/static/home/header-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-bottom: 4px solid var(--background-primary);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+  margin-bottom: 2em;
+}
+
+.header h1 {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.112);
+  font-size: 20em;
+}

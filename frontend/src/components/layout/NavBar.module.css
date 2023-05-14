@@ -1,5 +1,5 @@
 .navBar {
-  box-shadow: rgba(27, 27, 27, 0.5) 0px 7px 29px 0px;
+  box-shadow: rgba(22, 22, 22, 0.337) 0px 7px 29px 0px;
   background-color: rgba(var(--background-navbar), 0.95) !important;
 }
 

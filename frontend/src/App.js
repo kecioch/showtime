@@ -26,6 +26,7 @@ import Dashboard from "./pages/user/Dashboard";
 import Account from "./pages/user/Account";
 import Staff from "./pages/admin/Staff";
 import NavBar from "./components/layout/NavBar";
+import Footer from "./components/layout/Footer";
 
 function App() {
   const { isLoggedIn, user } = useAuth();
@@ -33,6 +34,7 @@ function App() {
   return (
     <React.Fragment>
       <NavBar />
+
       <Routes>
         {/* Public */}
         <Route path="/" element={<Home />} />
@@ -88,6 +90,7 @@ function App() {
         {/* Fallback */}
         <Route path="*" element={<Home />} />
       </Routes>
+      <Footer />
     </React.Fragment>
   );
 }
