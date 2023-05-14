@@ -1,11 +1,11 @@
 import styles from "./MovieListItem.module.css";
 import Card from "react-bootstrap/Card";
-import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
 import MainButton from "../ui/MainButton";
 import AgeBadge from "../movies/AgeBadge";
 import { TicketDetailedFill } from "react-bootstrap-icons";
 import TruncatedText from "../ui/TruncatedText";
+import PosterWeekCnt from "../movies/PosterWeekCnt";
 
 const MovieListItem = (props) => {
   const { movie } = props;
@@ -14,7 +14,11 @@ const MovieListItem = (props) => {
   return (
     <Card className={classes}>
       <Card.Body className={styles.movieListItem}>
-        <Image src={movie.media.images.poster} className={styles.cover} />
+        <PosterWeekCnt
+          src={movie.media.images.poster}
+          startdate={new Date(movie.startdate)}
+          className={styles.cover}
+        />
         <Card.Title className={styles.title}>{movie.title}</Card.Title>
         <p>
           <AgeBadge>{movie.release.ageRestriction}</AgeBadge> •{" "}

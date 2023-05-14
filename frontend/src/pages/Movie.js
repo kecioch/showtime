@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
-import Image from "react-bootstrap/Image";
 import styles from "./Movie.module.css";
 import { BACKEND_URL } from "../constants";
 import HorizontalScrollContainer from "../components/ui/HorizontalScrollContainer";
@@ -13,6 +12,7 @@ import useFetch from "../hooks/useFetch";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import AgeBadge from "../components/movies/AgeBadge";
 import FadeLine from "../components/ui/FadeLine";
+import PosterWeekCnt from "../components/movies/PosterWeekCnt";
 
 const Movie = (props) => {
   const { id } = useParams();
@@ -57,6 +57,8 @@ const Movie = (props) => {
     </Badge>
   ));
 
+  const trailer = movie?.media?.videos?.trailer;
+
   return (
     <Container>
       <Content className={styles.content}>
@@ -64,8 +66,13 @@ const Movie = (props) => {
         {!isFetching && movie && (
           <>
             <section className={styles.headerInfo}>
-              <Image
+              {/* <Image
                 src={movie.media.images.poster}
+                className={styles.poster}
+              /> */}
+              <PosterWeekCnt
+                src={movie.media.images.poster}
+                startdate={new Date(movie.startdate)}
                 className={styles.poster}
               />
               <h1>{movie.title}</h1>
@@ -105,16 +112,20 @@ const Movie = (props) => {
                   </h3>
                 )}
 
-                <h3 className="mt-4 mb-3">Trailer</h3>
-                <div className={styles.trailer}>
-                  <iframe
-                    src="https://www.youtube.com/embed/eWYrJGe5r88"
-                    title="Trailer"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                  ></iframe>
-                </div>
+                {trailer?.key && trailer?.site === "YouTube" && (
+                  <>
+                    <h3 className="mt-4 mb-3">Trailer</h3>
+                    <div className={styles.trailer}>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${trailer.key}`}
+                        title="Trailer"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                  </>
+                )}
 
                 <h3 className="mt-4 mb-3">Cast</h3>
 

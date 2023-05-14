@@ -9,16 +9,12 @@
 }
 
 .cover {
-  border-radius: 20px;
   float: left;
   width: 30%;
   max-width: 15em;
-  min-width: 8em;
+  min-width: 9em;
   margin-right: 1em;
-
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px,
-    rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px,
-    rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  margin-bottom: 0.3em;
 }
 
 .information {
