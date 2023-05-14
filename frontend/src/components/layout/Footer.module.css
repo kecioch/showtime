@@ -1,0 +1,23 @@
+.footer {
+  width: 100%;
+  background-color: var(--background-secondary);
+  height: 8em;
+  min-height: 8em;
+  border-top: 4px solid var(--background-primary);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5em;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-top: 5em;
+}
+
+.footer * {
+  color: rgba(128, 128, 128, 0.712);
+}
+
+.footer svg {
+  font-size: 1.8em;
+}
