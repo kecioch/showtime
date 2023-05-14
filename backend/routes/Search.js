@@ -16,8 +16,8 @@ router.get("/movie", async (req, res) => {
     const tmdbUrlSearch = `${TMDB_URL}/search/movie?api_key=${TMDB_KEY}`;
     const resSearch = await fetch(`${tmdbUrlSearch}&query=${name}`);
     if (resSearch.status !== 200)
-    return res.status(404).json({ message: "Film nicht gefunden" });
-    
+      return res.status(404).json({ message: "Film nicht gefunden" });
+
     const dataSearch = await resSearch.json();
     if (!dataSearch || dataSearch?.results?.length <= 0)
       return res.status(404).json({ message: "Film nicht gefunden" });
@@ -33,9 +33,12 @@ router.get("/movie", async (req, res) => {
     const releaseDate = dataMovie.release_dates.results.find(
       (el) => el.iso_3166_1 === "DE"
     );
-    const ageRestriction = releaseDate?.release_dates[0] && parseInt(releaseDate.release_dates[0].certification);
+    const ageRestriction =
+      releaseDate?.release_dates[0] &&
+      parseInt(releaseDate.release_dates[0].certification);
     const productionCountry = dataMovie.production_countries[0]?.iso_3166_1;
-    const productionYear = dataMovie.release_date && parseInt(dataMovie.release_date.slice(0, 4));
+    const productionYear =
+      dataMovie.release_date && parseInt(dataMovie.release_date.slice(0, 4));
     const keywords = dataMovie.keywords.keywords.map((el) => el.name);
     const genres = dataMovie.genres.map((el) => el.name);
     const cast = dataMovie.credits.cast.map((el) => ({
@@ -54,6 +57,10 @@ router.get("/movie", async (req, res) => {
       .map((el) => el.name)
       .join(", ");
 
+    const trailerList = dataMovie.videos.results.filter(
+      (video) => video.type === "Trailer" && video.site === "YouTube"
+    );
+    const trailer = trailerList.length >= 0 && trailerList[0];
     const movie = {
       title: dataMovie.title,
       subtitle: dataMovie.tagline,
@@ -77,6 +84,13 @@ router.get("/movie", async (req, res) => {
       media: {
         images: {
           poster: `${TMDB_URL_IMG}/w500${dataMovie.poster_path}`,
+        },
+        videos: {
+          trailer: {
+            name: trailer.name,
+            key: trailer.key,
+            site: trailer.site,
+          },
         },
       },
     };

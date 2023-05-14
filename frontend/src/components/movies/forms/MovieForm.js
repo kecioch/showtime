@@ -31,8 +31,10 @@ const MovieForm = (props) => {
   const [castImageInput, setCastImageInput] = useState("");
   const [cast, setCast] = useState([]);
   const [poster, setPoster] = useState("");
+  const [trailer, setTrailer] = useState("");
 
   useEffect(() => {
+    console.log(props.default);
     setTitle(props.default?.title ?? "");
     setSubtitle(props.default?.subtitle ?? "");
     setOriginalTitle(props.default?.originalTitle ?? "");
@@ -43,7 +45,8 @@ const MovieForm = (props) => {
     setAgeRestriction(props.default?.release?.ageRestriction ?? "");
     setDirector(props.default?.credits?.crew?.director?.name ?? "");
     setScreenwriter(props.default?.credits?.crew?.screenwriter?.name ?? "");
-    setPoster(props.default?.media?.images.poster ?? "");
+    setPoster(props.default?.media?.images?.poster ?? "");
+    setTrailer(props.default?.media?.videos?.trailer?.key ?? "");
     setKeywords(props.default?.keywords ?? []);
     setGenres(props.default?.genres ?? []);
     setCast(props.default?.credits?.cast ?? []);
@@ -75,6 +78,12 @@ const MovieForm = (props) => {
         images: {
           poster,
         },
+        videos: {
+          trailer: {
+            key: trailer,
+            site: "YouTube",
+          },
+        },
       },
     };
     const res = await props.onSubmit(movie);
@@ -91,6 +100,7 @@ const MovieForm = (props) => {
       setDirector("");
       setScreenwriter("");
       setPoster("");
+      setTrailer("");
       setKeywords([]);
       setKeywordInput("");
       setGenres([]);
@@ -250,6 +260,15 @@ const MovieForm = (props) => {
             placeholder="Bild URL eingeben..."
             onChange={(e) => setPoster(e.target.value)}
             value={poster}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="trailer">
+          <Form.Label>Trailer</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Youtube-Video Key eingeben..."
+            onChange={(e) => setTrailer(e.target.value)}
+            value={trailer}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="description">

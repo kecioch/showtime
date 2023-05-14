@@ -4,7 +4,7 @@ const movieSchema = new mongoose.Schema({
   title: {
     required: true,
     unique: true,
-    type: String
+    type: String,
   },
   subtitle: {
     required: false,
@@ -92,6 +92,13 @@ const movieSchema = new mongoose.Schema({
       poster: {
         required: true,
         type: String,
+      },
+    },
+    videos: {
+      trailer: {
+        key: { type: String },
+        name: { type: String },
+        site: { type: String },
       },
     },
   },
