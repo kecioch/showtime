@@ -4,13 +4,21 @@ import { BACKEND_URL } from "../../constants";
 import MovieConfig from "../../components/movies/forms/MovieConfig";
 import useFetch from "../../hooks/useFetch";
 import styles from "./NewMovie.module.css";
+import useFlash from "../../hooks/useFlash";
 
 const NewMovie = (props) => {
   const { fetch, isFetching, errorMsg } = useFetch();
+  const { createMessage } = useFlash();
 
   const addMovieHandler = async (movie) => {
     console.log("POST", movie);
     const res = await fetch.post(`${BACKEND_URL}/movies`, movie);
+    if (res.status === 200) {
+      createMessage({
+        text: "Film wurde erfolgreich erstellt",
+        variant: "success",
+      });
+    }
     return res;
   };
 

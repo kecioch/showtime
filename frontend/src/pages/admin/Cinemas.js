@@ -10,6 +10,7 @@ import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import styles from "./Cinemas.module.css";
 import MainButton from "../../components/ui/MainButton";
+import useFlash from "../../hooks/useFlash";
 
 const Cinemas = (props) => {
   const [cinemas, setCinemas] = useState([]);
@@ -17,6 +18,7 @@ const Cinemas = (props) => {
   const [deleteCinema, setDeleteCinema] = useState();
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
   const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
+  const { createMessage } = useFlash();
 
   useEffect(() => {
     fetchPage
@@ -39,14 +41,16 @@ const Cinemas = (props) => {
   }, []);
 
   const deleteCinemaHandler = () => {
-    console.log("DELETE", deleteCinema);
     fetch.delete(`${BACKEND_URL}/cinemas/${deleteCinema.title}`).then((res) => {
-      console.log(res);
       if (res.status !== 200) return;
       setShowDeleteModal(false);
       setCinemas((prev) => {
         const cinemas = prev.filter((el) => el.title !== deleteCinema.title);
         return cinemas;
+      });
+      createMessage({
+        text: "Kinosaal wurde erfolgreich gelöscht",
+        variant: "success",
       });
     });
   };

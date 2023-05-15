@@ -8,6 +8,7 @@ import DeleteModal from "../../components/modals/DeleteModal";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import MainButton from "../../components/ui/MainButton";
+import useFlash from "../../hooks/useFlash";
 
 const SeatTypes = (props) => {
   const [types, setTypes] = useState([]);
@@ -17,10 +18,10 @@ const SeatTypes = (props) => {
   const [isNew, setIsNew] = useState(true);
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
   const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
+  const { createMessage } = useFlash();
 
   useEffect(() => {
     fetchPage.get(`${BACKEND_URL}/seattypes`).then(async (res) => {
-      console.log(res);
       if (res.status !== 200) return;
       setTypes(res.data);
     });
@@ -47,17 +48,18 @@ const SeatTypes = (props) => {
   };
 
   const submitHandler = async (type) => {
-    console.log("SUBMIT", type);
     try {
       if (isNew) {
-        console.log("NEW", type);
         const res = await fetch.post(`${BACKEND_URL}/seattypes`, type);
         if (res.status !== 200) return;
 
         setTypes((prevTypes) => [...prevTypes, res.data]);
         setShowSeatTypeModal(false);
+        createMessage({
+          text: "Sitzplatztyp wurde erfolgreich erstellt",
+          variant: "success",
+        });
       } else {
-        console.log("UPDATE");
         const res = await fetch.put(
           `${BACKEND_URL}/seattypes/${type._id}`,
           type
@@ -73,6 +75,10 @@ const SeatTypes = (props) => {
           return [...newTypes];
         });
         setShowSeatTypeModal(false);
+        createMessage({
+          text: "Sitzplatztyp wurde erfolgreich aktualisiert",
+          variant: "success",
+        });
       }
     } catch (err) {
       console.log(err);
@@ -80,13 +86,16 @@ const SeatTypes = (props) => {
   };
 
   const deleteHandler = async () => {
-    console.log("DELETE SEAT TYPE", selectedSeatType);
     try {
       const res = await fetch.delete(
         `${BACKEND_URL}/seattypes/${selectedSeatType._id}`
       );
       if (res.status !== 200) return;
       setShowDeleteModal(false);
+      createMessage({
+        text: "Sitzplatztyp wurde erfolgreich gelöscht",
+        variant: "success",
+      });
       setTypes((prevTypes) => [
         ...prevTypes.filter((type) => type._id !== selectedSeatType._id),
       ]);

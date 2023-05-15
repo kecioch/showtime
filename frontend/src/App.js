@@ -27,6 +27,7 @@ import Account from "./pages/user/Account";
 import Staff from "./pages/admin/Staff";
 import NavBar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
+import FlashController from "./components/flash/FlashController";
 
 function App() {
   const { isLoggedIn, user } = useAuth();
@@ -34,7 +35,7 @@ function App() {
   return (
     <React.Fragment>
       <NavBar />
-
+      <FlashController />
       <Routes>
         {/* Public */}
         <Route path="/" element={<Home />} />

@@ -1,6 +1,5 @@
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
-import Button from "react-bootstrap/esm/Button";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import Screeningplan from "../../components/screeningplan/Screeningplan";
@@ -32,21 +31,17 @@ const EditScreenings = (props) => {
       movie,
       cinema,
     };
-    console.log("ADDSCREENING", screening);
 
     fetch.post(`${BACKEND_URL}/screenings/schedule`, screening).then((res) => {
-      console.log("POST RESULT DATA", res);
       if (res.status !== 200) return;
       setScreenings((screenings) => [...screenings, res.data]);
     });
   };
 
   const deleteScreeningHandler = () => {
-    console.log("DELETE SCREENING", deleteScreening);
     fetch
       .delete(`${BACKEND_URL}/screenings/schedule/${deleteScreening}`)
       .then((res) => {
-        console.log(res);
         if (res.status !== 200) return;
         setShowDeleteModal(false);
         setScreenings((prev) => {
@@ -58,7 +53,6 @@ const EditScreenings = (props) => {
 
   const onDeleteScreening = (screeningID) => {
     setDeleteScreening(screeningID);
-    console.log("SCREENINGID", screeningID);
     clearErrorMsg();
     setShowDeleteModal(true);
   };
@@ -68,19 +62,16 @@ const EditScreenings = (props) => {
       setIsPageLoading(true);
       await fetch.get(`${BACKEND_URL}/screenings/schedule`).then((res) => {
         if (res.status !== 200) return;
-        console.log("FETCH SCREENINGS", res);
         setScreenings(res.data);
       });
 
       await fetch.get(`${BACKEND_URL}/movies`).then((res) => {
         if (res.status !== 200) return;
-        console.log("FETCH MOVIES", res.data);
         setMovies(res.data);
       });
 
       await fetch.get(`${BACKEND_URL}/cinemas`).then((res) => {
         if (res.status !== 200) return;
-        console.log("FETCH CINEMAS", res.data);
         setCinemas(res.data);
       });
       setIsPageLoading(false);

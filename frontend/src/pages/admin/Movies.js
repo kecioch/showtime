@@ -9,6 +9,7 @@ import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import MainButton from "../../components/ui/MainButton";
 import styles from "./Movies.module.css";
+import useFlash from "../../hooks/useFlash";
 
 const Movies = (props) => {
   const [movies, setMovies] = useState([]);
@@ -16,6 +17,7 @@ const Movies = (props) => {
   const [deleteMovie, setDeleteMovie] = useState();
   const { fetch, isFetching, errorMsg, clearErrorMsg } = useFetch();
   const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
+  const { createMessage } = useFlash();
 
   useEffect(() => {
     fetchPage.get(`${BACKEND_URL}/movies`).then((res) => {
@@ -45,6 +47,10 @@ const Movies = (props) => {
       console.log(res);
       if (res.status !== 200) return;
       setShowDeleteModal(false);
+      createMessage({
+        text: "Film wurde erfolgreich gelöscht ",
+        variant: "success",
+      });
       setMovies((prev) => {
         const movies = prev.filter((el) => el.title !== deleteMovie.title);
         return movies;

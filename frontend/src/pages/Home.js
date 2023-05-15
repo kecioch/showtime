@@ -4,6 +4,7 @@ import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
 
 const Home = (props) => {
+
   return (
     <Container>
       <Header />

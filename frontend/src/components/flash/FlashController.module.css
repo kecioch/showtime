@@ -1,0 +1,14 @@
+.container {
+  width: 100%;
+  min-height: 5em;
+  position: fixed;
+  z-index: 100;
+}
+
+.alert {
+  margin: 0 !important;
+}
+
+.alert p {
+  margin-bottom: 0;
+}

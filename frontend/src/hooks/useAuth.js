@@ -2,10 +2,12 @@ import { useContext, useEffect } from "react";
 import { BACKEND_URL } from "../constants";
 import { AuthContext } from "../contexts/AuthContext";
 import useFetch from "./useFetch";
+import useFlash from "./useFlash";
 
 const useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
   const { fetch } = useFetch();
+  const { createMessage } = useFlash();
 
   const isLoggedIn = user ? true : false;
 
@@ -13,18 +15,21 @@ const useAuth = () => {
     return fetch
       .post(`${BACKEND_URL}/authentication/login`, { username, password })
       .then(async (res) => {
-        console.log("RES LOGIN", res);
         if (res.status !== 200) return false;
-        console.log("LOGIN SUCCESSFULL");
         saveUser(res.user);
         return true;
       });
   };
 
   const logout = () => {
-    console.log("LOGOUT");
     fetch.post(`${BACKEND_URL}/authentication/logout`).then((res) => {
-      if (res.status === 200) removeUser();
+      if (res.status === 200) {
+        removeUser();
+        createMessage({
+          text: "Erfolgreich ausgeloggt",
+          variant: "success",
+        });
+      }
     });
   };
 
@@ -35,8 +40,11 @@ const useAuth = () => {
     );
 
     if (res.status === 200) {
-      console.log("REGISTER SUCCESSFULL");
       saveUser(res.user);
+      createMessage({
+        text: "Erfolgreich registriert",
+        variant: "success",
+      });
     }
 
     return res;
@@ -55,7 +63,6 @@ const useAuth = () => {
   useEffect(() => {
     try {
       const loadedUser = JSON.parse(localStorage.getItem("user"));
-      console.log("USER LOADED", loadedUser);
       if (loadedUser) setUser(loadedUser);
     } catch (err) {
       console.log(err);

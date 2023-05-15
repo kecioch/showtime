@@ -17,8 +17,6 @@ const CinemaConfig = (props) => {
   const { fetch } = useFetch();
 
   const seatClickHandler = (seat) => {
-    console.log("SEATCLICKHANDLER", seat);
-
     if (seat.type?.title === selectedSeatType.title) seat.type = null;
     else seat.type = selectedSeatType;
 
@@ -32,12 +30,10 @@ const CinemaConfig = (props) => {
       updatedMap.map.rows[seat.row][seat.col] = seat;
       return updatedMap;
     });
-    console.log("NEW SEAT MAP", seatMap);
   };
 
   const onSubmit = (ev) => {
     ev.preventDefault();
-    console.log("SUBMIT CINEMA CONFIG");
     const cinema = {
       title,
       map: seatMap.map,
@@ -48,7 +44,6 @@ const CinemaConfig = (props) => {
   useEffect(() => {
     // Fetch SeatTypes
     fetch.get(`${BACKEND_URL}/seattypes`).then((res) => {
-      console.log("SEATTYPES", res);
       if (res.status !== 200) return;
       setSeatTypes(res.data);
       setSelectedSeatType(res.data[0]);

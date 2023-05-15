@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import styles from "./EditMovie.module.css";
+import useFlash from "../../hooks/useFlash";
+import { CodeSlash } from "react-bootstrap-icons";
 
 const EditMovie = (props) => {
   const { id } = useParams();
@@ -14,11 +16,11 @@ const EditMovie = (props) => {
   const navigate = useNavigate();
   const { fetch, isFetching, errorMsg } = useFetch();
   const { fetch: fetchPage, isFetching: isFetchingPage } = useFetch();
+  const { createMessage } = useFlash();
 
   useEffect(() => {
     const fetchMovie = async () => {
       const res = await fetchPage.get(`${BACKEND_URL}/movies/${id}`);
-      console.log(res);
       if (res.status !== 200) navigate("/movies");
       else setMovie(res.data);
     };
@@ -26,13 +28,16 @@ const EditMovie = (props) => {
   }, []);
 
   const updateMovieHandler = async (updatedMovie) => {
-    console.log("PUT", updatedMovie);
     const res = await fetch.put(
       `${BACKEND_URL}/movies/${movie._id}`,
       updatedMovie
     );
     if (res.status === 200) {
       setMovie(res.data);
+      createMessage({
+        text: "Film wurde erfolgreich aktualisiert",
+        variant: "success",
+      });
     }
     return res;
   };
@@ -42,13 +47,15 @@ const EditMovie = (props) => {
       <Content className={styles.content}>
         <h2>Film Bearbeiten</h2>
         {isFetchingPage && <LoadingSpinner />}
-        {!isFetchingPage && <MovieConfig
-          onSubmit={updateMovieHandler}
-          default={movie}
-          isNew={false}
-          isLoading={isFetching}
-          error={errorMsg}
-        />}
+        {!isFetchingPage && (
+          <MovieConfig
+            onSubmit={updateMovieHandler}
+            default={movie}
+            isNew={false}
+            isLoading={isFetching}
+            error={errorMsg}
+          />
+        )}
       </Content>
     </Container>
   );
