@@ -6,15 +6,32 @@ const { ROLES } = require("../constants");
 const authAdmin = authorization(ROLES.ADMIN);
 
 const Movie = require("../models/Movie");
+const ScheduledScreening = require("../models/ScheduledScreening");
 
 // BASIC URL /movies
 
 router.get("/", async (req, res) => {
   console.log("GET /movies");
+  const { screenings } = req.query;
   try {
-    const data = await Movie.find();
-    res.status(200).json({ data });
+    const movies = await Movie.find();
+    if (!screenings) return res.status(200).json({ data: movies });
+    console.log("MOVIES LEN", movies.length);
+    const moviesDetailed = [];
+    for (const movie of movies) {
+      const screeningsScheduled = await ScheduledScreening.find({
+        movie: movie.id,
+      });
+      const movieData = {
+        ...movie.toObject(),
+        screenings: screeningsScheduled,
+      };
+      moviesDetailed.push(movieData);
+    }
+    console.log(moviesDetailed);
+    return res.status(200).json({ data: moviesDetailed });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 });

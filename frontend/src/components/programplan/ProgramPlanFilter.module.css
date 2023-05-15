@@ -1,0 +1,14 @@
+.container {
+    width: 100%;
+    min-height: 2em;
+    border-radius: 0.5em; 
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    display: flex;
+    gap: 0.5em;
+}
+
+.select {
+    max-width: 25em !important;
+    border-color: #4d93af !important;
+}

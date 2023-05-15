@@ -14,9 +14,9 @@ const MovieListItem = (props) => {
 
   return (
     <motion.div
-      layout
       animate={{ opacity: 1, y: 0 }}
       initial={{ opacity: 0, y: -10 }}
+      exit={{ opacity: 0 }}
     >
       <Card className={classes}>
         <Card.Body className={styles.movieListItem}>

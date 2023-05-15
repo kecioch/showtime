@@ -1,0 +1,15 @@
+.dropdown button {
+  background-color: var(--text-primary) !important;
+  color: black;
+  border-color: #4d93af;
+}
+
+.dropdown button:focus,
+.dropdown button:hover {
+  color: #4d93af !important;
+}
+
+.menu {
+  padding-left: 0.5em !important;
+  padding-right: 0.5em !important;
+}
