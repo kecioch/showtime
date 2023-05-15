@@ -21,3 +21,9 @@
     gap: 0.3em;
     transition: color 0.3s;
 }
+
+@media (max-width: 750px) {
+    .listItem {
+        border-radius: 0;
+    }
+}

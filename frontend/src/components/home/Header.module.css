@@ -15,3 +15,10 @@
   color: rgba(255, 255, 255, 0.112);
   font-size: 20em;
 }
+
+@media (max-width: 705px) {
+  .header {
+    height: 13em;
+    margin-bottom: 1em;
+  }
+}
