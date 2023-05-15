@@ -27,9 +27,8 @@ const Dashboard = (props) => {
             <h4>
               Willkommen, {user.firstName} {user.lastName}!
             </h4>
-            <hr />
 
-            <div className="d-flex flex-column gap-2 mb-3 mt-4">
+            <div className="d-flex flex-column gap-2 mb-3 mt-5">
               {user.role === ROLES.ADMIN && (
                 <>
                   <DashboardListItem linkTo="/admin/movies">

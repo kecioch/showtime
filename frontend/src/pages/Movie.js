@@ -13,6 +13,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import AgeBadge from "../components/movies/AgeBadge";
 import FadeLine from "../components/ui/FadeLine";
 import PosterWeekCnt from "../components/movies/PosterWeekCnt";
+import { motion } from "framer-motion";
 
 const Movie = (props) => {
   const { id } = useParams();
@@ -52,9 +53,16 @@ const Movie = (props) => {
   ));
 
   const keywordElements = movie?.keywords?.map((el, i) => (
-    <Badge key={i} bg="secondary" className={styles.badge}>
-      {el}
-    </Badge>
+    <motion.div
+      key={i}
+      layout
+      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, scale: 0.8 }}
+    >
+      <Badge bg="secondary" className={styles.badge}>
+        {el}
+      </Badge>
+    </motion.div>
   ));
 
   const trailer = movie?.media?.videos?.trailer;
@@ -128,7 +136,6 @@ const Movie = (props) => {
                 )}
 
                 <h3 className="mt-4 mb-3">Cast</h3>
-
                 <HorizontalScrollContainer>
                   {castElements}
                 </HorizontalScrollContainer>

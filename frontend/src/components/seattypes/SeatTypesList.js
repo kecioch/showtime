@@ -1,5 +1,6 @@
 import SeatTypeListItem from "./SeatTypeListItem";
 import styles from "./SeatTypesList.module.css";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SeatTypesList = (props) => {
   const { data } = props;
@@ -12,7 +13,11 @@ const SeatTypesList = (props) => {
     />
   ));
 
-  return <div className={styles.list}>{listItems}</div>;
+  return (
+    <motion.div className={styles.list}>
+      <AnimatePresence>{listItems}</AnimatePresence>
+    </motion.div>
+  );
 };
 
 export default SeatTypesList;

@@ -7,6 +7,7 @@ import CastAvatar from "../CastAvatar";
 import HorizontalScrollContainer from "../../ui/HorizontalScrollContainer";
 import BadgeAction from "../../ui/BadgeAction";
 import LoadingButton from "../../ui/LoadingButton";
+import { AnimatePresence, motion } from "framer-motion";
 
 const MovieForm = (props) => {
   const isNew = props.isNew !== undefined ? props.isNew : true;
@@ -294,7 +295,9 @@ const MovieForm = (props) => {
             <Button onClick={addGenreHandler}>Hinzufügen</Button>
           </div>
 
-          <div className={styles.badgeContainer}>{genreElements}</div>
+          <motion.div className={styles.badgeContainer}>
+            <AnimatePresence>{genreElements}</AnimatePresence>
+          </motion.div>
         </Form.Group>
         <Form.Group className="mb-3" controlId="keywords">
           <Form.Label>Keywords</Form.Label>
@@ -307,7 +310,9 @@ const MovieForm = (props) => {
             />
             <Button onClick={addKeywordHandler}>Hinzufügen</Button>
           </div>
-          <div className={styles.badgeContainer}>{keywordsElements}</div>
+          <motion.div className={styles.badgeContainer}>
+            <AnimatePresence>{keywordsElements}</AnimatePresence>
+          </motion.div>
         </Form.Group>
         <Form.Group className="mb-3" controlId="director">
           <Form.Label>Regie</Form.Label>

@@ -1,6 +1,7 @@
 import styles from "./TicketListItem.module.css";
 import Image from "react-bootstrap/Image";
 import MainButton from "../ui/MainButton";
+import { motion } from "framer-motion";
 
 const TicketListItem = (props) => {
   const { ticket } = props;
@@ -19,7 +20,12 @@ const TicketListItem = (props) => {
   const timeString = date.toLocaleTimeString();
 
   return (
-    <div className={styles.listItem}>
+    <motion.div
+      layout
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: -10 }}
+      className={styles.listItem}
+    >
       <Image src={ticket.movie.poster} className={styles.poster} />
       <div className={styles.info}>
         <div className={styles.details}>
@@ -35,7 +41,7 @@ const TicketListItem = (props) => {
           <h4>{timeString}</h4>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

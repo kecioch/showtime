@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../../constants";
 import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { motion } from "framer-motion";
 
 const ProgramPlan = (props) => {
   const [movies, setMovies] = useState();
@@ -26,7 +27,11 @@ const ProgramPlan = (props) => {
     <h2 className="text-muted text-center mt-4 mb-3">Keine Filme vorhanden</h2>
   );
   if (movieList.length > 0)
-    content = <div className={styles.programPlan}>{movieList}</div>;
+    content = (
+      <motion.div layout className={styles.programPlan}>
+        {movieList}
+      </motion.div>
+    );
 
   useEffect(() => {
     fetch.get(`${BACKEND_URL}/movies`).then((res) => {

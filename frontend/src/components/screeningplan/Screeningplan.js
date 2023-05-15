@@ -5,6 +5,7 @@ import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
 import { useEffect, useState } from "react";
 import { getTimeString } from "../../services/FormatDate";
 import { getNextDate } from "../../services/Weekdays";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Screeningplan = (props) => {
   const [content, setContent] = useState([]);
@@ -71,7 +72,9 @@ const Screeningplan = (props) => {
 
           itemsWeek.push(
             <td key={`${cinema.title}_${day}_items`}>
-              <div className={styles.items}>{items}</div>
+              <motion.div className={styles.items}>
+                <AnimatePresence>{items}</AnimatePresence>
+              </motion.div>
             </td>
           );
         });
@@ -86,13 +89,34 @@ const Screeningplan = (props) => {
       <table className={styles.screeningPlan}>
         <thead>
           <tr className={styles.weekdays}>
-            <th>Mo{!props.editMode && `, ${getNextDate(1).toLocaleDateString()}`}</th>
-            <th>Di{!props.editMode && `, ${getNextDate(2).toLocaleDateString()}`}</th>
-            <th>Mi{!props.editMode && `, ${getNextDate(3).toLocaleDateString()}`}</th>
-            <th>Do{!props.editMode && `, ${getNextDate(4).toLocaleDateString()}`}</th>
-            <th>Fr{!props.editMode && `, ${getNextDate(5).toLocaleDateString()}`}</th>
-            <th>Sa{!props.editMode && `, ${getNextDate(6).toLocaleDateString()}`}</th>
-            <th>So{!props.editMode && `, ${getNextDate(0).toLocaleDateString()}`}</th>
+            <th>
+              Mo
+              {!props.editMode && `, ${getNextDate(1).toLocaleDateString()}`}
+            </th>
+            <th>
+              Di
+              {!props.editMode && `, ${getNextDate(2).toLocaleDateString()}`}
+            </th>
+            <th>
+              Mi
+              {!props.editMode && `, ${getNextDate(3).toLocaleDateString()}`}
+            </th>
+            <th>
+              Do
+              {!props.editMode && `, ${getNextDate(4).toLocaleDateString()}`}
+            </th>
+            <th>
+              Fr
+              {!props.editMode && `, ${getNextDate(5).toLocaleDateString()}`}
+            </th>
+            <th>
+              Sa
+              {!props.editMode && `, ${getNextDate(6).toLocaleDateString()}`}
+            </th>
+            <th>
+              So
+              {!props.editMode && `, ${getNextDate(0).toLocaleDateString()}`}
+            </th>
           </tr>
         </thead>
         <tbody>{content}</tbody>

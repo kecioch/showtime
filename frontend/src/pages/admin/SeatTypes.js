@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Container from "../../components/ui/Container";
 import Content from "../../components/ui/Content";
-import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../../constants";
 import SeatTypesList from "../../components/seattypes/SeatTypesList";
 import SeatTypeModal from "../../components/modals/SeatTypeModal";
@@ -23,7 +22,7 @@ const SeatTypes = (props) => {
     fetchPage.get(`${BACKEND_URL}/seattypes`).then(async (res) => {
       console.log(res);
       if (res.status !== 200) return;
-      setTypes(res.data.sort((elA, elB) => elA.title.localeCompare(elB.title)));
+      setTypes(res.data);
     });
   }, []);
 
@@ -55,11 +54,7 @@ const SeatTypes = (props) => {
         const res = await fetch.post(`${BACKEND_URL}/seattypes`, type);
         if (res.status !== 200) return;
 
-        setTypes((prevTypes) =>
-          [...prevTypes, res.data].sort((elA, elB) =>
-            elA.title.localeCompare(elB.title)
-          )
-        );
+        setTypes((prevTypes) => [...prevTypes, res.data]);
         setShowSeatTypeModal(false);
       } else {
         console.log("UPDATE");
@@ -69,12 +64,14 @@ const SeatTypes = (props) => {
         );
         if (res.status !== 200) return;
 
-        setTypes((prevTypes) =>
-          [
-            ...prevTypes.filter((prevType) => prevType._id !== type._id),
-            type,
-          ].sort((elA, elB) => elA.title.localeCompare(elB.title))
-        );
+        setTypes((prevTypes) => {
+          const index = prevTypes.findIndex(
+            (prevType) => prevType._id === type._id
+          );
+          const newTypes = prevTypes;
+          newTypes[index] = type;
+          return [...newTypes];
+        });
         setShowSeatTypeModal(false);
       }
     } catch (err) {

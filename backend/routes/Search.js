@@ -87,9 +87,9 @@ router.get("/movie", async (req, res) => {
         },
         videos: {
           trailer: {
-            name: trailer.name,
-            key: trailer.key,
-            site: trailer.site,
+            name: trailer?.name,
+            key: trailer?.key,
+            site: trailer?.site,
           },
         },
       },

@@ -11,7 +11,8 @@ import useFetch from "../hooks/useFetch";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import MainButton from "../components/ui/MainButton";
 import AgeBadge from "../components/movies/AgeBadge";
-import {Cart4} from "react-bootstrap-icons";
+import { Cart4 } from "react-bootstrap-icons";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Ticketshop = (props) => {
   const { id } = useParams();
@@ -136,16 +137,22 @@ const Ticketshop = (props) => {
   }, [selectedTickets]);
 
   const selectedTicketsElements = (
-    <ul className={styles.cartList}>
-      {selectedTickets?.map((seat, i) => {
-        console.log("SEAT", seat);
-        return (
-          <li
-            key={i}
-          >{`1x Reihe: ${seat.row}, Platz: ${seat.col} (${seat.type.title})`}</li>
-        );
-      })}
-    </ul>
+    <motion.ul className={styles.cartList}>
+      <AnimatePresence>
+        {selectedTickets?.map((seat, i) => {
+          console.log("SEAT", seat);
+          return (
+            <motion.li
+              key={i}
+              layout
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+              exit={{ opacity: 0 }}
+            >{`1x Reihe: ${seat.row}, Platz: ${seat.col} (${seat.type.title})`}</motion.li>
+          );
+        })}
+      </AnimatePresence>
+    </motion.ul>
   );
 
   return (
@@ -163,9 +170,7 @@ const Ticketshop = (props) => {
                   />
 
                   <div>
-                    <h1>
-                      {screening.scheduledScreening.movie.title}
-                    </h1>
+                    <h1>{screening.scheduledScreening.movie.title}</h1>
                     <p>
                       <AgeBadge>
                         {
@@ -214,9 +219,7 @@ const Ticketshop = (props) => {
           {!isFetching && (
             <>
               <h2>Ticket Auswahl</h2>
-              <div
-                className={styles.ticketSelection}
-              >
+              <div className={styles.ticketSelection}>
                 <SeatMap
                   data={seatMap}
                   onSeatClick={onSeatClickHandler}
