@@ -3,6 +3,7 @@ import { ROLES } from "../../constants";
 import useAuth from "../../hooks/useAuth";
 import styles from "./NavBar.module.css";
 import NavLink from "../ui/NavLink";
+import { BoxArrowInRight, BoxArrowRight } from "react-bootstrap-icons";
 
 const NavBar = () => {
   const { isLoggedIn, logout, user } = useAuth();
@@ -33,9 +34,9 @@ const NavBar = () => {
           </Nav>
           <Nav className={styles.navAccount}>
             {isLoggedIn ? (
-              <NavLink onClick={() => logout()}>Ausloggen</NavLink>
+              <NavLink className={styles.authAction} onClick={() => logout()}><BoxArrowRight /> Logout</NavLink>
             ) : (
-              <NavLink to="/login">Einloggen</NavLink>
+              <NavLink className={styles.authAction} to="/login"><BoxArrowInRight/> Login</NavLink>
             )}
           </Nav>
         </Navbar.Collapse>
