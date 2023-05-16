@@ -50,7 +50,7 @@ const sendTicket = async (ticket) => {
     seats.map(seat => seatsHTML += `<li>Reihe: ${seat.row} / Platz: ${seat.col} [${seat.type.title}]</li>`);
     console.log("SEATSHTML",seatsHTML);
     const mail = {
-      to: process.env.MAIL_SEND_TO,
+      to: customer.email, //process.env.MAIL_SEND_TO,
       subject: "Ticketbestellung",
       html: `<h1>Ihre Tickets wurden gebucht!</h1>${idHTML}<img src="cid:ticket"/>${
         movieHTML + cinemaHTML + datetimeHTML
