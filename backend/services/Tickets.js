@@ -35,7 +35,7 @@ const sendTicket = async (ticket) => {
       location: cinema.title,
       organizer: {
         name: "Showtime",
-        email: process.env.MAIL_USERNAME, //customer.email
+        email: process.env.MAIL_USERNAME,
       },
     });
 
