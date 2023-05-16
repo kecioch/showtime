@@ -6,10 +6,22 @@
   --text-primary: #d5d5d5;
   --text-secondary: #2b5263;
   --text-highlighted: #4c91af;
+  --navbar-height: 56px;
+}
+
+.appContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: space-between;
+  background-color: transparent;
 }
 
 body {
-  background-color: transparent !important;
+  height: 100%;
+  display: block;
+  overflow: auto;
   color: var(--text-primary) !important;
   background: #0f2027; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -28,8 +40,8 @@ body {
 
 html {
   height: 100%;
-  background-attachment: fixed !important;
-  background-color: var(--background-secondary);
+  display: block;
+  overflow: auto;
 }
 
 * {

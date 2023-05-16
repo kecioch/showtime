@@ -17,7 +17,7 @@ const NavBar = () => {
       sticky="top"
       className={styles.navBar}
     >
-      <Container>
+      <Container className={styles.container}>
         <Navbar.Brand className={styles.brand}>Showtime</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -34,9 +34,13 @@ const NavBar = () => {
           </Nav>
           <Nav className={styles.navAccount}>
             {isLoggedIn ? (
-              <NavLink className={styles.authAction} onClick={() => logout()}><BoxArrowRight /> Logout</NavLink>
+              <NavLink className={styles.authAction} onClick={() => logout()}>
+                <BoxArrowRight /> Logout
+              </NavLink>
             ) : (
-              <NavLink className={styles.authAction} to="/login"><BoxArrowInRight/> Login</NavLink>
+              <NavLink className={styles.authAction} to="/login">
+                <BoxArrowInRight /> Login
+              </NavLink>
             )}
           </Nav>
         </Navbar.Collapse>

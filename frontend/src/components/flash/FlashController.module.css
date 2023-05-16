@@ -3,6 +3,7 @@
   min-height: 5em;
   position: fixed;
   z-index: 100;
+  margin-top: var(--navbar-height);
 }
 
 .alert {
