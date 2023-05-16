@@ -13,7 +13,6 @@ const RegisterForm = (props) => {
   useEffect(() => {
     const user = props.user;
     if (!user) return;
-    console.log(user);
     setFirstName(user.firstName);
     setLastName(user.lastName);
     setUsername(user.username);

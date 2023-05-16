@@ -17,7 +17,6 @@ const MovieConfig = (props) => {
   const searchMovieHandler = async () => {
     if (isFetching) return;
 
-    console.log(`${BACKEND_URL}/search/movie?name=${searchInput}`);
     const res = await fetch.get(
       `${BACKEND_URL}/search/movie?name=${searchInput}`
     );
@@ -27,7 +26,6 @@ const MovieConfig = (props) => {
 
   const submitHandler = async (movie) => {
     const res = await props.onSubmit(movie);
-    console.log("CONFIG RES", res);
     if (res?.status === 200 && props.isNew) {
       setDefaultMovie();
     }

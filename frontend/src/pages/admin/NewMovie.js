@@ -11,7 +11,6 @@ const NewMovie = (props) => {
   const { createMessage } = useFlash();
 
   const addMovieHandler = async (movie) => {
-    console.log("POST", movie);
     const res = await fetch.post(`${BACKEND_URL}/movies`, movie);
     if (res.status === 200) {
       createMessage({

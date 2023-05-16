@@ -13,6 +13,7 @@ import PaymentModal from "../components/modals/PaymentModal";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import MainButton from "../components/ui/MainButton";
 import { CashCoin } from "react-bootstrap-icons";
+import useFlash from "../hooks/useFlash";
 
 const Cart = (props) => {
   const [cart, setCart] = useState();
@@ -26,12 +27,12 @@ const Cart = (props) => {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
+  const {createMessage} = useFlash();
 
   useEffect(() => {
     setLoadingPage(true);
     const cart = JSON.parse(localStorage.getItem("cart"));
     setCart(cart);
-    console.log("CART", cart);
     const total = cart
       ? cart.tickets?.reduce((acc, seat) => acc + seat.type.price, 0)
       : 0;
@@ -52,20 +53,23 @@ const Cart = (props) => {
     setIsFetching(true);
     await login(user.username, user.password).then((success) => {
       setIsFetching(false);
-      console.log("LOGIN SUCCESS ?", success);
       if (!success) {
         setError("Login fehlgeschlagen");
         return;
+      }
+      else {
+        createMessage({
+          text: "Erfolgreich eingeloggt",
+          variant: "success"
+        });
       }
     });
   };
 
   const paymentHandler = () => {
-    console.log("CART", cart);
     const customer = isLoggedIn
       ? { name: `${user.firstName} ${user.lastName}`, email: user.email }
       : { name: `${guestFirstName} ${guestLastName}`, email: guestMail };
-    console.log("CUSTOMER", customer);
     setCart((oldCart) => ({ ...oldCart, customer }));
     setShowPaymentModal(true);
   };

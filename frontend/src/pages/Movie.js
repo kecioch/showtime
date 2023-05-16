@@ -25,14 +25,12 @@ const Movie = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const movieRs = await fetch.get(`${BACKEND_URL}/movies/${id}`);
-      console.log(movieRs);
       if (movieRs.status !== 200) navigate("/");
       setMovie(movieRs.data);
 
       const screeningsRs = await fetch.get(
         `${BACKEND_URL}/screenings?title=${id}`
       );
-      console.log("SCREENINGS", screeningsRs);
       if (screeningsRs.status === 200) {
         setScreenings(
           screeningsRs.data.map((screening) => ({
@@ -74,10 +72,6 @@ const Movie = (props) => {
         {!isFetching && movie && (
           <>
             <section className={styles.headerInfo}>
-              {/* <Image
-                src={movie.media.images.poster}
-                className={styles.poster}
-              /> */}
               <PosterWeekCnt
                 src={movie.media.images.poster}
                 startdate={new Date(movie.startdate)}

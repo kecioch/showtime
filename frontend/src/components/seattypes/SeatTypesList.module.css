@@ -5,3 +5,9 @@
     flex-wrap: wrap;
     justify-content:flex-start;
 }
+
+@media (max-width: 750px) {
+    .list {
+        flex-direction: column;
+    }
+}

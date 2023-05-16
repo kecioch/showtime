@@ -35,7 +35,6 @@ const MovieForm = (props) => {
   const [trailer, setTrailer] = useState("");
 
   useEffect(() => {
-    console.log(props.default);
     setTitle(props.default?.title ?? "");
     setSubtitle(props.default?.subtitle ?? "");
     setOriginalTitle(props.default?.originalTitle ?? "");
@@ -88,7 +87,6 @@ const MovieForm = (props) => {
       },
     };
     const res = await props.onSubmit(movie);
-    console.log("FORM RES", res);
     if (res?.status === 200) {
       setTitle("");
       setSubtitle("");

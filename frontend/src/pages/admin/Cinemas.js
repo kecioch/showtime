@@ -24,7 +24,6 @@ const Cinemas = (props) => {
     fetchPage
       .get(`${BACKEND_URL}/cinemas`)
       .then((res) => {
-        console.log(res);
         const cinemaItems = res.data.map((el) => ({
           title: el.title,
           editPath: `/admin/cinemas/${el.title}/edit`,
@@ -64,7 +63,7 @@ const Cinemas = (props) => {
   return (
     <>
       <Container>
-        <Content className={styles.content}>
+        <Content className={styles.content} style={{minHeight: "70vh"}}>
           <div className={styles.header}>
             <h1>Kinosaal Verwaltung</h1>
             <hr />

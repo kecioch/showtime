@@ -10,14 +10,11 @@ const TicketValidationModal = ({ ticket, onClose, show }) => {
   const { fetch, errorMsg, isFetching } = useFetch();
 
   const validateHandler = async () => {
-    console.log("VALIDATE", ticket.id);
-
     const res = await fetch.patch(
       `${BACKEND_URL}/tickets/validate/${ticket.id}`
     );
 
     if (res.status === 200) {
-      console.log("SUCCESS VALIDATING");
       onClose();
     }
   };

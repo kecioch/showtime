@@ -4,15 +4,16 @@ import Container from "../components/ui/Container";
 import Content from "../components/ui/Content";
 
 const Home = (props) => {
-
   return (
-    <Container>
-      <Header />
-      <Content>
-        <h1>Programmplan</h1>
-        <ProgramPlan />
-      </Content>
-    </Container>
+    <>
+      <Container style={{minHeight: "76vh"}}>
+        <Header />
+        <Content>
+          <h1>Programmplan</h1>
+          <ProgramPlan />
+        </Content>
+      </Container>
+    </>
   );
 };
 

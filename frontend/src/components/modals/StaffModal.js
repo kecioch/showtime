@@ -2,7 +2,6 @@ import Modal from "react-bootstrap/Modal";
 import RegisterForm from "../authentication/forms/RegisterForm";
 
 const StaffModal = ({ show, onClose, isLoading, error, isNew, onSubmit }) => {
-  console.log("STAFF MODAL LOADING",isLoading);
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>

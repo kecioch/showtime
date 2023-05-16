@@ -7,8 +7,14 @@
   color: var(--text-primary);
 }
 
-.brand:hover {
-  color: var(--text-primary);
+.brand * {
+  color: var(--text-primary) !important;
+  text-decoration: none !important;
+}
+
+.brand:hover * {
+  color: var(--text-primary) !important;
+  text-decoration: none !important;
 }
 
 .navLinks {

@@ -28,7 +28,6 @@ const useFetch = () => {
   };
 
   const get = async (url) => {
-    console.log("FETCH GET");
     const res = await request(url, {
       method: "GET",
       credentials: "include",
@@ -37,7 +36,6 @@ const useFetch = () => {
   };
 
   const post = async (url, body) => {
-    console.log("FETCH POST");
     const res = await request(url, {
       method: "POST",
       credentials: "include",
@@ -51,7 +49,6 @@ const useFetch = () => {
   };
 
   const put = async (url, body) => {
-    console.log("FETCH PUT");
     const res = await request(url, {
       method: "PUT",
       credentials: "include",
@@ -65,7 +62,6 @@ const useFetch = () => {
   };
 
   const patch = async (url, body) => {
-    console.log("FETCH PUT");
     const res = await request(url, {
       method: "PATCH",
       credentials: "include",
@@ -79,7 +75,6 @@ const useFetch = () => {
   };
 
   const deleteRq = async (url, body) => {
-    console.log("FETCH DELETE");
     const res = await request(url, {
       method: "DELETE",
       credentials: "include",

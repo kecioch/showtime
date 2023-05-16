@@ -18,7 +18,6 @@ const Payment = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("CART PAYMENT", props.cart);
     fetch
       .post(`${BACKEND_URL}/payment/create-payment-intent`, props.cart)
       .then(async (res) => {

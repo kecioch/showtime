@@ -4,6 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import styles from "./NavBar.module.css";
 import NavLink from "../ui/NavLink";
 import { BoxArrowInRight, BoxArrowRight } from "react-bootstrap-icons";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const { isLoggedIn, logout, user } = useAuth();
@@ -18,7 +19,9 @@ const NavBar = () => {
       className={styles.navBar}
     >
       <Container className={styles.container}>
-        <Navbar.Brand className={styles.brand}>Showtime</Navbar.Brand>
+        <Navbar.Brand className={styles.brand}>
+          <Link to="/">Showtime</Link>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className={`me-auto ${styles.navLinks}`}>

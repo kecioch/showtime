@@ -21,7 +21,7 @@ const NewCinema = () => {
 
   return (
     <Container>
-      <Content>
+      <Content style={{minHeight: "75vh"}}>
         <h1 className="mb-4">Neuer Kinosaal</h1>
         <CinemaConfig
           onSubmit={createCinemaHandler}

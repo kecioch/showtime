@@ -40,6 +40,7 @@ const ProgramPlan = (props) => {
     .filter((movie) => {
       if (genreFilter?.length <= 0) return true;
       return genreFilter.every((genre) => movie.genres.includes(genre));
+      // return genreFilter.some((genre) => movie.genres.includes(genre));
     })
     .filter((movie) => {
       if (fskFilter?.length <= 0) return true;
@@ -64,7 +65,6 @@ const ProgramPlan = (props) => {
     if (timeParam) setTimeFilter(timeParam);
 
     fetch.get(`${BACKEND_URL}/movies?screenings=true`).then((res) => {
-      console.log(res);
       setMovies(res.data);
 
       const genres = [];
@@ -118,8 +118,6 @@ const ProgramPlan = (props) => {
       { text: "Wochenende", value: "weekend" },
     ],
   };
-
-  console.log(genreOptionsData);
 
   return (
     <>

@@ -87,7 +87,7 @@ const EditScreenings = (props) => {
   return (
     <>
       <Container>
-        <Content className={styles.content}>
+        <Content className={styles.content} style={{minHeight: "70vh"}}>
           <div className={styles.header}>
             <h1>Filmvorführungen</h1>
             <hr />

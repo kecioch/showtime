@@ -14,14 +14,12 @@ const TicketValidation = (props) => {
   const { fetch } = useFetch();
 
   useEffect(() => {
-    console.log("CODE CHANGED");
     fetchTicket(code);
     setCode(null);
   }, [code]);
 
   const fetchTicket = (code) => {
     if (!code || showValidationModal) return;
-    console.log("FETCH TICKET");
 
     fetch.get(`${BACKEND_URL}/tickets/validate/${code}`).then((res) => {
       if (res.status !== 200) return;
@@ -41,7 +39,6 @@ const TicketValidation = (props) => {
 
   const onScan = (result, error) => {
     if (!!result) {
-      console.log("SCANNED");
       const codeTxt = result?.text;
       if (!codeTxt) return;
       setCode(codeTxt);
@@ -55,7 +52,7 @@ const TicketValidation = (props) => {
   return (
     <>
       <Container>
-        <Content>
+        <Content style={{ minHeight: "70vh" }}>
           <h1>Ticket Validierung</h1>
           <hr />
           <QrReader

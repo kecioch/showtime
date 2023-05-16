@@ -19,7 +19,7 @@ const Dashboard = (props) => {
   const { user } = useAuth();
 
   return (
-    <Container>
+    <Container style={{minHeight: "75vh"}}>
       <Content className={styles.content}>
         <h1>Dashboard</h1>
         {user && (

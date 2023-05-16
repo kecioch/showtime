@@ -24,7 +24,6 @@ const Screeningplan = (props) => {
           screenings.find((screening) => screening.cinema.title === title)
             .cinema
       );
-      console.log("CINEMAS", cinemas);
     }
 
     cinemas

@@ -21,7 +21,6 @@ const Movies = (props) => {
 
   useEffect(() => {
     fetchPage.get(`${BACKEND_URL}/movies`).then((res) => {
-      console.log(res);
       if (res.status !== 200) return;
       const movieItems = res.data.map((el) => ({
         title: el.title,
@@ -42,9 +41,7 @@ const Movies = (props) => {
   };
 
   const deleteMovieHandler = () => {
-    console.log("DELETE", deleteMovie);
     fetch.delete(`${BACKEND_URL}/movies/${deleteMovie.title}`).then((res) => {
-      console.log(res);
       if (res.status !== 200) return;
       setShowDeleteModal(false);
       createMessage({
@@ -61,7 +58,7 @@ const Movies = (props) => {
   return (
     <>
       <Container>
-        <Content className={styles.content}>
+        <Content className={styles.content} style={{minHeight: "70vh"}}>
           <div className={styles.header}>
             <h1>Filme Verwalten</h1>
             <hr />

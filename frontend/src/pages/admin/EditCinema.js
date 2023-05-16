@@ -20,7 +20,6 @@ const EditCinema = (props) => {
     const fetchMovie = async () => {
       try {
         const res = await fetchPage.get(`${BACKEND_URL}/cinemas/${id}`);
-        console.log("RES!", res);
         if (res.status !== 200) navigate("/cinemas");
         else setCinema(res.data);
       } catch (err) {
@@ -44,7 +43,7 @@ const EditCinema = (props) => {
 
   return (
     <Container>
-      <Content>
+      <Content style={{ minHeight: "70vh" }}>
         <h1 className="mb-4">Kinosaal bearbeiten</h1>
         {isFetchingPage && <LoadingSpinner />}
         {!isFetchingPage && (

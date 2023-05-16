@@ -123,7 +123,6 @@ const CinemaConfig = (props) => {
   const changeSeatTypeHandler = (ev) => {
     const type = seatTypes.find((type) => type.title === ev.target.value);
     setSelectedSeatType(type);
-    console.log(type);
   };
 
   const errorMsg = props.error && <p className="text-danger">{props.error}</p>;

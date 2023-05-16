@@ -24,12 +24,10 @@ const Ticketshop = (props) => {
   const { fetch, isFetching } = useFetch();
 
   useEffect(() => {
-    console.log("REQ ID", id);
     // Fetching screening data
     fetch
       .get(`${BACKEND_URL}/screenings/ticketshop/${id}`)
       .then((res) => {
-        console.log("TICKETSHPPÜ", res);
         if (res.status !== 200) navigate("/");
         return res.data;
       })
@@ -63,7 +61,6 @@ const Ticketshop = (props) => {
           }
 
           // Set booked seats
-          console.log("BOOKED", data.bookedSeats);
           for (
             let i = 0;
             i < data.scheduledScreening.cinema.map.rows.length;
@@ -93,7 +90,6 @@ const Ticketshop = (props) => {
 
   const onSeatClickHandler = (seat) => {
     if (!seat || !seat?.type || seat?.status === "booked") return;
-    console.log("SEATCLICKED", seat);
 
     if (seat.status === "unselected") seat.status = "selected";
     else seat.status = "unselected";
@@ -111,12 +107,10 @@ const Ticketshop = (props) => {
   };
 
   const goToCartHandler = () => {
-    console.log(screening);
     const cart = {
       screening,
       tickets: selectedTickets,
     };
-    // console.log(cart);
     localStorage.setItem("cart", JSON.stringify(cart));
     navigate("/cart");
   };
@@ -130,7 +124,6 @@ const Ticketshop = (props) => {
   }, [seatMap]);
 
   useEffect(() => {
-    console.log("ST", selectedTickets);
     setTotalPrice(
       selectedTickets?.reduce((acc, seat) => acc + seat.type.price, 0)
     );
@@ -140,7 +133,6 @@ const Ticketshop = (props) => {
     <motion.ul className={styles.cartList}>
       <AnimatePresence>
         {selectedTickets?.map((seat, i) => {
-          console.log("SEAT", seat);
           return (
             <motion.li
               key={i}

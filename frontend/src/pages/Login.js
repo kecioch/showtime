@@ -1,7 +1,6 @@
 import Button from "react-bootstrap/esm/Button";
 import LoginForm from "../components/authentication/forms/LoginForm";
 import Container from "../components/ui/Container";
-import FadeLine from "../components/ui/FadeLine";
 import { Link, Navigate, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Login.module.css";
 import useAuth from "../hooks/useAuth";
@@ -16,22 +15,17 @@ const Login = (props) => {
   const [error, setError] = useState();
 
   const submitHandler = async (user) => {
-    console.log("LOGIN", user.username, user.password);
     setIsFetching(true);
     await login(user.username, user.password).then((success) => {
       setIsFetching(false);
-      console.log("LOGIN SUCCESS ?", success);
       if (!success) {
         setError("Login fehlgeschlagen");
         return;
       }
 
-      console.log("NOW BACK TO REQUESTED PATH", location.state?.from);
       if (location.state?.from) {
-        console.log("REDIRECTING BACK TO REQUESTED");
         navigate(location.state.from);
       } else {
-        console.log("REDIRECTING BACK NO REEQUSTED PAGE ");
         navigate("/");
       }
     });

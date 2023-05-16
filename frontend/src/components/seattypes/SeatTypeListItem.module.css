@@ -1,6 +1,6 @@
 .card {
     text-align: center;
-    width: 12em;
+    width: 12em !important;
     background-color: var(--text-primary);
     color: var(--text-secondary);
     border: 0;
@@ -13,6 +13,6 @@
 
 @media (max-width: 750px) {
     .card {
-        width: 100%;
+        width: 100% !important;
     }
 }

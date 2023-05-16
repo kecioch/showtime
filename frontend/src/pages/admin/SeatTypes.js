@@ -107,7 +107,7 @@ const SeatTypes = (props) => {
   return (
     <>
       <Container>
-        <Content>
+        <Content style={{minHeight: "70vh"}}>
           <h1>Sitzplatz-Typen</h1>
           <hr />
           <MainButton className="mb-4" onClick={addSeatType}>

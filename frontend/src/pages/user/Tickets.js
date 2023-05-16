@@ -15,10 +15,8 @@ const Tickets = (props) => {
 
   useEffect(() => {
     if (!user) return;
-    console.log(user);
     fetch.get(`${BACKEND_URL}/tickets`).then(async (res) => {
       if (res.status !== 200) return;
-      console.log("TICKETS", res.data);
       setTickets(
         res.data
           .map((ticket, i) => ({
@@ -42,7 +40,7 @@ const Tickets = (props) => {
 
   return (
     <Container>
-      <Content className={styles.content}>
+      <Content className={styles.content} style={{ minHeight: "70vh" }}>
         <div className={styles.header}>
           <h1 className="mb-4">Meine Tickets</h1>
           <hr />

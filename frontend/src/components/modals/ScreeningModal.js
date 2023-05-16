@@ -29,7 +29,6 @@ const ScreeningModal = ({
     };
     onSubmit(screening);
   };
-  console.log(options);
 
   const movieOptions = options?.movies?.map((m, i) => (
     <option key={i}>{m.title}</option>

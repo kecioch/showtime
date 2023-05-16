@@ -53,7 +53,7 @@ const Completion = (props) => {
   const content = redirect_status === "succeeded" ? success : failure;
 
   return (
-    <Container>
+    <Container style={{minHeight: "75vh"}}>
       <Content>{content}</Content>
     </Container>
   );
