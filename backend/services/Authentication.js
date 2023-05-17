@@ -7,7 +7,7 @@ const User = require("../models/User");
 const { ROLES } = require("../constants");
 
 const generateToken = (user) => {
-  const expiresIn = "10s";
+  const expiresIn = process.env.TOKEN_EXPIRATION || "1h";
 
   const token = jwt.sign({ user }, privateKey, { expiresIn });
 
