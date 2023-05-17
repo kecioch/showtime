@@ -81,6 +81,7 @@ exports.login = async (req, res) => {
       return res
         .cookie("auth_token", token, {
           httpOnly: true,
+          sameSite: process.env.NODE_ENV === 'None',
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
@@ -139,6 +140,7 @@ exports.register = async (req, res) => {
     return res
       .cookie("auth_token", token, {
         httpOnly: true,
+        sameSite: process.env.NODE_ENV === 'None',
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
@@ -241,6 +243,7 @@ exports.update = async (req, res) => {
     return res
       .cookie("auth_token", token, {
         httpOnly: true,
+        sameSite: process.env.NODE_ENV === 'None',
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
