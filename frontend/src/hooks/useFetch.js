@@ -1,8 +1,12 @@
 import { useState } from "react";
+import useFlash from "./useFlash";
+import useUser from "./useUser";
 
 const useFetch = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [errorMsg, setErrorMsg] = useState();
+  const { createMessage } = useFlash();
+  const { removeUser } = useUser();
 
   const clearErrorMsg = () => setErrorMsg();
 
@@ -15,6 +19,14 @@ const useFetch = () => {
       res = await fetch(url, options);
       const data = await res.json();
       if (res.status !== 200) setErrorMsg(data.message);
+      if (res.status === 401 && data?.tokenExpired) {
+        removeUser();
+        createMessage({
+          header: "Sitzung abgelaufen",
+          text: "Bitte erneut einloggen",
+          variant: "danger",
+        });
+      }
       rtn = { status: res.status, ...data };
     } catch (err) {
       rtn = {

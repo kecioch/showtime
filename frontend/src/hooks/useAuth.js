@@ -1,13 +1,13 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { BACKEND_URL } from "../constants";
-import { AuthContext } from "../contexts/AuthContext";
 import useFetch from "./useFetch";
 import useFlash from "./useFlash";
+import useUser from "./useUser";
 
 const useAuth = () => {
-  const { user, setUser } = useContext(AuthContext);
   const { fetch } = useFetch();
   const { createMessage } = useFlash();
+  const { user, setUser, saveUser, removeUser } = useUser();
 
   const isLoggedIn = user ? true : false;
 
@@ -50,16 +50,6 @@ const useAuth = () => {
     return res;
   };
 
-  const saveUser = (user) => {
-    setUser(user);
-    localStorage.setItem("user", JSON.stringify(user));
-  };
-
-  const removeUser = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
-
   useEffect(() => {
     try {
       const loadedUser = JSON.parse(localStorage.getItem("user"));
@@ -67,9 +57,16 @@ const useAuth = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [setUser]);
+  }, []);
 
-  return { login, logout, register, isLoggedIn, user, saveUser };
+  return {
+    login,
+    logout,
+    register,
+    isLoggedIn,
+    user,
+    saveUser,
+  };
 };
 
 export default useAuth;

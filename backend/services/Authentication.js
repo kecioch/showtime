@@ -6,6 +6,14 @@ const privateKey = process.env.PRIVATE_KEY;
 const User = require("../models/User");
 const { ROLES } = require("../constants");
 
+const generateToken = (user) => {
+  const expiresIn = "10s";
+
+  const token = jwt.sign({ user }, privateKey, { expiresIn });
+
+  return token;
+};
+
 const findUser = async (user) => {
   if (!user || (!user.username && !user.email)) return null;
 
@@ -58,18 +66,13 @@ exports.login = async (req, res) => {
 
       const match = await bcrypt.compare(password, user.password);
       if (match) {
-        token = jwt.sign(
-          {
-            user: {
-              username: user.username,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email,
-              role: user.role,
-            },
-          },
-          privateKey
-        );
+        token = generateToken({
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+        });
         console.log("TOKEN:", token);
       }
     }
@@ -129,12 +132,8 @@ exports.register = async (req, res) => {
       role: newUserRes.user.role,
     };
 
-    const token = jwt.sign(
-      {
-        user: userInfo,
-      },
-      privateKey
-    );
+    token = generateToken(userInfo);
+
     console.log("TOKEN:", token);
 
     return res
@@ -161,15 +160,17 @@ exports.authorization = (roles) => {
       if (!token) return res.sendStatus(403);
 
       const data = jwt.verify(token, privateKey);
+
       req.user = data.user;
       console.log("REQ.USER", req.user);
 
       if (!Array.isArray(roles)) {
-        if ((roles && req.user.role === roles) || (!roles && req.user)) return next();
+        if ((roles && req.user.role === roles) || (!roles && req.user))
+          return next();
       } else {
         let foundRole = false;
         roles.forEach((role) => {
-          if (role === req.user.role) return foundRole = true;
+          if (role === req.user.role) return (foundRole = true);
         });
         if (foundRole) return next();
       }
@@ -177,6 +178,16 @@ exports.authorization = (roles) => {
       return res.sendStatus(403);
     } catch (err) {
       console.log(err);
+      if (err.name === "TokenExpiredError")
+        return (
+          res
+            .clearCookie("auth_token")
+            .status(401)
+            .json({
+              message: "Token expired. Authorization denied.",
+              tokenExpired: true,
+            })
+        );
       return res.sendStatus(403);
     }
   };
@@ -225,12 +236,7 @@ exports.update = async (req, res) => {
       role: savedUser.role,
     };
 
-    const token = jwt.sign(
-      {
-        user: userInfo,
-      },
-      privateKey
-    );
+    token = generateToken(userInfo);
 
     return res
       .cookie("auth_token", token, {
