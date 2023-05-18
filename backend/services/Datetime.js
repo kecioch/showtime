@@ -1,9 +1,9 @@
 const createDatetime = (date, time) => {
     const datetime = new Date(date);
-    datetime.setHours(time.getUTCHours());
-    datetime.setMinutes(time.getUTCMinutes());
-    datetime.setSeconds(time.getUTCSeconds());
-    datetime.setMilliseconds(time.getUTCMilliseconds());
+    datetime.setUTCHours(time.getUTCHours());
+    datetime.setUTCMinutes(time.getUTCMinutes());
+    datetime.setUTCSeconds(time.getUTCSeconds());
+    datetime.setUTCMilliseconds(time.getUTCMilliseconds());
 
     return datetime;
 

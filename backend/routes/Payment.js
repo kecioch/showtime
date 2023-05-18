@@ -148,7 +148,6 @@ router.post(
               path: "scheduledScreening",
               populate: { path: "movie" },
             });
-          // console.log("SCREENING", screening);
 
           // Create Ticket
           const datetime = createDatetime(
