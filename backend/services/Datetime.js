@@ -1,7 +1,6 @@
-const timeZone = {
-  offset: 60, // Standard offset from UTC in minutes (e.g., UTC+1)
-  dstOffset: 1, // DST offset in hours (e.g., 1 hour during DST)
-};
+const { DateTime } = require("luxon");
+
+const timeZone = "Europe/Berlin";
 
 const createDatetime = (date, time) => {
   // const datetime = new Date(date);
@@ -11,24 +10,21 @@ const createDatetime = (date, time) => {
   // datetime.setUTCMilliseconds(time.getUTCMilliseconds());
   // return datetime;
 
-  const datetime = new Date(date);
-  const originalTimeString = time.toLocaleString("en-US", {
-    timeZone: timeZone,
-    hour12: false,
+  const datetime = DateTime.fromJSDate(date, { zone: "UTC" });
+
+  const originalTimeString = time.toISOString().substr(11, 8);
+  const originalTime = DateTime.fromISO(originalTimeString, {
+    zone: "UTC",
   });
 
-  const originalTime = new Date(`2000-01-01T${originalTimeString}.000`);
-  const originalOffset = originalTime.getTimezoneOffset();
+  const adjustedDatetime = datetime.set({
+    hour: originalTime.hour,
+    minute: originalTime.minute,
+    second: originalTime.second,
+    millisecond: originalTime.millisecond,
+  });
 
-  const dstOffset = timeZone.dstOffset * 60; // Convert DST offset from hours to minutes
-  const adjustedOffset = originalOffset + dstOffset;
-
-  datetime.setHours(time.getHours() + Math.floor(adjustedOffset / 60));
-  datetime.setMinutes(time.getMinutes() + (adjustedOffset % 60));
-  datetime.setSeconds(time.getSeconds());
-  datetime.setMilliseconds(time.getMilliseconds());
-
-  return datetime;
+  return adjustedDatetime.setZone(timeZone).toJSDate();
 };
 
 module.exports = { createDatetime };
