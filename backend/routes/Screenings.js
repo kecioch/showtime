@@ -132,12 +132,12 @@ router.post("/schedule", authAdmin, async (req, res) => {
     const time = body.time;
     console.log("TIME", time);
     // const date = new Date(`2000-01-01T${time}:00`);
-    // const date = new Date(time);
-    // date.setFullYear(2000);
-    // date.setMonth(0);
-    // date.setDate(1);
-    // date.setMilliseconds(0);
-    // console.log("DATE", date);
+    const date = new Date(time);
+    date.setFullYear(2000);
+    date.setMonth(0);
+    date.setDate(1);
+    date.setMilliseconds(0);
+    console.log("DATE", date);
     const screening = new ScheduledScreening({ ...body, time });
     let savedScreening = await screening.save();
     savedScreening = await savedScreening.populate("movie");

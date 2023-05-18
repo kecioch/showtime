@@ -24,7 +24,7 @@ const ScreeningModal = ({
     const time = new Date();
     const [hours, minutes] = selectedTime.split(":").map(Number);
     time.setHours(hours);
-    time.setMonth(minutes);
+    time.setMinutes(minutes);
     time.setFullYear(2000);
     time.setMonth(0);
     time.setDate(1);
