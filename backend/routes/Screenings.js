@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { authorization } = require("../services/Authentication");
-const {ROLES} = require("../constants");
+const { ROLES } = require("../constants");
 const authAdmin = authorization(ROLES.ADMIN);
 
 const ScheduledScreening = require("../models/ScheduledScreening");
@@ -130,7 +130,14 @@ router.post("/schedule", authAdmin, async (req, res) => {
 
   try {
     const time = body.time;
-    const date = new Date(`2000-01-01T${time}:00`);
+    console.log("TIME", time);
+    // const date = new Date(`2000-01-01T${time}:00`);
+    const date = new Date(time);
+    date.setFullYear(2000);
+    date.setMonth(0);
+    date.setDate(1);
+    date.setMilliseconds(0);
+    console.log("DATE", date);
     const screening = new ScheduledScreening({ ...body, time: date });
     let savedScreening = await screening.save();
     savedScreening = await savedScreening.populate("movie");

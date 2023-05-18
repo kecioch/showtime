@@ -21,11 +21,20 @@ const ScreeningModal = ({
   const selectedWeekday = useRef();
 
   const addScreening = () => {
+    const time = new Date();
+    const [hours, minutes] = selectedTime.split(":").map(Number);
+    time.setHours(hours);
+    time.setMonth(minutes);
+    time.setFullYear(2000);
+    time.setMonth(0);
+    time.setDate(1);
+    time.setMilliseconds(0);
+
     const screening = {
       cinema: selectedCinema.current.value,
       movie: selectedMovie.current.value,
       weekday: selectedWeekday.current.value,
-      time: selectedTime,
+      time,
     };
     onSubmit(screening);
   };
