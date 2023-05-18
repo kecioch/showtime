@@ -9,22 +9,16 @@ const createDatetime = (date, time) => {
   // datetime.setUTCSeconds(time.getUTCSeconds());
   // datetime.setUTCMilliseconds(time.getUTCMilliseconds());
   // return datetime;
-
-  const datetime = DateTime.fromJSDate(date, { zone: "UTC" });
-
-  const originalTimeString = time.toISOString().substr(11, 8);
-  const originalTime = DateTime.fromISO(originalTimeString, {
-    zone: "UTC",
-  });
+  const datetime = DateTime.fromJSDate(date, { zone: timeZone });
 
   const adjustedDatetime = datetime.set({
-    hour: originalTime.hour,
-    minute: originalTime.minute,
-    second: originalTime.second,
-    millisecond: originalTime.millisecond,
+    hour: time.getUTCHours(),
+    minute: time.getUTCMinutes(),
+    second: time.getUTCSeconds(),
+    millisecond: time.getUTCMilliseconds(),
   });
 
-  return adjustedDatetime.setZone(timeZone).toJSDate();
+  return adjustedDatetime.toJSDate();
 };
 
 module.exports = { createDatetime };
