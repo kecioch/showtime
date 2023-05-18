@@ -29,9 +29,27 @@ const sendTicket = async (ticket) => {
       name: "Filmvorführung | Showtime",
     });
 
+    const startDate = new Date("2023-05-22T00:00:00.000+00:00");
+    const startTime = new Date("2000-01-01T10:45:11.000+00:00");
+    const endDate = new Date("2023-05-22T00:00:00.000+00:00");
+    const endTime = new Date("2000-01-01T10:45:11.000+00:00");
     calendar.createEvent({
-      start: datetime,
-      end: datetime,
+      // start: datetime,
+      // end: datetime,
+      start: [
+        startDate.getFullYear(),
+        startDate.getMonth() + 1,
+        startDate.getDate(),
+        startTime.getHours(),
+        startTime.getMinutes(),
+      ], // Start date and time
+      end: [
+        endDate.getFullYear(),
+        endDate.getMonth() + 1,
+        endDate.getDate(),
+        endTime.getHours(),
+        endTime.getMinutes(),
+      ], // End date and time
       summary: movie.title,
       location: cinema.title,
       organizer: {
