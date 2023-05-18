@@ -19,14 +19,14 @@ const createDatetime = (date, time) => {
   // });
 
   // return adjustedDatetime.toJSDate();
-
-  const datetime = moment()
-    .year(date.getYear())
-    .month(date.getMonth())
-    .date(date.getDate())
-    .hour(time.getUTCHours())
-    .minute(time.getUTCMinutes())
-    .second(time.getUTCSeconds());
+  
+  const datetime = moment();
+  datetime.set("year", date.getFullYear());
+  datetime.set("month", date.getMonth());
+  datetime.set("date", date.getDate());
+  datetime.set("hour", time.getHours());
+  datetime.set("minute", time.getMinutes());
+  datetime.set("second", time.getSeconds());
 
   return datetime.toDate();
 };
