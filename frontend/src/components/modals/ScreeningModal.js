@@ -28,6 +28,7 @@ const ScreeningModal = ({
     time.setFullYear(2000);
     time.setMonth(0);
     time.setDate(1);
+    time.setSeconds(0);
     time.setMilliseconds(0);
 
     const screening = {

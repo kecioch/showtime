@@ -136,6 +136,7 @@ router.post("/schedule", authAdmin, async (req, res) => {
     date.setFullYear(2000);
     date.setMonth(0);
     date.setDate(1);
+    date.setSeconds(0);
     date.setMilliseconds(0);
     console.log("DATE", date);
     const screening = new ScheduledScreening({ ...body, time });
