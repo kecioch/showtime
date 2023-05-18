@@ -1,13 +1,11 @@
 const createDatetime = (date, time) => {
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      time.getHours(),
-      time.getMinutes(),
-      time.getSeconds(),
-      time.getMilliseconds()
-    );
+    const datetime = new Date(date);
+    datetime.setHours(time.getHours());
+    datetime.setMinutes(time.getMinutes());
+    datetime.setSeconds(time.getSeconds());
+    datetime.setMilliseconds(time.getMilliseconds());
+
+    return datetime;
 
   // const datePart = date.toISOString().slice(0, 10);
   // const timePart = time.toISOString().slice(11, 23); 

@@ -55,6 +55,7 @@ const sendTicket = async (ticket) => {
         (seatsHTML += `<li>Reihe: ${seat.row} / Platz: ${seat.col} [${seat.type.title}]</li>`)
     );
     console.log("SEATSHTML", seatsHTML);
+    console.log("DATETIMEHTML", datetimeHTML);
     const mail = {
       to: customer.email, //process.env.MAIL_SEND_TO,
       subject: "Ticketbestellung",
