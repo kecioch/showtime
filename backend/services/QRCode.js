@@ -6,12 +6,13 @@ const util = require("util");
 const createQRCodeFile = async (text) => {
   const toFileSync = util.promisify(QRCode.toFile);
 
-  const staticDir = "./static";
-  if (!fs.existsSync(staticDir)) {
-    fs.mkdirSync(staticDir);
+  const dir = process.env.NODE_ENV !== "production" ? "./static" : "/tmp";
+  if (process.env.NODE_ENV !== "production" && !fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
   }
   const uniqueFilename = "ticket_" + Date.now() + ".png";
-  const filepath = path.join(staticDir, uniqueFilename);
+  const filepath = path.join(dir, uniqueFilename);
+  console.log("CREATEQRCODE FILEPATH", filepath);
 
   await toFileSync(filepath, text, {
     errorCorrectionLevel: "H",

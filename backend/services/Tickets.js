@@ -17,10 +17,11 @@ const sendTicket = async (ticket) => {
     const cinema = screening.scheduledScreening.cinema;
 
     // Load QRCode
-    const ticketFilePath = path.resolve(
-      __dirname,
-      `../static/${code.filename}`
-    );
+    const ticketFilePath =
+      process.env.NODE_ENV !== "production"
+        ? path.resolve(__dirname, `../static/${code.filename}`)
+        : `/tmp/${code.filename}`;
+    console.log("SENDTICKET FILEPATH", ticketFilePath);
     const codeImg = fs.readFileSync(ticketFilePath);
 
     // Create ical event
@@ -46,9 +47,12 @@ const sendTicket = async (ticket) => {
     const movieHTML = `<h3>${movie.title}</h2>`;
     const cinemaHTML = `<h3>${cinema.title}</h2>`;
     const datetimeHTML = `<h2>${datetime.toLocaleString("de-de")}</h2>`;
-    let seatsHTML = "" 
-    seats.map(seat => seatsHTML += `<li>Reihe: ${seat.row} / Platz: ${seat.col} [${seat.type.title}]</li>`);
-    console.log("SEATSHTML",seatsHTML);
+    let seatsHTML = "";
+    seats.map(
+      (seat) =>
+        (seatsHTML += `<li>Reihe: ${seat.row} / Platz: ${seat.col} [${seat.type.title}]</li>`)
+    );
+    console.log("SEATSHTML", seatsHTML);
     const mail = {
       to: customer.email, //process.env.MAIL_SEND_TO,
       subject: "Ticketbestellung",
