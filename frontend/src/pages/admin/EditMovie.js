@@ -8,7 +8,6 @@ import useFetch from "../../hooks/useFetch";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import styles from "./EditMovie.module.css";
 import useFlash from "../../hooks/useFlash";
-import { CodeSlash } from "react-bootstrap-icons";
 
 const EditMovie = (props) => {
   const { id } = useParams();
@@ -34,6 +33,11 @@ const EditMovie = (props) => {
     );
     if (res.status === 200) {
       setMovie(res.data);
+      document.body.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
       createMessage({
         text: "Film wurde erfolgreich aktualisiert",
         variant: "success",
