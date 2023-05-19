@@ -58,7 +58,9 @@ exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
     let token = null;
-    const user = await User.findOne({ username });
+    const user = await User.findOne({
+      username: { $regex: new RegExp("^" + username + "$", "i") },
+    });
     console.log("USER:", user);
 
     if (username && password && user) {
@@ -181,15 +183,10 @@ exports.authorization = (roles) => {
     } catch (err) {
       console.log(err);
       if (err.name === "TokenExpiredError")
-        return (
-          res
-            .clearCookie("auth_token")
-            .status(401)
-            .json({
-              message: "Token expired. Authorization denied.",
-              tokenExpired: true,
-            })
-        );
+        return res.clearCookie("auth_token").status(401).json({
+          message: "Token expired. Authorization denied.",
+          tokenExpired: true,
+        });
       return res.sendStatus(403);
     }
   };
