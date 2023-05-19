@@ -7,10 +7,6 @@ const sendTicket = async (ticket) => {
   try {
     console.log("SEND TICKET");
     const { customer, code, seats, screening, datetime, id } = ticket;
-    console.log("T_id", id);
-    console.log("T_customer", customer);
-    console.log("T_seats", seats);
-    console.log("T_screening", screening);
     console.log("T_datetime", datetime);
 
     const movie = screening.scheduledScreening.movie;
@@ -21,7 +17,6 @@ const sendTicket = async (ticket) => {
       process.env.NODE_ENV !== "production"
         ? path.resolve(__dirname, `../static/${code.filename}`)
         : `/tmp/${code.filename}`;
-    console.log("SENDTICKET FILEPATH", ticketFilePath);
     const codeImg = fs.readFileSync(ticketFilePath);
 
     // Create ical event
@@ -54,8 +49,7 @@ const sendTicket = async (ticket) => {
       (seat) =>
         (seatsHTML += `<li>Reihe: ${seat.row} / Platz: ${seat.col} [${seat.type.title}]</li>`)
     );
-    console.log("SEATSHTML", seatsHTML);
-    console.log("DATETIMEHTML", datetimeHTML);
+
     const mail = {
       to: customer.email, //process.env.MAIL_SEND_TO,
       subject: "Ticketbestellung",

@@ -193,10 +193,7 @@ const Ticketshop = (props) => {
                     </h4>
                     <h4>
                       {new Date(screening.date).toLocaleDateString()},{" "}
-                      {getTimeString(
-                        new Date(screening.scheduledScreening.time)
-                      )}{" "}
-                      Uhr
+                      {screening.scheduledScreening.time} Uhr
                     </h4>
                   </div>
                 </div>

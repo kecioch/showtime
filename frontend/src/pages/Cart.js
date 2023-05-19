@@ -27,7 +27,7 @@ const Cart = (props) => {
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState();
   const [loadingPage, setLoadingPage] = useState(true);
-  const {createMessage} = useFlash();
+  const { createMessage } = useFlash();
 
   useEffect(() => {
     setLoadingPage(true);
@@ -56,11 +56,10 @@ const Cart = (props) => {
       if (!success) {
         setError("Login fehlgeschlagen");
         return;
-      }
-      else {
+      } else {
         createMessage({
           text: "Erfolgreich eingeloggt",
-          variant: "success"
+          variant: "success",
         });
       }
     });
@@ -145,10 +144,7 @@ const Cart = (props) => {
                       </h4>
                       <h4>
                         {new Date(cart.screening.date).toLocaleDateString()},{" "}
-                        {getTimeString(
-                          new Date(cart.screening.scheduledScreening.time)
-                        )}{" "}
-                        Uhr
+                        {cart.screening.scheduledScreening.time} Uhr
                       </h4>
                       <h4 className="mt-1">
                         Ticketanzahl:{" "}
@@ -210,7 +206,9 @@ const Cart = (props) => {
                   </section>
                 </>
               ) : (
-                <h3 className="text-muted text-center mt-3 mb-3">Warenkorb ist leer</h3>
+                <h3 className="text-muted text-center mt-3 mb-3">
+                  Warenkorb ist leer
+                </h3>
               )}
             </>
           )}

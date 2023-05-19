@@ -19,16 +19,21 @@ const createDatetime = (date, time) => {
   // });
 
   // return adjustedDatetime.toJSDate();
-  
-  const datetime = moment();
-  datetime.set("year", date.getFullYear());
-  datetime.set("month", date.getMonth());
-  datetime.set("date", date.getDate());
-  datetime.set("hour", time.getHours());
-  datetime.set("minute", time.getMinutes());
-  datetime.set("second", time.getSeconds());
 
-  return datetime.toDate();
+  // const datetime = moment();
+  // datetime.set("year", date.getFullYear());
+  // datetime.set("month", date.getMonth());
+  // datetime.set("date", date.getDate());
+  // datetime.set("hour", time.getHours());
+  // datetime.set("minute", time.getMinutes());
+  // datetime.set("second", time.getSeconds());
+  // return datetime.toDate();
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const datetime = new Date(`${year}-${month}-${day}T${time}`);
+  return datetime;
 };
 
 module.exports = { createDatetime };

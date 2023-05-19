@@ -12,7 +12,6 @@ const createQRCodeFile = async (text) => {
   }
   const uniqueFilename = "ticket_" + Date.now() + ".png";
   const filepath = path.join(dir, uniqueFilename);
-  console.log("CREATEQRCODE FILEPATH", filepath);
 
   await toFileSync(filepath, text, {
     errorCorrectionLevel: "H",

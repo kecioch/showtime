@@ -3,7 +3,6 @@ import ScreeningItem from "./ScreeningItem";
 import styles from "./Screeningplan.module.css";
 import HorizontalScrollContainer from "../ui/HorizontalScrollContainer";
 import { useEffect, useState } from "react";
-import { getTimeString } from "../../services/FormatDate";
 import { getNextDate } from "../../services/Weekdays";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -47,14 +46,13 @@ const Screeningplan = (props) => {
                 screening.cinema.title === cinema.title &&
                 screening.weekday === day
             )
-            .sort((elA, elB) => new Date(elA.time) - new Date(elB.time))
+            .sort((elA, elB) => elA.time.localeCompare(elB.time))
             .map((el, i) => {
-              const timeDate = new Date(el.time);
               return editMode ? (
                 <ScreeningItem
                   key={`${el.cinema.title}_${el.movie.title}_${el.weekday}_${el.time}_${i}`}
                   title={el.movie.title}
-                  time={getTimeString(timeDate)}
+                  time={el.time}
                   id={el._id}
                   onDelete={props.onDelete}
                   editMode={true}
@@ -62,7 +60,7 @@ const Screeningplan = (props) => {
               ) : (
                 <ScreeningItem
                   key={`${el.cinema.title}_${el.weekday}_${el.time}_${i}`}
-                  time={getTimeString(timeDate)}
+                  time={el.time}
                   id={el._id}
                   editMode={false}
                 />

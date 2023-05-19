@@ -125,17 +125,10 @@ router.post(
           // Get metadata from payment
           const { order_id } = metadata;
           const order = await Order.findById(order_id).populate("seats.type");
-          console.log("METADATA", metadata);
-          console.log("ORDER_ID", metadata.order_id);
-          console.log("ORDER", order);
 
           const seats = order.seats;
           const customer = order.customer;
           const screening_id = order.screening;
-
-          console.log(screening_id);
-          console.log(customer);
-          console.log(seats);
 
           // Get screening
           const screening = await Screening.findById(screening_id)
@@ -154,8 +147,10 @@ router.post(
             screening.date,
             screening.scheduledScreening.time
           );
-          console.log("TICKET SEATS", seats);
-          console.log("TICKET SCREENING_ID", screening.id);
+            console.log("REQ.DATE",screening.date);
+            console.log("REQ.TIME",screening.scheduledScreening.time);
+            console.log("DATETIME",datetime);
+
           const ticket = new Ticket({
             customer,
             datetime,
