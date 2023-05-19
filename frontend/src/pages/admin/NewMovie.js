@@ -13,6 +13,11 @@ const NewMovie = (props) => {
   const addMovieHandler = async (movie) => {
     const res = await fetch.post(`${BACKEND_URL}/movies`, movie);
     if (res.status === 200) {
+      document.body.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
       createMessage({
         text: "Film wurde erfolgreich erstellt",
         variant: "success",
