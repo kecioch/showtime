@@ -1,6 +1,5 @@
 const { DateTime } = require("luxon");
-// const moment = require("moment");
-const timeZone = "Europe/Berlin";
+const timeZone = process.env.TIME_ZONE || "Europe/Berlin";
 
 const createDatetime = (date, time) => {
   const year = date.getFullYear();

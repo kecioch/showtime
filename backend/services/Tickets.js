@@ -42,7 +42,7 @@ const sendTicket = async (ticket) => {
     const movieHTML = `<h3>${movie.title}</h2>`;
     const cinemaHTML = `<h3>${cinema.title}</h2>`;
     const datetimeHTML = `<h2>${datetime.toLocaleString("de-de", {
-      timeZone: "Europe/Berlin",
+      timeZone: process.env.TIME_ZONE || "Europe/Berlin",
     })}</h2>`;
     let seatsHTML = "";
     seats.map(

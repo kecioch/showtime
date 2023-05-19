@@ -4,7 +4,6 @@ import Content from "../components/ui/Content";
 import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import Image from "react-bootstrap/Image";
-import { getTimeString } from "../services/FormatDate";
 import LoginForm from "../components/authentication/forms/LoginForm";
 import styles from "./Cart.module.css";
 import { isEmailValid } from "../services/EmailValidation";
