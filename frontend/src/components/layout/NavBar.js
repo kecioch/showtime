@@ -5,9 +5,16 @@ import styles from "./NavBar.module.css";
 import NavLink from "../ui/NavLink";
 import { BoxArrowInRight, BoxArrowRight } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import { useRef, useState } from "react";
 
 const NavBar = () => {
   const { isLoggedIn, logout, user } = useAuth();
+  const collapseRef = useRef();
+  const [expanded, setExpanded] = useState(false);
+
+  const collapseHandler = () => {
+    setExpanded(expanded ? false : "expanded");
+  };
 
   return (
     <Navbar
@@ -17,31 +24,56 @@ const NavBar = () => {
       variant="dark"
       sticky="top"
       className={styles.navBar}
+      id="navbar"
+      expanded={expanded}
     >
       <Container className={styles.container}>
         <Navbar.Brand className={styles.brand}>
           <Link to="/">Showtime</Link>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          onClick={collapseHandler}
+        />
+        <Navbar.Collapse id="responsive-navbar-nav" ref={collapseRef}>
           <Nav className={`me-auto ${styles.navLinks}`}>
-            <NavLink to="/">Home</NavLink>
-            {isLoggedIn && <NavLink to="/dashboard">Dashboard</NavLink>}
+            <NavLink to="/" onClick={collapseHandler}>
+              Home
+            </NavLink>
+            {isLoggedIn && (
+              <NavLink to="/dashboard" onClick={collapseHandler}>
+                Dashboard
+              </NavLink>
+            )}
             {user && user.role === ROLES.USER && (
-              <NavLink to="/user/tickets">Meine Tickets</NavLink>
+              <NavLink to="/user/tickets" onClick={collapseHandler}>
+                Meine Tickets
+              </NavLink>
             )}
             {user &&
               (user.role === ROLES.ADMIN || user.role === ROLES.STAFF) && (
-                <NavLink to="/tickets/validation">Ticket Scanner</NavLink>
+                <NavLink to="/tickets/validation" onClick={collapseHandler}>
+                  Ticket Scanner
+                </NavLink>
               )}
           </Nav>
           <Nav className={styles.navAccount}>
             {isLoggedIn ? (
-              <NavLink className={styles.authAction} onClick={() => logout()}>
+              <NavLink
+                className={styles.authAction}
+                onClick={() => {
+                  collapseHandler();
+                  logout();
+                }}
+              >
                 <BoxArrowRight /> Logout
               </NavLink>
             ) : (
-              <NavLink className={styles.authAction} to="/login">
+              <NavLink
+                className={styles.authAction}
+                to="/login"
+                onClick={collapseHandler}
+              >
                 <BoxArrowInRight /> Login
               </NavLink>
             )}
