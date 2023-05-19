@@ -32,8 +32,6 @@ const EditScreenings = (props) => {
       cinema,
     };
 
-    console.log(screening);
-
     fetch.post(`${BACKEND_URL}/screenings/schedule`, screening).then((res) => {
       if (res.status !== 200) return;
       setScreenings((screenings) => [...screenings, res.data]);

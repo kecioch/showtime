@@ -21,8 +21,6 @@ const ScreeningModal = ({
   const selectedWeekday = useRef();
 
   const addScreening = () => {
-    console.log(selectedTime);
-
     const screening = {
       cinema: selectedCinema.current.value,
       movie: selectedMovie.current.value,
