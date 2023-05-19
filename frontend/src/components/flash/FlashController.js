@@ -2,6 +2,7 @@ import { Alert } from "react-bootstrap";
 import styles from "./FlashController.module.css";
 import useFlash from "../../hooks/useFlash";
 import { AnimatePresence, motion } from "framer-motion";
+import LoadingLine from "../ui/LoadingLine";
 
 const FlashController = () => {
   const { getMessage, clearMessage } = useFlash();
@@ -23,10 +24,15 @@ const FlashController = () => {
               onClose={clearMessage}
               dismissible
             >
-              {message?.header && (
-                <Alert.Heading>{message.header}</Alert.Heading>
+              <div className={styles.content}>
+                {message?.header && (
+                  <Alert.Heading>{message.header}</Alert.Heading>
+                )}
+                {message?.text && <p>{message.text}</p>}
+              </div>
+              {message?.delay && (
+                <LoadingLine timer={`${message.delay / 1000}s`} />
               )}
-              {message?.text && <p>{message.text}</p>}
             </Alert>
           </motion.div>
         )}

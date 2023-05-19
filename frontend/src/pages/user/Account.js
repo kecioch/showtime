@@ -10,7 +10,7 @@ import useFlash from "../../hooks/useFlash";
 const Account = (props) => {
   const { user, saveUser } = useAuth();
   const { fetch, isFetching, errorMsg } = useFetch();
-const {createMessage} = useFlash();
+  const { createMessage } = useFlash();
 
   const updateHandler = (updatedUser) => {
     fetch

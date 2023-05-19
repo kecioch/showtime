@@ -6,6 +6,20 @@
   margin-top: var(--navbar-height);
 }
 
+.container * {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.container button {
+  padding-right: 16px !important;
+}
+
+.content * {
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+}
+
 .alert {
   margin: 0 !important;
 }

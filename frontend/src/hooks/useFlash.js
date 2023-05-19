@@ -7,6 +7,7 @@ const useFlash = () => {
 
   const createMessage = (msg) => {
     if (message) clearMessage();
+    if (!msg.autoHideOff && !msg.delay) msg.delay = defaultDelay;
 
     setMessage(msg);
     const delay = msg?.delay || defaultDelay;

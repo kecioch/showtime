@@ -6,7 +6,7 @@ import Content from "../components/ui/Content";
 const Home = (props) => {
   return (
     <>
-      <Container style={{minHeight: "76vh"}}>
+      <Container style={{minHeight: "80vh"}}>
         <Header />
         <Content>
           <h1>Programmplan</h1>
