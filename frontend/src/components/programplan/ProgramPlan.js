@@ -68,7 +68,7 @@ const ProgramPlan = (props) => {
       setMovies(res.data);
 
       const genres = [];
-      res.data.forEach((movie) => {
+      res?.data?.forEach((movie) => {
         movie.genres.forEach((genre) => {
           if (!genres.includes(genre)) genres.push(genre);
         });
@@ -76,7 +76,7 @@ const ProgramPlan = (props) => {
       setGenreOptions(genres.sort());
 
       const ages = [];
-      res.data.forEach((movie) => {
+      res?.data?.forEach((movie) => {
         const age = movie.release.ageRestriction.toString();
         if (!ages.includes(age)) ages.push(age);
       });
