@@ -13,6 +13,7 @@ const NavBar = () => {
   const [expanded, setExpanded] = useState(false);
 
   const collapseHandler = () => {
+    if(window.innerWidth >= 768) return;
     setExpanded(expanded ? false : "expanded");
   };
 
@@ -29,7 +30,9 @@ const NavBar = () => {
     >
       <Container className={styles.container}>
         <Navbar.Brand className={styles.brand}>
-          <Link to="/">Showtime</Link>
+          <Link to="/" onClick={() => setExpanded(false)}>
+            Showtime
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
