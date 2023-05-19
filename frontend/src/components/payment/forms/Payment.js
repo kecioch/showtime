@@ -4,30 +4,48 @@ import { BACKEND_URL } from "../../../constants";
 import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import useFetch from "../../../hooks/useFetch";
+import LoadingSpinner from "../../ui/LoadingSpinner";
 
 const Payment = (props) => {
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
-  const { fetch } = useFetch();
+  const { fetch, isFetching } = useFetch();
+  const [error, setError] = useState();
 
   useEffect(() => {
-    fetch.get(`${BACKEND_URL}/payment/config`).then((res) => {
-      const { publicKey } = res.data;
+    const fetchPublicKey = async () => {
+      const res = await fetch.get(`${BACKEND_URL}/payment/config`);
+      const publicKey = res?.data?.publicKey;
+      if (!publicKey) return setError(true);
       setStripePromise(loadStripe(publicKey));
-    });
+    };
+    fetchPublicKey();
   }, []);
 
   useEffect(() => {
-    fetch
-      .post(`${BACKEND_URL}/payment/create-payment-intent`, props.cart)
-      .then(async (res) => {
-        const { clientSecret } = res.data;
-        setClientSecret(clientSecret);
-      });
+    const fetchClientSecret = async () => {
+      const res = await fetch.post(
+        `${BACKEND_URL}/payment/create-payment-intent`,
+        props.cart
+      );
+      const clientSecret = res?.data?.clientSecret;
+      if (!clientSecret) return setError(true);
+      setClientSecret(clientSecret);
+    };
+    fetchClientSecret();
   }, []);
 
   return (
     <>
+      {isFetching && <LoadingSpinner />}
+      {!isFetching && error && (
+        <>
+          <h2 className="text-danger">
+            Fehler bei der Verbindung zum Zahlungsdienstleister
+          </h2>
+          <h4 className="text-danger">Bitte Vorgang wiederholen</h4>
+        </>
+      )}
       {stripePromise && clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <CheckoutForm />
