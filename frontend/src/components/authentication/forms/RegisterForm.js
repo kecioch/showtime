@@ -2,6 +2,8 @@ import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import LoadingButton from "../../ui/LoadingButton";
 import styles from "./RegisterForm.module.css";
+import PasswordInput from "./PasswordInput";
+import { InputGroup } from "react-bootstrap";
 
 const RegisterForm = (props) => {
   const [firstName, setFirstName] = useState("");
@@ -82,8 +84,7 @@ const RegisterForm = (props) => {
         <Form.Label>
           {props.isUpdate ? "Neues Passwort" : "Passwort"}
         </Form.Label>
-        <Form.Control
-          type="password"
+        <PasswordInput
           placeholder="Passwort eingeben..."
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}
