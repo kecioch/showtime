@@ -28,12 +28,14 @@ import Staff from "./pages/admin/Staff";
 import NavBar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
 import FlashController from "./components/flash/FlashController";
+import ScrollToTop from "./components/ui/ScrollToTop";
 
 function App() {
   const { isLoggedIn, user } = useAuth();
 
   return (
     <React.Fragment>
+      <ScrollToTop />
       <div className="appContainer">
         <NavBar />
         <FlashController />
