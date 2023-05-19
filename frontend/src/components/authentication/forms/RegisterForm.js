@@ -8,7 +8,9 @@ const RegisterForm = (props) => {
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordRepeat, setPasswordRepeat] = useState("");
   const [email, setEmail] = useState("");
+  const [errorMsg, setErrorMsg] = useState();
 
   useEffect(() => {
     const user = props.user;
@@ -21,15 +23,20 @@ const RegisterForm = (props) => {
 
   const onSubmit = (ev) => {
     ev.preventDefault();
+    if (password !== passwordRepeat)
+      return setErrorMsg("Passwörter stimmen nicht überein");
+    else setErrorMsg();
     const newUser = { username, password, firstName, lastName, email };
     props.onSubmit(newUser);
   };
 
-  const errorMsg = props.error && <p className="text-danger">{props.error}</p>;
+  const errorMsgElement = (errorMsg || props.error) && (
+    <p className="text-danger">{errorMsg ? errorMsg : props.error}</p>
+  );
 
   return (
     <Form onSubmit={onSubmit}>
-      {errorMsg}
+      {errorMsgElement}
       <Form.Group className="mb-3" controlId="firstName">
         <Form.Label>Vorname</Form.Label>
         <Form.Control
@@ -47,6 +54,17 @@ const RegisterForm = (props) => {
           placeholder="Nachname eingeben..."
           value={lastName}
           onChange={(ev) => setLastName(ev.target.value)}
+          required
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="eMail">
+        <Form.Label>E-Mail</Form.Label>
+        <Form.Control
+          type="email"
+          placeholder="E-Mail eingeben..."
+          value={email}
+          onChange={(ev) => setEmail(ev.target.value)}
+          pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
           required
         />
       </Form.Group>
@@ -72,18 +90,21 @@ const RegisterForm = (props) => {
           required={!props.isUpdate}
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="eMail">
-        <Form.Label>E-Mail</Form.Label>
+      <Form.Group className="mb-3" controlId="passwordRepeat">
+        <Form.Label>Passwort wiederholen</Form.Label>
         <Form.Control
-          type="email"
-          placeholder="E-Mail eingeben..."
-          value={email}
-          onChange={(ev) => setEmail(ev.target.value)}
-          pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-          required
+          type="password"
+          placeholder="Passwort wiederholen..."
+          value={passwordRepeat}
+          onChange={(ev) => setPasswordRepeat(ev.target.value)}
+          required={!props.isUpdate}
         />
       </Form.Group>
-      <LoadingButton type="submit" isLoading={props.isLoading} className={styles.submit}>
+      <LoadingButton
+        type="submit"
+        isLoading={props.isLoading}
+        className={styles.submit}
+      >
         {props.isUpdate ? "Änderungen speichern" : "Registrieren"}
       </LoadingButton>
     </Form>
