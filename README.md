@@ -18,11 +18,11 @@ To try out the payment process you can use a payment method that redirects to a 
 
 # Screenshots
 
-<div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 2em">
+<div align="center" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 2em">
   <img src="./static/1-Home.PNG" width="30%" />
   <img src="./static/2-Movie.PNG" width="30%" />
   <img src="./static/3-Seat-Selection.PNG" width="30%" />
-    <img src="./static/4-Payment.PNG" width="30%" />
+  <img src="./static/4-Payment.PNG" width="30%" />
   <img src="./static/5-Dashboard.PNG" width="30%" />
   <img src="./static/6-Login.PNG" width="30%" />
   <img src="./static/7-Validating-Ticket.PNG" width="30%" />
