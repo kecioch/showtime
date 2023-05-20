@@ -1,4 +1,24 @@
-# Getting Started with Create React App
+<h1 align="center">
+  Frontend
+</h1>
+
+## Setup
+```bash
+# Navigate into repository
+$ cd frontend
+
+# Install dependencies
+$ npm i --force
+
+# Rename .env.sample to .env file and fill out the environment variables
+
+# Start frontend
+$ npm run start
+```
+
+> **_NOTE_**: Because the frontend uses version 3.0.0 of the react-qr-reader package which doesn't support react 18.2 officially at the moment, you need to use the _--force_ paramter to install the packages.
+
+# Information
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
