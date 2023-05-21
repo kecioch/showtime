@@ -32,7 +32,7 @@ const PasswordInput = ({
         required={required}
       />
       <InputGroup.Text onClick={toggleHide}>
-        {hide ? <EyeSlashFill /> : <EyeFill />}
+        {hide ? <EyeFill /> : <EyeSlashFill />}
       </InputGroup.Text>
     </InputGroup>
   );
