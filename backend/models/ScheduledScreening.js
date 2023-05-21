@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const Screening = require("./Screening"); 
+
 const scheduledScreeningSchema = new mongoose.Schema({
   weekday: {
     type: String,
@@ -36,6 +38,14 @@ const scheduledScreeningSchema = new mongoose.Schema({
     ref: "Cinema",
     required: true,
   },
+});
+
+scheduledScreeningSchema.post("findOneAndDelete", async function (doc) {
+  try {
+    const res = await Screening.deleteMany({scheduledScreening: doc.id});
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = mongoose.model("ScheduledScreening", scheduledScreeningSchema);

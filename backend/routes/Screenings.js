@@ -147,7 +147,9 @@ router.delete("/schedule/:id", authAdmin, async (req, res) => {
   console.log(`DELETE /screenings/schedule/${id}`);
 
   try {
-    const deletedScreening = await ScheduledScreening.findByIdAndDelete(id);
+    const deletedScreening = await ScheduledScreening.findOneAndDelete({
+      _id: id,
+    });
     res.status(200).json({ data: deletedScreening });
   } catch (err) {
     res.status(404).json({ message: "delete error" });

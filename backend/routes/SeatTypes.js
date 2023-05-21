@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { authorization } = require("../services/Authentication");
-const {ROLES} = require("../constants");
+const { ROLES } = require("../constants");
 const authAdmin = authorization(ROLES.ADMIN);
 
 const SeatType = require("../models/SeatType");
@@ -68,9 +68,10 @@ router.delete("/:id", authAdmin, async (req, res) => {
   console.log(`DELETE /seattypes/${id}`);
 
   try {
-    const type = await SeatType.findByIdAndDelete(id);
+    const type = await SeatType.findOneAndDelete({ _id: id });
     res.status(200).json({ data: type });
   } catch (err) {
+    console.log(err);
     res.status(404).json({ message: err.message });
   }
 });

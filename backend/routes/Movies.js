@@ -78,13 +78,13 @@ router.put("/:id", authAdmin, async (req, res) => {
 
 router.delete("/:title", authAdmin, async (req, res) => {
   const title = req.params.title;
-  console.log(`DELETE /cinemas/${title}`);
+  console.log(`DELETE /movies/${title}`);
 
   try {
     const movie = await Movie.findOneAndDelete({ title });
     res.status(200).json({ data: movie });
   } catch (err) {
-    res.status(404).send({ message: "delete error" });
+    res.status(404).send({ message: err.message || "delete error" });
   }
 });
 

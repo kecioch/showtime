@@ -65,7 +65,7 @@ router.delete("/:title", authAdmin, async (req, res) => {
     const cinema = await Cinema.findOneAndDelete({ title });
     res.status(200).json({ data: cinema });
   } catch (err) {
-    res.status(404).json({ message: "delete error" });
+    res.status(404).json({ message: err.message || "delete error" });
   }
 });
 

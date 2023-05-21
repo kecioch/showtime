@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ScheduledScreening = require("./ScheduledScreening");
 
 const cinemaSchema = new mongoose.Schema({
   title: {
@@ -21,6 +22,29 @@ const cinemaSchema = new mongoose.Schema({
       ],
     ],
   },
+});
+
+cinemaSchema.pre("findOneAndDelete", async function (next) {
+  try {
+    const query = this.getQuery();
+
+    const scheduledScreenings = (
+      await ScheduledScreening.find().populate("cinema")
+    ).filter((el) => el.cinema.title === query.title);
+
+    const hasReferences = scheduledScreenings.length > 0;
+
+    if (hasReferences) {
+      const error = new Error(
+        "Kinosaal kann nicht gelöscht werden! Es gibt nocht Filmvorführungen, die ihn referenzieren."
+      );
+      return next(error);
+    }
+  } catch (error) {
+    return next(error);
+  }
+
+  next();
 });
 
 module.exports = mongoose.model("Cinema", cinemaSchema);

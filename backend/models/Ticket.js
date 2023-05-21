@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./User");
 
 const ticketSchema = new mongoose.Schema({
   customer: {
@@ -12,11 +13,11 @@ const ticketSchema = new mongoose.Schema({
     },
   },
   codeSVG: {
-    type: String
+    type: String,
   },
   checked: {
     type: Boolean,
-    default: false
+    default: false,
   },
   seats: [
     {
@@ -38,6 +39,29 @@ const ticketSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+});
+
+ticketSchema.pre("deleteMany", async function (next) {
+  try {
+    const entities = await this.model.find(this.getQuery());
+    this._entitiesToDelete = entities; // Store the entities to be deleted
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+ticketSchema.post("deleteMany", async function (doc) {
+  try {
+    const deletedEntities = this._entitiesToDelete;
+    const ticketIDs = deletedEntities.map((el) => el._id);
+    await User.updateMany(
+      { tickets: { $in: ticketIDs } },
+      { $pull: { tickets: { $in: ticketIDs } } }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = mongoose.model("Ticket", ticketSchema);
